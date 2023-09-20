@@ -1,0 +1,73 @@
+import { ethers } from "hardhat";
+import { expect } from "chai";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+
+describe("TransferContract", () => {
+  let melakaResident: any;
+  let melakaRice: any;
+  let approvalContract: any;
+  let transferContract: any;
+  let governmentOfficer1: SignerWithAddress;
+  let governmentOfficer2: SignerWithAddress;
+  let resident: SignerWithAddress;
+
+  const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
+    ethers.utils.toUtf8Bytes("GOVERNMENT_OFFICER_ROLE")
+  );
+  const MINTER_ROLE: string = ethers.utils.keccak256(
+    ethers.utils.toUtf8Bytes("MINTER_ROLE")
+  );
+
+  beforeEach(async () => {
+    [governmentOfficer1, governmentOfficer2, resident] =
+      await ethers.getSigners();
+
+    // Deploy the ERC20 token (MelakaRice)
+    const MelakaRice = await ethers.getContractFactory("MelakaRice");
+    melakaRice = await MelakaRice.connect(governmentOfficer1).deploy();
+
+    // Deploy the ERC721 token (MelakaResident)
+    const MelakaResident = await ethers.getContractFactory("MelakaResident");
+    melakaResident = await MelakaResident.connect(governmentOfficer1).deploy(
+      melakaRice.address
+    );
+
+    const nric1 = ethers.utils.formatBytes32String("NRIC1");
+    const nric2 = ethers.utils.formatBytes32String("NRIC2");
+
+    await melakaResident.grantRole(
+      GOVERNMENT_OFFICER_ROLE,
+      governmentOfficer1.address
+    );
+    await melakaResident.grantRole(
+      GOVERNMENT_OFFICER_ROLE,
+      governmentOfficer2.address
+    );
+
+    await melakaRice.grantRole(MINTER_ROLE, melakaResident.address);
+  });
+
+  it("should transfer ERC20 tokens to a resident after approval", async () => {
+    const amountToTransfer = ethers.utils.parseUnits("10", 18); // 10 tokens (in wei)
+
+    // Approve the transfer by government officers
+    // await approvalContract
+    //   .connect(governmentOfficer1)
+    //   .approveTransfer(resident.address, amountToTransfer);
+
+    // // Ensure that the transfer is approved
+    // const isTransferApproved = await approvalContract.isTransferApproved(
+    //   resident.address
+    // );
+    // expect(isTransferApproved).to.be.true;
+
+    // Perform the transfer
+    await melakaResident
+      .connect(governmentOfficer1)
+      .transferToResident(resident.address);
+
+    // // Check the balance of the resident
+    const residentBalance = await melakaRice.balanceOf(resident.address);
+    expect(residentBalance).to.equal(1);
+  });
+});
