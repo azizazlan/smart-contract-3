@@ -1,7 +1,12 @@
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import { useAccountSelector } from '../services/hook';
+import { AccountState } from '../services/store';
 
 export default function Footer() {
+  const { networkId } = useAccountSelector(
+    (state: AccountState) => state.account
+  );
   return (
     <Box
       sx={{
@@ -12,7 +17,9 @@ export default function Footer() {
       }}
     >
       <Typography variant="caption">
-        Built with love for Melaka folks by Thuleen
+        Network id {networkId}
+        <br />
+        Built with ♥ for Melaka folks by Thuleen
       </Typography>
     </Box>
   );
