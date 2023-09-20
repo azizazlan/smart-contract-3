@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Divider,
   FormControl,
   FormHelperText,
   TextField,
@@ -65,8 +66,9 @@ export default function Restore() {
         <Button variant="outlined" color="secondary" component={Link} to="/">
           cancel
         </Button>
+        <Divider sx={{ width: '7px' }} />
         <Button variant="contained" color="primary" type="submit">
-          submit
+          restore
         </Button>
       </Box>
     </Box>

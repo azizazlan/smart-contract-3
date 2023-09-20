@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Divider,
   FormControl,
   FormHelperText,
   TextField,
@@ -44,6 +45,7 @@ export default function Signup() {
             control={control}
             render={({ field }) => (
               <TextField
+                type="number"
                 placeholder="34567891011"
                 InputLabelProps={{ shrink: true }}
                 label="NRIC"
@@ -63,8 +65,9 @@ export default function Signup() {
         <Button variant="outlined" color="secondary" component={Link} to="/">
           cancel
         </Button>
+        <Divider sx={{ width: '7px' }} />
         <Button variant="contained" color="primary" type="submit">
-          submit
+          signup
         </Button>
       </Box>
     </Box>
