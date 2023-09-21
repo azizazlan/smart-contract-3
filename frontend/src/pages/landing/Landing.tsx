@@ -1,9 +1,32 @@
-import { Box, Stack, Button, Divider } from '@mui/material';
-import { Link } from 'react-router-dom';
+import {
+  Stack,
+  Button,
+  Divider,
+  Backdrop,
+  CircularProgress,
+} from '@mui/material';
+import { Link, Navigate } from 'react-router-dom';
+import { useResidentAccSelector } from '../../services/hook';
+import { ResidentAccState } from '../../services/store';
 
 export default function Landing() {
+  const { submissionState, publicKey, seedPhrase } = useResidentAccSelector(
+    (state: ResidentAccState) => state.residentAcc
+  );
+
+  if (publicKey && seedPhrase) {
+    return <Navigate to="/account" />;
+  }
+
   return (
     <Stack spacing={1} direction="column">
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={submissionState === 'PENDING'}
+        onClick={() => console.log('Close backdrop')}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Button
         sx={{ minWidth: '235px' }}
         variant="contained"

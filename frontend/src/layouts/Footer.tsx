@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useAccountSelector } from '../services/hook';
-import { AccountState } from '../services/store';
+import { useResidentAccSelector } from '../services/hook';
+import { ResidentAccState } from '../services/store';
 
 export default function Footer() {
-  const { networkId } = useAccountSelector(
-    (state: AccountState) => state.account
+  const { networkId } = useResidentAccSelector(
+    (state: ResidentAccState) => state.residentAcc
   );
   return (
     <Box

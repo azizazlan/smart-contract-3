@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
-import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import styles from './styles';
 import nonResidentImg from '../../assets/resident-non.png';
@@ -9,8 +8,21 @@ import residentImg from '../../assets/resident-ok.png';
 import riceIcon from '../../assets/rice.svg';
 import emptyBox from '../../assets/empty-box.png';
 import QrCodeDlg from '../../dialogs/QrCodeDlg';
+import {
+  useResidentAccDispatch,
+  useResidentAccSelector,
+} from '../../services/hook';
+import { ResidentAccState } from '../../services/store';
+import { Navigate } from 'react-router-dom';
+import whitelistStat from '../../services/residentAccount/thunks/whitelistStat';
 
-function Balance() {
+function Balance({
+  isWhitelisted,
+  ftRiceBalance,
+}: {
+  isWhitelisted: boolean;
+  ftRiceBalance: number;
+}) {
   return (
     <Box
       sx={{
@@ -35,8 +47,7 @@ function Balance() {
       </Typography>
       <Avatar
         sx={{ width: 135, height: 135, color: 'silver' }}
-        src={riceIcon}
-        // src={emptyBox}
+        src={isWhitelisted ? riceIcon : emptyBox}
         alt="rice icon"
       />
       <Box
@@ -67,14 +78,14 @@ function Balance() {
             marginBottom: '15px',
           }}
         >
-          0
+          {ftRiceBalance}
         </Typography>
       </Box>
     </Box>
   );
 }
 
-function ResidentAvatar() {
+function ResidentAvatar({ isWhitelisted }: { isWhitelisted: boolean }) {
   const [openQrCode, setOpenQrCode] = React.useState(false);
 
   return (
@@ -92,8 +103,7 @@ function ResidentAvatar() {
       />
       <img
         style={{ width: '95px' }}
-        src={residentImg}
-        // src={nonResidentImg}
+        src={isWhitelisted ? residentImg : nonResidentImg}
         alt="non resident icon"
         onClick={() => setOpenQrCode((o) => !o)}
       />
@@ -101,7 +111,7 @@ function ResidentAvatar() {
   );
 }
 
-function Nric() {
+function Nric({ nric }: { nric: string }) {
   return (
     <Box
       sx={{
@@ -131,18 +141,45 @@ function Nric() {
           marginTop: '-9px',
         }}
       >
-        777788123456
+        {nric}
       </Typography>
     </Box>
   );
 }
 
 export default function Info() {
+  const dispatch = useResidentAccDispatch();
+  const { publicKey, seedPhrase, isWhitelisted, nric, ftRiceBalance } =
+    useResidentAccSelector((state: ResidentAccState) => state.residentAcc);
+
+  if (!publicKey && !seedPhrase) {
+    return <Navigate to="/" />;
+  }
+
+  React.useEffect(() => {
+    let pollingInterval: any;
+
+    const fetchWhitelistStatus = async () => {
+      dispatch(whitelistStat());
+    };
+
+    // Stop polling when isWhitelisted is true
+    if (isWhitelisted) {
+      clearInterval(pollingInterval);
+    }
+
+    // Set up a timer to fetch the variable periodically (e.g., every 5 seconds)
+    pollingInterval = setInterval(fetchWhitelistStatus, 5000); // 5000 milliseconds
+
+    // Clean up the timer when the component unmounts
+    return () => clearInterval(pollingInterval);
+  }, []);
+
   return (
     <Box sx={styles.container}>
-      <ResidentAvatar />
-      <Nric />
-      <Balance />
+      <ResidentAvatar isWhitelisted={isWhitelisted} />
+      <Nric nric={nric || 'NA'} />
+      <Balance isWhitelisted={isWhitelisted} ftRiceBalance={ftRiceBalance} />
     </Box>
   );
 }

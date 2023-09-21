@@ -45,7 +45,7 @@ export default function QrCodeDlg({
             <CloseIcon />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Quick response code
+            QR code
           </Typography>
           <Button autoFocus color="inherit" onClick={handleClose}>
             close
@@ -65,7 +65,7 @@ export default function QrCodeDlg({
         <QRCodeCanvas
           size={256}
           fgColor="#273c75"
-          value="https://reactjs.org/"
+          value="0xCE94dA7E3703Ff902E0b49f747Ca0A6346435fE3_750112091234"
         />
       </Box>
     </Dialog>

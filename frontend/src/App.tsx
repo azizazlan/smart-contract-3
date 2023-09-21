@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Landing from './pages/landing/Landing';
 import Layout from './layouts/Default';
@@ -7,8 +8,16 @@ import Restore from './pages/account/Restore';
 import { default as AccountInfo } from './pages/account/Info';
 import About from './pages/about/About';
 import Verify from './pages/verify/Verify';
+import { useResidentAccDispatch } from './services/hook';
+import initialize from './services/residentAccount/thunks/initialize';
 
 function App() {
+  const dispatch = useResidentAccDispatch();
+
+  React.useEffect(() => {
+    dispatch(initialize());
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

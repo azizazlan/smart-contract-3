@@ -1,6 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { AccountDispatch, AccountState } from './store';
+import { ResidentAccDispatch, ResidentAccState } from './store';
 
-export const useAccountDispatch = () => useDispatch<AccountDispatch>();
-export const useAccountSelector: TypedUseSelectorHook<AccountState> =
+export const useResidentAccDispatch = () => useDispatch<ResidentAccDispatch>();
+export const useResidentAccSelector: TypedUseSelectorHook<ResidentAccState> =
   useSelector;

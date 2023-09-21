@@ -10,8 +10,11 @@ import Footer from './Footer';
 import DrawerMenu from './DrawerMenu';
 import QrCodeDlg from '../dialogs/QrCodeDlg';
 import ClearCacheDlg from '../dialogs/ClearCacheDlg';
+import { useResidentAccDispatch } from '../services/hook';
+import clearLocalSto from '../services/residentAccount/thunks/clearLocalSto';
 
 function Appbar() {
+  const dispatch = useResidentAccDispatch();
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openQrCode, setOpenQrCode] = React.useState(false);
   const [openClearCache, setOpenClearCache] = React.useState(false);
@@ -28,10 +31,19 @@ function Appbar() {
     setOpenClearCache((o) => !o);
   };
 
+  const handleClearLocalSto = () => {
+    dispatch(clearLocalSto());
+    toggleClearCache();
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <QrCodeDlg open={openQrCode} handleClose={toggleQrCode} />
-      <ClearCacheDlg open={openClearCache} handleClose={toggleClearCache} />
+      <ClearCacheDlg
+        open={openClearCache}
+        handleClose={toggleClearCache}
+        handleClear={handleClearLocalSto}
+      />
       <AppBar position="static">
         <Toolbar>
           <IconButton

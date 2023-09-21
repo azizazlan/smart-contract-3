@@ -19,12 +19,20 @@ import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
-import { useAccountDispatch, useAccountSelector } from '../../services/hook.ts';
-import signupResident from '../../services/account/thunks/signupResident.ts';
-import { AccountState } from '../../services/store.ts';
+import {
+  useResidentAccDispatch,
+  useResidentAccSelector,
+} from '../../services/hook.ts';
+import signupResident from '../../services/residentAccount/thunks/signup.ts';
+import { ResidentAccState } from '../../services/store.ts';
 
 const schema = Yup.object().shape({
-  nric: Yup.string().required('Please key in your NRIC'),
+  nric: Yup.string()
+    .required('Please key in your NRIC')
+    .test('valid-nric', 'NRIC must be at least 12 digits numbers', (value) => {
+      if (!value) return false; // Skip validation if the value is empty or undefined
+      return /^[0-9]{12,}$/.test(value);
+    }),
 });
 
 type SignupFields = {
@@ -32,9 +40,9 @@ type SignupFields = {
 };
 
 export default function Signup() {
-  const dispatch = useAccountDispatch();
-  const { submissionState, seedPhrase } = useAccountSelector(
-    (state: AccountState) => state.account
+  const dispatch = useResidentAccDispatch();
+  const { submissionState, publicKey, seedPhrase } = useResidentAccSelector(
+    (state: ResidentAccState) => state.residentAcc
   );
   const {
     control,
@@ -52,7 +60,7 @@ export default function Signup() {
     dispatch(signupResident({ nric }));
   };
 
-  if (submissionState === 'OK') {
+  if (submissionState === 'OK' && publicKey && seedPhrase) {
     return (
       <Box sx={{ ...styles.container, marginLeft: 7, marginRight: 7 }}>
         <Alert icon={false} severity="success">

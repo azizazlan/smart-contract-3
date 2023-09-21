@@ -10,10 +10,11 @@ import MemoryIcon from '@mui/icons-material/Memory';
 type ClearCacheDlgProps = {
   open: boolean;
   handleClose: () => void;
+  handleClear: () => void;
 };
 
 export default function ClearCacheDlg(props: ClearCacheDlgProps) {
-  const { open, handleClose } = props;
+  const { open, handleClose, handleClear } = props;
   return (
     <Dialog
       open={open}
@@ -53,7 +54,7 @@ export default function ClearCacheDlg(props: ClearCacheDlgProps) {
         <Button
           variant="contained"
           color="error"
-          onClick={handleClose}
+          onClick={handleClear}
           autoFocus
         >
           clear
