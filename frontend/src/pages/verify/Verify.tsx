@@ -1,3 +1,6 @@
+import Box from '@mui/material/Box';
+import styles from './styles';
+
 export default function Verify() {
-  return <h1>Verify page</h1>;
+  return <Box sx={styles.container}>Verify page</Box>;
 }

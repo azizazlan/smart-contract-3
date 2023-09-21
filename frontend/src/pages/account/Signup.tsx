@@ -69,6 +69,7 @@ export default function Signup() {
         <Button variant="contained" color="primary" type="submit">
           signup
         </Button>
+        <Link to="/account">t</Link>
       </Box>
     </Box>
   );
