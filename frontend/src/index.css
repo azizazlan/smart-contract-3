@@ -18,6 +18,12 @@ body {
       url('/assets/Oswald-VariableFont_wght.ttf') format('truetype');
   }
 
+  @font-face {
+    font-family: 'Abel';
+    src: local('Abel'),
+      url('/assets/Abel-Regular.ttf') format('truetype');
+  }
+
   h1 {
     font-family: 'Oswald';  
   }

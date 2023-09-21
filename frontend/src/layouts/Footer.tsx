@@ -16,10 +16,13 @@ export default function Footer() {
         textAlign: 'center',
       }}
     >
-      <Typography variant="caption">
+      <Typography variant="caption" sx={{ color: 'silver' }}>
         Network id {networkId}
         <br />
-        Built with ♥ for Melaka folks by Thuleen
+        Built with <span style={{ color: 'red', fontSize: '12pt' }}>
+          ♥
+        </span>{' '}
+        for Melaka folks by Thuleen
       </Typography>
     </Box>
   );
