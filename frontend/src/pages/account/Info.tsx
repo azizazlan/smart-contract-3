@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import Badge from '@mui/material/Badge';
@@ -7,6 +8,7 @@ import nonResidentImg from '../../assets/resident-non.png';
 import residentImg from '../../assets/resident-ok.png';
 import riceIcon from '../../assets/rice.svg';
 import emptyBox from '../../assets/empty-box.png';
+import QrCodeDlg from '../../dialogs/QrCodeDlg';
 
 function Balance() {
   return (
@@ -73,6 +75,8 @@ function Balance() {
 }
 
 function ResidentAvatar() {
+  const [openQrCode, setOpenQrCode] = React.useState(false);
+
   return (
     <Box
       sx={{
@@ -82,11 +86,16 @@ function ResidentAvatar() {
         marginTop: '35px',
       }}
     >
+      <QrCodeDlg
+        open={openQrCode}
+        handleClose={() => setOpenQrCode((o) => !o)}
+      />
       <img
         style={{ width: '95px' }}
         src={residentImg}
         // src={nonResidentImg}
         alt="non resident icon"
+        onClick={() => setOpenQrCode((o) => !o)}
       />
     </Box>
   );
@@ -122,7 +131,7 @@ function Nric() {
           marginTop: '-9px',
         }}
       >
-        7777881234
+        777788123456
       </Typography>
     </Box>
   );

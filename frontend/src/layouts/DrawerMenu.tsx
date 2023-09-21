@@ -7,18 +7,26 @@ import ListItemButton from '@mui/material/ListItemButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import InfoIcon from '@mui/icons-material/Info';
+import MemoryIcon from '@mui/icons-material/Memory';
+import QrCodeIcon from '@mui/icons-material/QrCode';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+type DrawerMenuProps = {
+  openDrawer: boolean;
+  toggleDrawer: () => void;
+  toggleClearCache: () => void;
+  toggleQrCode: () => void;
+};
+
 export default function DrawerMenu({
   openDrawer,
   toggleDrawer,
-}: {
-  openDrawer: boolean;
-  toggleDrawer: () => void;
-}) {
+  toggleQrCode,
+  toggleClearCache,
+}: DrawerMenuProps) {
   const list = () => (
     <Box
       sx={{ auto: 275 }}
@@ -30,7 +38,7 @@ export default function DrawerMenu({
         <ListItem key="Account" disablePadding>
           <ListItemButton component={Link} to="/account">
             <ListItemIcon>
-              <AccountCircleIcon sx={{ color: 'silver' }} />
+              <AccountCircleIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
             <ListItemText
               primary={
@@ -41,10 +49,41 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
+
+        <ListItem key="QrCodeDlg" disablePadding>
+          <ListItemButton onClick={toggleQrCode}>
+            <ListItemIcon>
+              <QrCodeIcon sx={{ color: 'grey' }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  QR code
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem key="ClearStorage" disablePadding>
+          <ListItemButton onClick={toggleClearCache}>
+            <ListItemIcon>
+              <MemoryIcon sx={{ color: 'grey' }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography color="error" sx={{ fontFamily: 'Oswald' }}>
+                  Clear cache
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+
         <ListItem key="Verify" disablePadding>
           <ListItemButton component={Link} to="/account/verify">
             <ListItemIcon>
-              <SensorOccupiedIcon sx={{ color: 'silver' }} />
+              <SensorOccupiedIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
             <ListItemText
               primary={
@@ -59,7 +98,7 @@ export default function DrawerMenu({
         <ListItem key="About" disablePadding>
           <ListItemButton component={Link} to="/account/about">
             <ListItemIcon>
-              <InfoIcon sx={{ color: 'silver' }} />
+              <InfoIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
             <ListItemText
               primary={
