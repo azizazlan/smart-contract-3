@@ -1,19 +1,22 @@
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
+import signupResident from './thunks/signupResident';
 
 interface AccountState {
   submissionState: SubmissionStates;
   networkId: number;
-  productionLatestBlock: number;
-  developmentLatestBlock: number;
+  nric: string | null;
+  publicKey: string | null;
+  seedPhrase: string | null;
 }
 
 const initialState: AccountState = {
   submissionState: 'IDLE',
   networkId: -1,
-  productionLatestBlock: -1,
-  developmentLatestBlock: -1,
+  nric: null,
+  publicKey: null,
+  seedPhrase: null,
 };
 
 export const accountSlice = createSlice({
@@ -23,14 +26,15 @@ export const accountSlice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    // builder.addCase(getNetworkId.pending, (state, { payload }) => {
-    //   state.submissionState = 'PENDING';
-    // });
-    // builder.addCase(getNetworkId.fulfilled, (state, { payload }) => {
-    //   // TODO : Implement error case
-    //   state.submissionState = 'OK';
-    //   state.networkId = payload;
-    // });
+    builder.addCase(signupResident.pending, (state, { payload }) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(signupResident.fulfilled, (state, { payload }) => {
+      state.nric = payload.nric;
+      state.publicKey = payload.publicKey;
+      state.seedPhrase = payload.seedPhrase;
+      state.submissionState = 'OK';
+    });
   },
 });
 
