@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useResidentAccSelector } from '../services/hook';
 import { ResidentAccState } from '../services/store';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const { networkId } = useResidentAccSelector(
@@ -22,7 +23,7 @@ export default function Footer() {
         Built with <span style={{ color: 'red', fontSize: '12pt' }}>
           ♥
         </span>{' '}
-        for Melaka folks by Thuleen
+        for <Link to="/official">Melaka</Link> folks by Thuleen
       </Typography>
     </Box>
   );

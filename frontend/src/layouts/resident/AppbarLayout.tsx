@@ -6,12 +6,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Footer from './Footer';
+import Footer from '../Footer';
 import DrawerMenu from './DrawerMenu';
-import QrCodeDlg from '../dialogs/QrCodeDlg';
-import ClearCacheDlg from '../dialogs/ClearCacheDlg';
-import { useResidentAccDispatch } from '../services/hook';
-import clearLocalSto from '../services/residentAccount/thunks/clearLocalSto';
+import QrCodeDlg from '../../dialogs/QrCodeDlg';
+import ClearCacheDlg from '../../dialogs/ClearCacheDlg';
+import { useResidentAccDispatch } from '../../services/hook';
+import clearLocalSto from '../../services/residentAccount/thunks/clearLocalSto';
 
 function Appbar() {
   const dispatch = useResidentAccDispatch();

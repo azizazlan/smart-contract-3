@@ -6,8 +6,8 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { Link, Navigate } from 'react-router-dom';
-import { useResidentAccSelector } from '../../services/hook';
-import { ResidentAccState } from '../../services/store';
+import { useResidentAccSelector } from '../../../services/hook';
+import { ResidentAccState } from '../../../services/store';
 
 export default function Landing() {
   const { submissionState, publicKey, seedPhrase } = useResidentAccSelector(
@@ -33,7 +33,7 @@ export default function Landing() {
         component={Link}
         to="/signup"
       >
-        resident signup
+        state official signup
       </Button>
       <Button
         variant="contained"

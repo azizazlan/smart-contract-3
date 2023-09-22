@@ -3,18 +3,18 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import styles from './styles';
-import nonResidentImg from '../../assets/resident-non.png';
-import residentImg from '../../assets/resident-ok.png';
-import riceIcon from '../../assets/rice.svg';
-import emptyBox from '../../assets/empty-box.png';
-import QrCodeDlg from '../../dialogs/QrCodeDlg';
+import nonResidentImg from '../../../assets/resident-non.png';
+import residentImg from '../../../assets/resident-ok.png';
+import riceIcon from '../../../assets/rice.svg';
+import emptyBox from '../../../assets/empty-box.png';
+import QrCodeDlg from '../../../dialogs/QrCodeDlg';
 import {
   useResidentAccDispatch,
   useResidentAccSelector,
-} from '../../services/hook';
-import { ResidentAccState } from '../../services/store';
+} from '../../../services/hook';
+import { ResidentAccState } from '../../../services/store';
 import { Navigate } from 'react-router-dom';
-import whitelistStat from '../../services/residentAccount/thunks/whitelistStat';
+import whitelistStat from '../../../services/residentAccount/thunks/whitelistStat';
 
 function Balance({
   isWhitelisted,

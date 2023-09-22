@@ -22,9 +22,9 @@ import { Link } from 'react-router-dom';
 import {
   useResidentAccDispatch,
   useResidentAccSelector,
-} from '../../services/hook.ts';
-import signupResident from '../../services/residentAccount/thunks/signup.ts';
-import { ResidentAccState } from '../../services/store.ts';
+} from '../../../services/hook.ts';
+import signupResident from '../../../services/residentAccount/thunks/signup.ts';
+import { ResidentAccState } from '../../../services/store.ts';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
