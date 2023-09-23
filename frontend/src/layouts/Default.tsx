@@ -11,16 +11,20 @@ export default function Layout() {
 
   return (
     <Box
-      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: 7,
+      }}
     >
-      <Box sx={{ paddingTop: '5px', paddingBottom: '0px' }}>
-        <img
-          onClick={handleClick}
-          src={flag}
-          alt="melaka flag"
-          style={{ width: '275px' }}
-        />
-      </Box>
+      <img
+        onClick={handleClick}
+        src={flag}
+        alt="melaka flag"
+        style={{ width: '225px' }}
+      />
+      <h1 style={{ color: '#273c75' }}>Resident</h1>
       <Outlet />
       <Footer />
     </Box>

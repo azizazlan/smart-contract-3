@@ -1,13 +1,16 @@
 import React from 'react';
 import detectEthereumProvider from '@metamask/detect-provider';
+import { utils } from 'ethers';
 import Box from '@mui/material/Box';
-import { Divider, TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { default as ActionsTab } from './ActionsTab';
+import ethLogo from '../../assets/eth-logo.png';
 
 export default function Landing() {
   const [hasProvider, setHasProvider] = React.useState<boolean | null>(null);
   const [chainId, setChainId] = React.useState<string | null>(null);
   const [publicKey, setPublicKey] = React.useState<string | null>(null);
+  const [balance, setBalance] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const getProvider = async () => {
@@ -19,6 +22,12 @@ export default function Landing() {
       });
       console.log(accounts[0]);
       setPublicKey(accounts[0]);
+
+      const bal = await window.ethereum!.request({
+        method: 'eth_getBalance',
+        params: [accounts[0], 'latest'],
+      });
+      setBalance(utils.formatEther(bal));
 
       let chainIdHex = await window.ethereum.request({
         method: 'eth_chainId',
@@ -61,13 +70,20 @@ export default function Landing() {
             Public key
           </Typography>
           <Typography sx={{ fontFamily: 'Abel' }}>{publicKey}</Typography>
-          <Typography
-            color="primary"
-            sx={{ fontFamily: 'Oswald', fontSize: '14pt' }}
-          >
-            Ether balance
-          </Typography>
-          <Typography sx={{ fontFamily: 'Abel' }}>todo</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Typography
+              color="primary"
+              sx={{ fontFamily: 'Oswald', fontSize: '14pt' }}
+            >
+              Ether balance
+            </Typography>
+            <img
+              src={ethLogo}
+              alt="ether logo"
+              style={{ width: '21px', height: 'auto', marginLeft: 3 }}
+            />
+          </Box>
+          <Typography sx={{ fontFamily: 'Abel' }}>{balance}</Typography>
           <ActionsTab />
         </Box>
       ) : null}

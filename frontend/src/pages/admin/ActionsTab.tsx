@@ -81,7 +81,7 @@ export default function BasicTabs() {
             revoke
           </Button>
           <Divider sx={{ minWidth: 5 }} />
-          <Button variant="contained" color="primary">
+          <Button variant="contained" sx={{ backgroundColor: '#1B1464' }}>
             award as melaka resident
           </Button>
         </Box>

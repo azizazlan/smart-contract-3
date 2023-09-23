@@ -61,7 +61,7 @@ function Appbar() {
             component="div"
             sx={{ fontFamily: 'Oswald', flexGrow: 1 }}
           >
-            Melaka FairSubsidy
+            Melaka EquiSubsidy
           </Typography>
         </Toolbar>
       </AppBar>
