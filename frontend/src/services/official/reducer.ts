@@ -4,6 +4,7 @@ import { SubmissionStates } from '../submissionState';
 import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
 import residentialStatus from './thunks/residentialStat';
+import hasRole from './thunks/hasRole';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -57,11 +58,15 @@ export const officialSlice = createSlice({
     builder.addCase(residentialStatus.pending, (state, {}) => {
       state.submissionState = 'PENDING';
     });
-    builder.addCase(residentialStatus.rejected, (state, { payload }) => {
-      console.log('residentialStatus rejected!');
-    });
     builder.addCase(residentialStatus.fulfilled, (state, { payload }) => {
       state.isResident = payload.isResident;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(hasRole.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(hasRole.fulfilled, (state, { payload }) => {
+      state.isOfficer = payload.hasRole;
       state.submissionState = 'OK';
     });
   },

@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import { IconButton, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
+import cw from '@mui/icons-material/Check';
 import styles from './styles';
 import { Navigate } from 'react-router-dom';
 import { OfficialState } from '../../../services/store';
@@ -11,6 +12,7 @@ import {
 } from '../../../services/hook';
 import ethLogo from '../../../assets/eth-logo.png';
 import residentialStatus from '../../../services/official/thunks/residentialStat';
+import hasRole from '../../../services/official/thunks/hasRole';
 
 function Balance({
   etherBal,
@@ -78,10 +80,14 @@ function RoleStatus({
   nric,
   isResident,
   handleReloadResidentStat,
+  isOfficer,
+  handleReloadRole,
 }: {
   nric: string;
   isResident: boolean;
   handleReloadResidentStat: () => void;
+  isOfficer: boolean;
+  handleReloadRole: () => void;
 }) {
   return (
     <Box
@@ -135,7 +141,7 @@ function RoleStatus({
             fontSize: '21pt',
           }}
         >
-          {isResident ? `Resident` : `Non-resident`}
+          {isResident ? `Resident ✔` : `Non-resident`}
         </Typography>
         <IconButton onClick={handleReloadResidentStat}>
           <ReplayIcon color="primary" />
@@ -154,15 +160,21 @@ function RoleStatus({
       >
         Role
       </Typography>
-      <Typography
-        style={{
-          fontFamily: 'Abel',
-          fontSize: '21pt',
-          marginTop: '-9px',
-        }}
+      <Box
+        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        Officer | No role
-      </Typography>
+        <Typography
+          style={{
+            fontFamily: 'Abel',
+            fontSize: '21pt',
+          }}
+        >
+          {isOfficer ? `Officer ✔` : `Pending appointment`}
+        </Typography>
+        <IconButton onClick={handleReloadRole}>
+          <ReplayIcon color="primary" />
+        </IconButton>
+      </Box>
     </Box>
   );
 }
@@ -170,7 +182,7 @@ function RoleStatus({
 // Official info page
 export default function Info() {
   const dispatch = useOfficialDispatch();
-  const { publicKey, seedPhrase, nric, etherBal, isResident } =
+  const { publicKey, seedPhrase, nric, etherBal, isResident, isOfficer } =
     useOfficialSelector((state: OfficialState) => state.official);
 
   if (!publicKey && !seedPhrase && !nric) {
@@ -178,13 +190,18 @@ export default function Info() {
   }
 
   const handleReloadResidentStat = () => {
-    if (!publicKey && !nric) {
-      return;
-    }
     dispatch(
       residentialStatus({
         publicKey: publicKey as string,
         nric: nric as string,
+      })
+    );
+  };
+
+  const handleReloadRole = () => {
+    dispatch(
+      hasRole({
+        publicKey: publicKey as string,
       })
     );
   };
@@ -195,6 +212,8 @@ export default function Info() {
         nric={nric || 'NA'}
         isResident={isResident}
         handleReloadResidentStat={handleReloadResidentStat}
+        isOfficer={isOfficer}
+        handleReloadRole={handleReloadRole}
       />
       <Balance publicKey={publicKey || 'NA'} etherBal={etherBal} />
     </Box>
