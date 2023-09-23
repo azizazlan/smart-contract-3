@@ -11,6 +11,7 @@ import Restore from './pages/resident/account/Restore';
 import { default as OfficialRestore } from './pages/official/account/Restore';
 import { default as OfficialAccountInfo } from './pages/official/account/Info';
 import { default as AccountInfo } from './pages/resident/account/Info';
+import AdminLanding from './pages/admin/Landing';
 import About from './pages/about/About';
 import Verify from './pages/verify/Verify';
 import { default as OfficialLanding } from './pages/official/landing/Landing';
@@ -52,6 +53,9 @@ function App() {
       </Route>
       <Route path="/signedofficial" element={<OfficialAppbarLayout />}>
         <Route index element={<OfficialAccountInfo />} />
+      </Route>
+      <Route path="/admin" element={<OfficialLayout />}>
+        <Route index element={<AdminLanding />} />
       </Route>
     </Routes>
   );

@@ -51,11 +51,9 @@ function Balance({
         </Typography>
         <Typography
           style={{
-            fontFamily: 'Abel',
+            fontFamily: 'Oswald',
             fontSize: '12pt',
-            fontWeight: 'bold',
             color: 'silver',
-            marginTop: '15px',
           }}
         >
           Ether Balance
@@ -100,9 +98,8 @@ function RoleStatus({
     >
       <Typography
         style={{
-          fontFamily: 'Abel',
+          fontFamily: 'Oswald',
           fontSize: '12pt',
-          fontWeight: 'bold',
           color: 'silver',
           marginRight: '3px',
           marginTop: '4px',
@@ -122,9 +119,8 @@ function RoleStatus({
       </Typography>
       <Typography
         style={{
-          fontFamily: 'Abel',
+          fontFamily: 'Oswald',
           fontSize: '12pt',
-          fontWeight: 'bold',
           color: 'silver',
           marginRight: '3px',
           marginTop: '4px',
@@ -137,22 +133,21 @@ function RoleStatus({
       >
         <Typography
           style={{
-            fontFamily: 'Abel',
-            fontSize: '21pt',
+            fontFamily: 'Oswald',
+            fontSize: '15pt',
           }}
         >
           {isResident ? `Resident ✔` : `Non-resident`}
         </Typography>
         <IconButton onClick={handleReloadResidentStat}>
-          <ReplayIcon color="primary" />
+          <ReplayIcon color="secondary" fontSize="small" />
         </IconButton>
       </Box>
 
       <Typography
         style={{
-          fontFamily: 'Abel',
+          fontFamily: 'Oswald',
           fontSize: '12pt',
-          fontWeight: 'bold',
           color: 'silver',
           marginRight: '3px',
           marginTop: '4px',
@@ -165,14 +160,14 @@ function RoleStatus({
       >
         <Typography
           style={{
-            fontFamily: 'Abel',
-            fontSize: '21pt',
+            fontFamily: 'Oswald',
+            fontSize: '15pt',
           }}
         >
           {isOfficer ? `Officer ✔` : `Pending appointment`}
         </Typography>
         <IconButton onClick={handleReloadRole}>
-          <ReplayIcon color="primary" />
+          <ReplayIcon color="secondary" fontSize="small" />
         </IconButton>
       </Box>
     </Box>

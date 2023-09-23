@@ -20,10 +20,10 @@ export default function Footer() {
       <Typography variant="caption" sx={{ color: 'silver' }}>
         Network id {networkId}
         <br />
-        Built with <span style={{ color: 'red', fontSize: '12pt' }}>
-          ♥
-        </span>{' '}
-        for <Link to="/official">Melaka</Link> folks by Thuleen
+        Built with love for <Link to="/official">Melaka</Link> folks by{' '}
+        <span style={{ fontFamily: 'Oswald', fontWeight: 'bold' }}>
+          thuleen
+        </span>
       </Typography>
     </Box>
   );
