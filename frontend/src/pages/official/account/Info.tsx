@@ -1,11 +1,16 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
+import ReplayIcon from '@mui/icons-material/Replay';
 import styles from './styles';
 import { Navigate } from 'react-router-dom';
 import { OfficialState } from '../../../services/store';
-import { useOfficialSelector } from '../../../services/hook';
+import {
+  useOfficialDispatch,
+  useOfficialSelector,
+} from '../../../services/hook';
 import ethLogo from '../../../assets/eth-logo.png';
+import residentialStatus from '../../../services/official/thunks/residentialStat';
 
 function Balance({
   etherBal,
@@ -69,7 +74,15 @@ function Balance({
   );
 }
 
-function RoleStatus({ nric }: { nric: string }) {
+function RoleStatus({
+  nric,
+  isResident,
+  handleReloadResidentStat,
+}: {
+  nric: string;
+  isResident: boolean;
+  handleReloadResidentStat: () => void;
+}) {
   return (
     <Box
       sx={{
@@ -113,15 +126,22 @@ function RoleStatus({ nric }: { nric: string }) {
       >
         Residential status
       </Typography>
-      <Typography
-        style={{
-          fontFamily: 'Abel',
-          fontSize: '21pt',
-          marginTop: '-9px',
-        }}
+      <Box
+        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        Resident | Non-resident
-      </Typography>
+        <Typography
+          style={{
+            fontFamily: 'Abel',
+            fontSize: '21pt',
+          }}
+        >
+          {isResident ? `Resident` : `Non-resident`}
+        </Typography>
+        <IconButton onClick={handleReloadResidentStat}>
+          <ReplayIcon color="primary" />
+        </IconButton>
+      </Box>
+
       <Typography
         style={{
           fontFamily: 'Abel',
@@ -147,18 +167,35 @@ function RoleStatus({ nric }: { nric: string }) {
   );
 }
 
+// Official info page
 export default function Info() {
-  const { publicKey, seedPhrase, nric, etherBal } = useOfficialSelector(
-    (state: OfficialState) => state.official
-  );
+  const dispatch = useOfficialDispatch();
+  const { publicKey, seedPhrase, nric, etherBal, isResident } =
+    useOfficialSelector((state: OfficialState) => state.official);
 
-  if (!publicKey && !seedPhrase) {
+  if (!publicKey && !seedPhrase && !nric) {
     return <Navigate to="/official" />;
   }
 
+  const handleReloadResidentStat = () => {
+    if (!publicKey && !nric) {
+      return;
+    }
+    dispatch(
+      residentialStatus({
+        publicKey: publicKey as string,
+        nric: nric as string,
+      })
+    );
+  };
+
   return (
     <Box sx={styles.container}>
-      <RoleStatus nric={nric || 'NA'} />
+      <RoleStatus
+        nric={nric || 'NA'}
+        isResident={isResident}
+        handleReloadResidentStat={handleReloadResidentStat}
+      />
       <Balance publicKey={publicKey || 'NA'} etherBal={etherBal} />
     </Box>
   );

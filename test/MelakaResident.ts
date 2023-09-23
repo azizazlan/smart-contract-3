@@ -53,6 +53,12 @@ describe("MelakaResident and MelakaRice", function () {
   });
 
   describe("MelakaResident as Identifier", function () {
+    it("Should be false when none is awarded as resident", async function () {
+      const { melakaResident, officer2 } = await loadFixture(deployContracts);
+      const nric = ethers.utils.formatBytes32String("777766554432");
+      await expect(await melakaResident.verifyResident(officer2.address, nric))
+        .to.be.false;
+    });
     it("Owner officer1 should able to award residential status", async function () {
       const { melakaResident, officer1, officer2 } = await loadFixture(
         deployContracts

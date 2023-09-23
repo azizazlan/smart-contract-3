@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
+import residentialStatus from './thunks/residentialStat';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -51,6 +52,16 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(residentialStatus.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(residentialStatus.rejected, (state, { payload }) => {
+      console.log('residentialStatus rejected!');
+    });
+    builder.addCase(residentialStatus.fulfilled, (state, { payload }) => {
+      state.isResident = payload.isResident;
       state.submissionState = 'OK';
     });
   },
