@@ -9,12 +9,12 @@ import riceIcon from '../../../assets/rice.svg';
 import emptyBox from '../../../assets/empty-box.png';
 import QrCodeDlg from '../../../dialogs/QrCodeDlg';
 import {
-  useResidentAccDispatch,
-  useResidentAccSelector,
+  useResidentDispatch,
+  useResidentSelector,
 } from '../../../services/hook';
-import { ResidentAccState } from '../../../services/store';
+import { ResidentState } from '../../../services/store';
 import { Navigate } from 'react-router-dom';
-import whitelistStat from '../../../services/residentAccount/thunks/whitelistStat';
+import whitelistStat from '../../../services/resident/thunks/whitelistStat';
 
 function Balance({
   isWhitelisted,
@@ -148,9 +148,9 @@ function Nric({ nric }: { nric: string }) {
 }
 
 export default function Info() {
-  const dispatch = useResidentAccDispatch();
+  const dispatch = useResidentDispatch();
   const { publicKey, seedPhrase, isWhitelisted, nric, ftRiceBalance } =
-    useResidentAccSelector((state: ResidentAccState) => state.residentAcc);
+    useResidentSelector((state: ResidentState) => state.resident);
 
   if (!publicKey && !seedPhrase) {
     return <Navigate to="/" />;

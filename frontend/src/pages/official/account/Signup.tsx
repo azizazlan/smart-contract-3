@@ -20,11 +20,11 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
 import {
-  useResidentDispatch,
-  useResidentSelector,
+  useOfficialDispatch,
+  useOfficialSelector,
 } from '../../../services/hook.ts';
-import signupResident from '../../../services/resident/thunks/signup.ts';
-import { ResidentState } from '../../../services/store.ts';
+import signupOfficial from '../../../services/official/thunks/signup.ts';
+import { OfficialState } from '../../../services/store.ts';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -40,9 +40,9 @@ type SignupFields = {
 };
 
 export default function Signup() {
-  const dispatch = useResidentDispatch();
-  const { submissionState, publicKey, seedPhrase } = useResidentSelector(
-    (state: ResidentState) => state.resident
+  const dispatch = useOfficialDispatch();
+  const { submissionState, publicKey, seedPhrase } = useOfficialSelector(
+    (state: OfficialState) => state.official
   );
   const {
     control,
@@ -57,7 +57,7 @@ export default function Signup() {
 
   const onSubmit: SubmitHandler<SignupFields> = (data) => {
     const { nric } = data;
-    dispatch(signupResident({ nric }));
+    dispatch(signupOfficial({ nric }));
   };
 
   if (submissionState === 'OK' && publicKey && seedPhrase) {
@@ -83,7 +83,7 @@ export default function Signup() {
               justifyContent: 'flex-end',
             }}
           >
-            <Button variant="outlined" component={Link} to="/account">
+            <Button variant="outlined" component={Link} to="/signedofficial">
               OK, view my account
             </Button>
           </CardActions>
@@ -112,7 +112,7 @@ export default function Signup() {
                 type="number"
                 placeholder="34567891011"
                 InputLabelProps={{ shrink: true }}
-                label="NRIC"
+                label="Official NRIC"
                 id="nric"
                 {...field}
               />
@@ -126,7 +126,12 @@ export default function Signup() {
         </FormControl>
       </form>
       <Box sx={styles.formButtons}>
-        <Button variant="outlined" color="secondary" component={Link} to="/">
+        <Button
+          variant="outlined"
+          color="secondary"
+          component={Link}
+          to="/official"
+        >
           cancel
         </Button>
         <Divider sx={{ width: '7px' }} />

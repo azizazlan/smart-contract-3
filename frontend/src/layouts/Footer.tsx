@@ -1,12 +1,12 @@
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useResidentAccSelector } from '../services/hook';
-import { ResidentAccState } from '../services/store';
+import { useResidentSelector } from '../services/hook';
+import { ResidentState } from '../services/store';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
-  const { networkId } = useResidentAccSelector(
-    (state: ResidentAccState) => state.residentAcc
+  const { networkId } = useResidentSelector(
+    (state: ResidentState) => state.resident
   );
   return (
     <Box

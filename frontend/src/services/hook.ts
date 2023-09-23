@@ -1,6 +1,15 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { ResidentAccDispatch, ResidentAccState } from './store';
+import {
+  OfficialDispatch,
+  OfficialState,
+  ResidentDispatch,
+  ResidentState,
+} from './store';
 
-export const useResidentAccDispatch = () => useDispatch<ResidentAccDispatch>();
-export const useResidentAccSelector: TypedUseSelectorHook<ResidentAccState> =
+export const useResidentDispatch = () => useDispatch<ResidentDispatch>();
+export const useResidentSelector: TypedUseSelectorHook<ResidentState> =
+  useSelector;
+
+export const useOfficialDispatch = () => useDispatch<OfficialDispatch>();
+export const useOfficialSelector: TypedUseSelectorHook<OfficialState> =
   useSelector;

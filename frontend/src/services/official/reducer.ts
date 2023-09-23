@@ -1,32 +1,29 @@
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
-import signupResident from './thunks/signup';
+import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
-import clearLocalSto from './thunks/clearLocalSto';
 
-interface AccountState {
+interface OfficialState {
   submissionState: SubmissionStates;
   networkId: number;
   nric: string | null;
   publicKey: string | null;
   seedPhrase: string | null;
-  isWhitelisted: boolean;
-  ftRiceBalance: number;
+  etherBal: string;
 }
 
-const initialState: AccountState = {
+const initialState: OfficialState = {
   submissionState: 'IDLE',
   networkId: -1,
   nric: null,
   publicKey: null,
   seedPhrase: null,
-  isWhitelisted: false,
-  ftRiceBalance: 0,
+  etherBal: '0',
 };
 
-export const accountSlice = createSlice({
-  name: 'accountSlice',
+export const officialSlice = createSlice({
+  name: 'officialSlice',
   initialState,
   reducers: {
     reset: () => initialState,
@@ -41,19 +38,10 @@ export const accountSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.submissionState = 'OK';
     });
-    builder.addCase(clearLocalSto.pending, (state, {}) => {
+    builder.addCase(signupOfficial.pending, (state, {}) => {
       state.submissionState = 'PENDING';
     });
-    builder.addCase(clearLocalSto.fulfilled, (state, {}) => {
-      state.nric = null;
-      state.publicKey = null;
-      state.seedPhrase = null;
-      state.submissionState = 'OK';
-    });
-    builder.addCase(signupResident.pending, (state, {}) => {
-      state.submissionState = 'PENDING';
-    });
-    builder.addCase(signupResident.fulfilled, (state, { payload }) => {
+    builder.addCase(signupOfficial.fulfilled, (state, { payload }) => {
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
@@ -62,5 +50,5 @@ export const accountSlice = createSlice({
   },
 });
 
-export const { reset } = accountSlice.actions;
-export default accountSlice.reducer;
+export const { reset } = officialSlice.actions;
+export default officialSlice.reducer;

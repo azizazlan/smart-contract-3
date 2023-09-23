@@ -6,16 +6,16 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { Link, Navigate } from 'react-router-dom';
-import { useResidentAccSelector } from '../../../services/hook';
-import { ResidentAccState } from '../../../services/store';
+import { useOfficialSelector } from '../../../services/hook';
+import { OfficialState } from '../../../services/store';
 
 export default function Landing() {
-  const { submissionState, publicKey, seedPhrase } = useResidentAccSelector(
-    (state: ResidentAccState) => state.residentAcc
+  const { submissionState, publicKey, seedPhrase } = useOfficialSelector(
+    (state: OfficialState) => state.official
   );
 
   if (publicKey && seedPhrase) {
-    return <Navigate to="/account" />;
+    return <Navigate to="/signedofficial" />;
   }
 
   return (
@@ -31,7 +31,7 @@ export default function Landing() {
         sx={{ minWidth: '235px' }}
         variant="contained"
         component={Link}
-        to="/signup"
+        to="/official/signup"
       >
         state official signup
       </Button>
@@ -39,7 +39,7 @@ export default function Landing() {
         variant="contained"
         color="secondary"
         component={Link}
-        to="/restore"
+        to="/official/restore"
       >
         Restore
       </Button>
