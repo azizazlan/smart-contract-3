@@ -52,6 +52,36 @@ describe("MelakaResident and MelakaRice", function () {
     });
   });
 
+  describe("MelakaResident as Identifier", function () {
+    it("Owner officer1 should able to award residential status", async function () {
+      const { melakaResident, officer1, officer2 } = await loadFixture(
+        deployContracts
+      );
+      const nric = ethers.utils.formatBytes32String("777766554432");
+      await melakaResident
+        .connect(officer1)
+        .awardResidentialStatus(officer2.address, nric);
+      const isResidentAddrOK = await melakaResident.residents(officer2.address);
+      const isResidentNricOK = await melakaResident.residentNrics(nric);
+      expect(isResidentAddrOK && isResidentNricOK).to.be.true;
+
+      // or use a method
+      await expect(await melakaResident.verifyResident(officer2.address, nric))
+        .to.be.true;
+    });
+    it("Non-owner officer2 should NOT be able to award residential status", async function () {
+      const { melakaResident, officer2, resident1 } = await loadFixture(
+        deployContracts
+      );
+      const nric = ethers.utils.formatBytes32String("777766554432");
+      await expect(
+        melakaResident
+          .connect(officer2)
+          .awardResidentialStatus(resident1.address, nric)
+      ).to.be.reverted;
+    });
+  });
+
   describe("MelakaResident MINTER_ROLE and SUBSIDY_RECIPIENT roles", function () {
     it("Officer 1 should be the default minter", async function () {
       const { melakaResident, officer1 } = await loadFixture(deployContracts);
@@ -141,10 +171,10 @@ describe("MelakaResident and MelakaRice", function () {
   describe("Transfer FT MelakaRice to residents", function () {
     it("Should revert when resident has yet in whitelist", async function () {
       const { melakaResident, resident1 } = await loadFixture(deployContracts);
-      await expect(melakaResident.transferToResident(resident1.address)).to.be
+      await expect(melakaResident.transferFTToResident(resident1.address)).to.be
         .reverted;
       await expect(
-        melakaResident.transferToResident(resident1.address)
+        melakaResident.transferFTToResident(resident1.address)
       ).to.be.rejectedWith("Resident not in whitelist");
     });
     it("Recipient should receive FT", async function () {
@@ -162,7 +192,7 @@ describe("MelakaResident and MelakaRice", function () {
       // Set the initial allowance for melakaResident
       await melakaRice.approve(melakaResident.address, initialAllowance);
       // Attempt to transfer tokens from melakaResident to resident1
-      await melakaResident.transferToResident(resident1.address);
+      await melakaResident.transferFTToResident(resident1.address);
       // Check the balance of the resident
       const residentBalance = await melakaRice.balanceOf(resident1.address);
       expect(residentBalance).to.equal(1);
@@ -178,7 +208,7 @@ describe("MelakaResident and MelakaRice", function () {
       const nric1 = ethers.utils.formatBytes32String("760119097876");
       await melakaResident.addResidentWhitelist(resident1.address, nric1);
       await expect(
-        await melakaResident.verifyResident(resident1.address, nric1)
+        await melakaResident.verifyWhitelistedResident(resident1.address, nric1)
       ).to.be.true;
     });
     it("Should return false if not added to whitelist", async function () {
@@ -188,7 +218,7 @@ describe("MelakaResident and MelakaRice", function () {
       await melakaResident.grantRole(GOVERNMENT_OFFICER_ROLE, officer1.address);
       const nric1 = ethers.utils.formatBytes32String("760119097876");
       await expect(
-        await melakaResident.verifyResident(resident1.address, nric1)
+        await melakaResident.verifyWhitelistedResident(resident1.address, nric1)
       ).to.be.false;
     });
     it("Should return false if NRIC is incorrect", async function () {
@@ -200,7 +230,10 @@ describe("MelakaResident and MelakaRice", function () {
       await melakaResident.addResidentWhitelist(resident1.address, nric1);
       const falseNric = ethers.utils.formatBytes32String("770119097876");
       await expect(
-        await melakaResident.verifyResident(resident1.address, falseNric)
+        await melakaResident.verifyWhitelistedResident(
+          resident1.address,
+          falseNric
+        )
       ).to.be.false;
     });
     it("Should return false if NRIC is correct but wrong resident", async function () {
@@ -210,7 +243,7 @@ describe("MelakaResident and MelakaRice", function () {
       const nric1 = ethers.utils.formatBytes32String("760119097876");
       await melakaResident.addResidentWhitelist(resident1.address, nric1);
       await expect(
-        await melakaResident.verifyResident(resident2.address, nric1)
+        await melakaResident.verifyWhitelistedResident(resident2.address, nric1)
       ).to.be.false;
     });
   });

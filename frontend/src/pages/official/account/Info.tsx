@@ -7,7 +7,13 @@ import { OfficialState } from '../../../services/store';
 import { useOfficialSelector } from '../../../services/hook';
 import ethLogo from '../../../assets/eth-logo.png';
 
-function Balance({ etherBal }: { etherBal: string }) {
+function Balance({
+  etherBal,
+  publicKey,
+}: {
+  etherBal: string;
+  publicKey: string;
+}) {
   return (
     <Box
       sx={{
@@ -26,6 +32,16 @@ function Balance({ etherBal }: { etherBal: string }) {
         }}
       >
         <img src={ethLogo} alt="Eth logo" style={{ width: '95px' }} />
+        <Typography
+          style={{
+            fontFamily: 'Abel',
+            fontSize: '11.5pt',
+            marginTop: '0px',
+            marginBottom: '5px',
+          }}
+        >
+          {publicKey}
+        </Typography>
         <Typography
           style={{
             fontFamily: 'Abel',
@@ -53,7 +69,7 @@ function Balance({ etherBal }: { etherBal: string }) {
   );
 }
 
-function Nric({ nric }: { nric: string }) {
+function RoleStatus({ nric }: { nric: string }) {
   return (
     <Box
       sx={{
@@ -85,6 +101,48 @@ function Nric({ nric }: { nric: string }) {
       >
         {nric}
       </Typography>
+      <Typography
+        style={{
+          fontFamily: 'Abel',
+          fontSize: '12pt',
+          fontWeight: 'bold',
+          color: 'silver',
+          marginRight: '3px',
+          marginTop: '4px',
+        }}
+      >
+        Residential status
+      </Typography>
+      <Typography
+        style={{
+          fontFamily: 'Abel',
+          fontSize: '21pt',
+          marginTop: '-9px',
+        }}
+      >
+        Resident | Non-resident
+      </Typography>
+      <Typography
+        style={{
+          fontFamily: 'Abel',
+          fontSize: '12pt',
+          fontWeight: 'bold',
+          color: 'silver',
+          marginRight: '3px',
+          marginTop: '4px',
+        }}
+      >
+        Role
+      </Typography>
+      <Typography
+        style={{
+          fontFamily: 'Abel',
+          fontSize: '21pt',
+          marginTop: '-9px',
+        }}
+      >
+        Officer | No role
+      </Typography>
     </Box>
   );
 }
@@ -100,8 +158,8 @@ export default function Info() {
 
   return (
     <Box sx={styles.container}>
-      <Nric nric={nric || 'NA'} />
-      <Balance etherBal={etherBal} />
+      <RoleStatus nric={nric || 'NA'} />
+      <Balance publicKey={publicKey || 'NA'} etherBal={etherBal} />
     </Box>
   );
 }

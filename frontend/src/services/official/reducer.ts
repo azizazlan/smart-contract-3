@@ -11,6 +11,8 @@ interface OfficialState {
   publicKey: string | null;
   seedPhrase: string | null;
   etherBal: string;
+  isResident: boolean;
+  isOfficer: boolean;
 }
 
 const initialState: OfficialState = {
@@ -20,6 +22,8 @@ const initialState: OfficialState = {
   publicKey: null,
   seedPhrase: null,
   etherBal: '0',
+  isOfficer: false,
+  isResident: false,
 };
 
 export const officialSlice = createSlice({
@@ -36,6 +40,8 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.isOfficer = payload.isOfficer;
+      state.isResident = payload.isResident;
       state.submissionState = 'OK';
     });
     builder.addCase(signupOfficial.pending, (state, {}) => {

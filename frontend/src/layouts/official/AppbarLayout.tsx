@@ -84,11 +84,6 @@ function Appbar() {
 }
 
 export default function Layout() {
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate('/');
-  };
-
   return (
     <Box>
       <Appbar />

@@ -36,7 +36,7 @@ export default function DrawerMenu({
     >
       <List>
         <ListItem key="Account" disablePadding>
-          <ListItemButton component={Link} to="/account">
+          <ListItemButton component={Link} to="/signedofficial">
             <ListItemIcon>
               <AccountCircleIcon sx={{ color: 'grey' }} />
             </ListItemIcon>

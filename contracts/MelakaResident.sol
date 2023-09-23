@@ -19,9 +19,13 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
         keccak256("GOVERNMENT_OFFICER_ROLE");
     bytes32 public constant SUBSIDY_RECIPIENT = keccak256("SUBSIDY_RECIPIENT");
 
+    // Residential status
+    mapping(address => bool) public residents;
+    mapping(bytes => bool) public residentNrics;
+
     // Mapping to store whitelisted residents
     mapping(address => bool) public whitelistedResidents;
-    mapping(bytes => bool) public residentNrics;
+    mapping(bytes => bool) public whitelistedResidentNrics;
 
     // ERC20 contract address
     address public ftContractAddress;
@@ -40,6 +44,24 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
         _safeMint(to, tokenId);
     }
 
+    function awardResidentialStatus(
+        address account,
+        bytes memory nric
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(!residents[account], "Address is already a resident");
+        require(!residentNrics[nric], "NRIC is already used by a resident");
+
+        residents[account] = true;
+        residentNrics[nric] = true;
+    }
+
+    function verifyResident(
+        address resident,
+        bytes memory residentNric
+    ) public view returns (bool) {
+        return residents[resident] && residentNrics[residentNric];
+    }
+
     // Add an address to the whitelist
     function addResidentWhitelist(
         address account,
@@ -52,13 +74,13 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
         );
 
         require(
-            !residentNrics[residentNric],
+            !whitelistedResidentNrics[residentNric],
             "Resident NRIC is already whitelisted"
         );
 
         // Perform the whitelisting by adding the address to the mapping
         whitelistedResidents[account] = true;
-        residentNrics[residentNric] = true;
+        whitelistedResidentNrics[residentNric] = true;
 
         grantRole(SUBSIDY_RECIPIENT, account);
     }
@@ -70,7 +92,7 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
     ) external onlyRole(GOVERNMENT_OFFICER_ROLE) {
         // Perform the whitelisting by adding the address to the mapping
         whitelistedResidents[account] = false;
-        residentNrics[residentNric] = false;
+        whitelistedResidentNrics[residentNric] = false;
         revokeRole(SUBSIDY_RECIPIENT, account);
     }
 
@@ -80,14 +102,18 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
         return whitelistedResidents[resident];
     }
 
-    function verifyResident(
+    function verifyWhitelistedResident(
         address resident,
         bytes memory residentNric
     ) public view returns (bool) {
-        return whitelistedResidents[resident] && residentNrics[residentNric];
+        return
+            residents[resident] &&
+            residentNrics[residentNric] &&
+            whitelistedResidents[resident] &&
+            whitelistedResidentNrics[residentNric];
     }
 
-    function transferToResident(address to) external onlyRole(MINTER_ROLE) {
+    function transferFTToResident(address to) external onlyRole(MINTER_ROLE) {
         require(
             !hasRole(SUBSIDY_RECIPIENT, msg.sender),
             "Only whitelist resident can receive FT"
@@ -95,7 +121,7 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
 
         require(isResidentWhitelisted(to), "Resident not in whitelist");
 
-        // Transfer the NFT from this contract to the specified address
+        // Transfer an FT from this contract to the specified address
         MelakaRice nftContract = MelakaRice(ftContractAddress);
         nftContract.mint(to, 1);
     }
