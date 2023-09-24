@@ -1,8 +1,7 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import { IconButton, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
-import cw from '@mui/icons-material/Check';
+import DoneIcon from '@mui/icons-material/Done';
 import styles from './styles';
 import { Navigate } from 'react-router-dom';
 import { OfficialState } from '../../../services/store';
@@ -108,11 +107,10 @@ function RoleStatus({
         NRIC
       </Typography>
       <Typography
+        color="primary"
         style={{
-          fontFamily: 'Abel',
-          fontSize: '21pt',
-          fontWeight: 'bold',
-          marginTop: '-9px',
+          fontFamily: 'Oswald',
+          fontSize: '16pt',
         }}
       >
         {nric}
@@ -126,21 +124,28 @@ function RoleStatus({
           marginTop: '4px',
         }}
       >
-        Residential status
+        Status
       </Typography>
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        <Typography
-          style={{
-            fontFamily: 'Oswald',
-            fontSize: '15pt',
-          }}
-        >
-          {isResident ? `Resident ✔` : `Non-resident`}
-        </Typography>
+        {isResident ? (
+          <Typography
+            color="primary"
+            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
+          >
+            Resident
+          </Typography>
+        ) : (
+          <Typography
+            color="error"
+            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
+          >
+            Non-resident
+          </Typography>
+        )}
         <IconButton onClick={handleReloadResidentStat}>
-          <ReplayIcon color="secondary" fontSize="small" />
+          <ReplayIcon color="primary" fontSize="small" />
         </IconButton>
       </Box>
 
@@ -158,16 +163,23 @@ function RoleStatus({
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        <Typography
-          style={{
-            fontFamily: 'Oswald',
-            fontSize: '15pt',
-          }}
-        >
-          {isOfficer ? `Officer ✔` : `Pending appointment`}
-        </Typography>
+        {isOfficer ? (
+          <Typography
+            color="primary"
+            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
+          >
+            Officer
+          </Typography>
+        ) : (
+          <Typography
+            color="error"
+            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
+          >
+            NA
+          </Typography>
+        )}
         <IconButton onClick={handleReloadRole}>
-          <ReplayIcon color="secondary" fontSize="small" />
+          <ReplayIcon color="primary" fontSize="small" />
         </IconButton>
       </Box>
     </Box>

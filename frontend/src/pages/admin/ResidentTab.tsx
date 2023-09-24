@@ -5,10 +5,21 @@ import {
   Divider,
   FormControl,
   FormHelperText,
+  Alert,
+  IconButton,
+  Typography,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useAdminDispatch, useAdminSelector } from '../../services/hook';
+import awardResident from '../../services/admin/thunks/awardResident';
+import { AdminState } from '../../services/store';
+import { resetSubmission } from '../../services/admin/reducer';
+import checkResident from '../../services/admin/thunks/checkResident';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -31,7 +42,12 @@ type ResidentAwardFields = {
 };
 
 export default function ResidentTab() {
+  const dispatch = useAdminDispatch();
+  const { submissionState, isResident } = useAdminSelector(
+    (state: AdminState) => state.admin
+  );
   const {
+    reset,
     control,
     handleSubmit,
     formState: { errors },
@@ -43,36 +59,59 @@ export default function ResidentTab() {
     },
   });
 
+  const handleReset = () => {
+    reset();
+    dispatch(resetSubmission());
+  };
+
+  const handleResetSubmission = () => {
+    dispatch(resetSubmission());
+  };
+
   const onSubmit: SubmitHandler<ResidentAwardFields> = (data) => {
     const { nric, publicKey } = data;
-    console.log(nric);
-    console.log(publicKey);
+    dispatch(awardResident({ publicKey, nric }));
+    dispatch(checkResident({ publicKey, nric }));
   };
 
   return (
     <Box sx={{ marginTop: 0 }}>
       <form id="award_resident_form" onSubmit={handleSubmit(onSubmit)}>
-        <FormControl fullWidth margin="normal">
-          <Controller
-            name="nric"
-            defaultValue=""
-            control={control}
-            render={({ field }) => (
-              <TextField
-                InputLabelProps={{ shrink: true }}
-                id="nric"
-                label="NRIC"
-                variant="outlined"
-                {...field}
-              />
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <FormControl fullWidth margin="normal" sx={{ flexGrow: 1 }}>
+            <Controller
+              name="nric"
+              defaultValue=""
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="number"
+                  InputLabelProps={{ shrink: true }}
+                  id="nric"
+                  label="NRIC"
+                  variant="outlined"
+                  {...field}
+                />
+              )}
+            />
+            {errors.nric ? (
+              <FormHelperText error>{errors.nric.message}</FormHelperText>
+            ) : (
+              <FormHelperText>*Without dash or any symbol</FormHelperText>
             )}
-          />
-          {errors.nric ? (
-            <FormHelperText error>{errors.nric.message}</FormHelperText>
-          ) : (
-            <FormHelperText>*Without dash or any symbol</FormHelperText>
-          )}
-        </FormControl>
+          </FormControl>
+          <Divider sx={{ minWidth: 7 }} />
+          <FormControl margin="normal">
+            <TextField
+              disabled
+              InputLabelProps={{ shrink: true }}
+              id="residencyStat"
+              label="Status"
+              variant="outlined"
+              value={isResident ? 'Resident' : '-'}
+            />
+          </FormControl>
+        </Box>
         <FormControl fullWidth margin="normal">
           <Controller
             name="publicKey"
@@ -98,19 +137,40 @@ export default function ResidentTab() {
           )}
         </FormControl>
       </form>
+      <Box sx={{ minHeight: '37pt', marginTop: 1 }}>
+        {submissionState === 'FAILED' ? (
+          <Alert
+            sx={{ mb: 2 }}
+            icon={false}
+            severity="error"
+            action={
+              <IconButton size="small" onClick={handleResetSubmission}>
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            Failed to award! The NRIC or public key already has been added or
+            mismatch with the public key!
+          </Alert>
+        ) : null}
+      </Box>
       <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: 3 }}>
         <Box sx={{ flexGrow: 1 }} />
+        <Button variant="outlined" color="secondary" onClick={handleReset}>
+          reset
+        </Button>
+        <Divider sx={{ minWidth: 7 }} />
         <Button variant="contained" color="secondary">
           revoke
         </Button>
-        <Divider sx={{ minWidth: 5 }} />
+        <Divider sx={{ minWidth: 7 }} />
         <Button
           type="submit"
           form="award_resident_form"
           variant="contained"
           sx={{ backgroundColor: '#1B1464' }}
         >
-          award residency
+          award
         </Button>
       </Box>
     </Box>

@@ -2,12 +2,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import metamaskInfo from './thunks/metamaskInfo';
+import awardResident from './thunks/awardResident';
+import checkResident from './thunks/checkResident';
 
 interface AdminState {
   submissionState: SubmissionStates;
   networkId: string;
   etherBal: string;
   publicKey: string | null;
+  isResident: boolean;
 }
 
 const initialState: AdminState = {
@@ -15,6 +18,7 @@ const initialState: AdminState = {
   networkId: '-1',
   etherBal: '0',
   publicKey: null,
+  isResident: false,
 };
 
 export const adminSlice = createSlice({
@@ -22,6 +26,10 @@ export const adminSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    resetSubmission: (state) => {
+      state.isResident = false;
+      state.submissionState = 'IDLE';
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(metamaskInfo.pending, (state, {}) => {
@@ -33,8 +41,27 @@ export const adminSlice = createSlice({
       state.etherBal = payload.etherBal;
       state.submissionState = 'OK';
     });
+    builder.addCase(awardResident.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(awardResident.rejected, (state, action) => {
+      console.log(action);
+      state.submissionState = 'FAILED';
+    });
+    builder.addCase(awardResident.fulfilled, (state, { payload }) => {
+      console.log(payload);
+      state.isResident = payload?.isResident;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(checkResident.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(checkResident.fulfilled, (state, { payload }) => {
+      state.isResident = payload?.isResident;
+      state.submissionState = 'OK';
+    });
   },
 });
 
-export const { reset } = adminSlice.actions;
+export const { reset, resetSubmission } = adminSlice.actions;
 export default adminSlice.reducer;
