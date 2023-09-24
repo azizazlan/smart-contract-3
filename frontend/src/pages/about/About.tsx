@@ -28,7 +28,7 @@ export default function About() {
         <img src={flag} alt="melaka flag" style={{ width: '275px' }} />
       </Box>
       <Typography variant="body2" gutterBottom>
-        Melaka FairSubsidy is a basic DApp to demonstrate the use of smart
+        Melaka EquiSubsidy is a basic DApp to demonstrate the use of smart
         contracts to regulate the distribution of subsidised items to the
         residents of Melaka.
       </Typography>

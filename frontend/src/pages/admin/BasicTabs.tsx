@@ -7,6 +7,9 @@ import { utils } from 'ethers';
 import InfoTab from './InfoTab';
 import ResidentTab from './ResidentTab';
 import OfficerTab from './OfficerTab';
+import { useAdminDispatch, useAdminSelector } from '../../services/hook';
+import { AdminState } from '../../services/store';
+import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,39 +41,14 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
+  const dispatch = useAdminDispatch();
+  const { networkId, publicKey, etherBal } = useAdminSelector(
+    (state: AdminState) => state.admin
+  );
   const [value, setValue] = React.useState(0);
-  const [hasProvider, setHasProvider] = React.useState<boolean | null>(null);
-  const [chainId, setChainId] = React.useState<string | null>(null);
-  const [publicKey, setPublicKey] = React.useState<string | null>(null);
-  const [balance, setBalance] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    const getProvider = async () => {
-      const provider = await detectEthereumProvider({ silent: true });
-      setHasProvider(Boolean(provider)); // transform provider to true or false
-
-      let accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts',
-      });
-      console.log(accounts[0]);
-      setPublicKey(accounts[0]);
-
-      const bal = await window.ethereum!.request({
-        method: 'eth_getBalance',
-        params: [accounts[0], 'latest'],
-      });
-      setBalance(utils.formatEther(bal));
-
-      let chainIdHex = await window.ethereum.request({
-        method: 'eth_chainId',
-      });
-      console.log(chainIdHex);
-      const nchainId = parseInt(chainIdHex, 16);
-      console.log(nchainId.toString());
-      setChainId(nchainId.toString());
-    };
-
-    getProvider();
+    dispatch(metamaskInfo());
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -92,9 +70,9 @@ export default function BasicTabs() {
       </Box>
       <CustomTabPanel value={value} index={0}>
         <InfoTab
-          chainId={chainId || ''}
+          chainId={networkId || ''}
           publicKey={publicKey || ''}
-          balance={balance || ''}
+          balance={etherBal || ''}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>

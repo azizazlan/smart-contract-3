@@ -1,17 +1,20 @@
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
+import metamaskInfo from './thunks/metamaskInfo';
 
 interface AdminState {
   submissionState: SubmissionStates;
-  networkId: number;
+  networkId: string;
   etherBal: string;
+  publicKey: string | null;
 }
 
 const initialState: AdminState = {
   submissionState: 'IDLE',
-  networkId: -1,
+  networkId: '-1',
   etherBal: '0',
+  publicKey: null,
 };
 
 export const adminSlice = createSlice({
@@ -21,17 +24,15 @@ export const adminSlice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    // builder.addCase(initialize.pending, (state, {}) => {
-    //   state.submissionState = 'PENDING';
-    // });
-    // builder.addCase(initialize.fulfilled, (state, { payload }) => {
-    //   state.nric = payload.nric;
-    //   state.publicKey = payload.publicKey;
-    //   state.seedPhrase = payload.seedPhrase;
-    //   state.isOfficer = payload.isOfficer;
-    //   state.isResident = payload.isResident;
-    //   state.submissionState = 'OK';
-    // });
+    builder.addCase(metamaskInfo.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(metamaskInfo.fulfilled, (state, { payload }) => {
+      state.publicKey = payload.publicKey;
+      state.networkId = payload.networkId;
+      state.etherBal = payload.etherBal;
+      state.submissionState = 'OK';
+    });
   },
 });
 
