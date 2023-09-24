@@ -4,6 +4,8 @@ import {
   OfficialState,
   ResidentDispatch,
   ResidentState,
+  AdminDispatch,
+  AdminState,
 } from './store';
 
 export const useResidentDispatch = () => useDispatch<ResidentDispatch>();
@@ -13,3 +15,6 @@ export const useResidentSelector: TypedUseSelectorHook<ResidentState> =
 export const useOfficialDispatch = () => useDispatch<OfficialDispatch>();
 export const useOfficialSelector: TypedUseSelectorHook<OfficialState> =
   useSelector;
+
+export const useAdminDispatch = () => useDispatch<AdminDispatch>();
+export const useAdminSelector: TypedUseSelectorHook<AdminState> = useSelector;

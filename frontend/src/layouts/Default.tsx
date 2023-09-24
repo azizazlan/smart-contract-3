@@ -22,9 +22,8 @@ export default function Layout() {
         onClick={handleClick}
         src={flag}
         alt="melaka flag"
-        style={{ width: '225px' }}
+        style={{ width: '225px', marginBottom: 7 }}
       />
-      <h1 style={{ color: '#273c75' }}>Resident</h1>
       <Outlet />
       <Footer />
     </Box>
