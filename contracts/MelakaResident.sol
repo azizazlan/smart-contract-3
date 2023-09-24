@@ -35,6 +35,7 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
     ) ERC721("Melaka Resident Identifier", "MLKID") {
         ftContractAddress = _ftContractAddress;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(GOVERNMENT_OFFICER_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
     }
 
@@ -47,12 +48,23 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
     function awardResidentialStatus(
         address account,
         bytes memory nric
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external onlyRole(GOVERNMENT_OFFICER_ROLE) {
         require(!residents[account], "Address is already a resident");
         require(!residentNrics[nric], "NRIC is already used by a resident");
 
         residents[account] = true;
         residentNrics[nric] = true;
+    }
+
+    function revokeResidentialStatus(
+        address account,
+        bytes memory nric
+    ) external onlyRole(GOVERNMENT_OFFICER_ROLE) {
+        require(residents[account], "Address is not resident");
+        require(residentNrics[nric], "NRIC not a resident");
+
+        residents[account] = false;
+        residentNrics[nric] = false;
     }
 
     function verifyResident(
