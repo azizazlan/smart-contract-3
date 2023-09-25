@@ -7,15 +7,18 @@ import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type CheckResidentFields = {
+type CheckResidencyFields = {
   nric: string;
   publicKey: string;
 };
 
-const checkResident = createAsyncThunk(
-  'adminCheckResidentStatus',
-  async (props: CheckResidentFields) => {
+const checkResidency = createAsyncThunk(
+  'adminCheckResidencyStatus',
+  async (props: CheckResidencyFields) => {
     const { publicKey, nric } = props;
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
@@ -36,4 +39,4 @@ const checkResident = createAsyncThunk(
     };
   }
 );
-export default checkResident;
+export default checkResidency;

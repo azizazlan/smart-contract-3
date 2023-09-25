@@ -25,6 +25,7 @@ import {
 } from '../../../services/hook.ts';
 import signupResident from '../../../services/resident/thunks/signup.ts';
 import { ResidentState } from '../../../services/store.ts';
+import BackdropLoader from '../../../commons/BackdropLoader.tsx';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -94,13 +95,7 @@ export default function Signup() {
 
   return (
     <Box sx={styles.container}>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={submissionState === 'PENDING'}
-        onClick={() => console.log('Close backdrop')}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <BackdropLoader submissionState={submissionState} />
       <form id="resident_signup_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller

@@ -18,6 +18,8 @@ type AwardResidentFields = {
 const awardResident = createAsyncThunk(
   'adminAwardResident',
   async (props: AwardResidentFields) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     const { publicKey, nric } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
@@ -33,12 +35,13 @@ const awardResident = createAsyncThunk(
       web3Provider
     );
     const bytesNric = ethers.utils.formatBytes32String(nric);
+
     await contract
       .connect(metaMaskWallet)
       .awardResidentialStatus(publicKey, bytesNric);
 
     const isResident = await contract.verifyResident(publicKey, bytesNric);
-    console.log(isResident);
+
     return {
       isResident,
     };

@@ -1,13 +1,14 @@
+import { config } from "dotenv";
+config(); // Load environment variables from .env
+
 import { ethers } from "hardhat";
 import { Wallet } from "ethers";
 
-const METAMASK_PRIVATE_KEY =
-  "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+const RPC_URL = process.env.RPC_URL as string;
+const METAMASK_PRIVATE_KEY = process.env.METAMASK_PRIVATE_KEY as string;
 
 async function main() {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "http://127.0.0.1:8545/"
-  );
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
   const metaMaskWallet = new Wallet(METAMASK_PRIVATE_KEY, provider);
 
   const MelakaRice = await ethers.getContractFactory("MelakaRice");

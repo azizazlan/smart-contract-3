@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import metamaskInfo from './thunks/metamaskInfo';
 import awardResident from './thunks/awardResident';
-import checkResident from './thunks/checkResident';
+import checkResident from './thunks/checkResidency';
 
 interface AdminState {
   submissionState: SubmissionStates;

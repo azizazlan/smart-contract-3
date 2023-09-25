@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   TextField,
@@ -7,11 +8,9 @@ import {
   FormHelperText,
   Alert,
   IconButton,
-  Typography,
-  ListItem,
-  ListItemText,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import DoneIcon from '@mui/icons-material/Done';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -19,7 +18,8 @@ import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import awardResident from '../../services/admin/thunks/awardResident';
 import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
-import checkResident from '../../services/admin/thunks/checkResident';
+import checkResidency from '../../services/admin/thunks/checkResidency';
+import BackdropLoader from '../../commons/BackdropLoader';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -42,6 +42,7 @@ type ResidentAwardFields = {
 };
 
 export default function ResidentTab() {
+  const [checkResidencyForm, setCheckResidencyForm] = React.useState(false);
   const dispatch = useAdminDispatch();
   const { submissionState, isResident } = useAdminSelector(
     (state: AdminState) => state.admin
@@ -70,48 +71,39 @@ export default function ResidentTab() {
 
   const onSubmit: SubmitHandler<ResidentAwardFields> = (data) => {
     const { nric, publicKey } = data;
+    if (checkResidencyForm) {
+      dispatch(checkResidency({ publicKey, nric }));
+      return;
+    }
     dispatch(awardResident({ publicKey, nric }));
-    dispatch(checkResident({ publicKey, nric }));
   };
 
   return (
     <Box sx={{ marginTop: 0 }}>
+      <BackdropLoader submissionState={submissionState} />
       <form id="award_resident_form" onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <FormControl fullWidth margin="normal" sx={{ flexGrow: 1 }}>
-            <Controller
-              name="nric"
-              defaultValue=""
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  type="number"
-                  InputLabelProps={{ shrink: true }}
-                  id="nric"
-                  label="NRIC"
-                  variant="outlined"
-                  {...field}
-                />
-              )}
-            />
-            {errors.nric ? (
-              <FormHelperText error>{errors.nric.message}</FormHelperText>
-            ) : (
-              <FormHelperText>*Without dash or any symbol</FormHelperText>
+        <FormControl fullWidth margin="normal" sx={{ flexGrow: 1 }}>
+          <Controller
+            name="nric"
+            defaultValue=""
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="number"
+                InputLabelProps={{ shrink: true }}
+                id="nric"
+                label="NRIC"
+                variant="outlined"
+                {...field}
+              />
             )}
-          </FormControl>
-          <Divider sx={{ minWidth: 7 }} />
-          <FormControl margin="normal">
-            <TextField
-              disabled
-              InputLabelProps={{ shrink: true }}
-              id="residencyStat"
-              label="Status"
-              variant="outlined"
-              value={isResident ? 'Resident' : '-'}
-            />
-          </FormControl>
-        </Box>
+          />
+          {errors.nric ? (
+            <FormHelperText error>{errors.nric.message}</FormHelperText>
+          ) : (
+            <FormHelperText>*Without dash or any symbol</FormHelperText>
+          )}
+        </FormControl>
         <FormControl fullWidth margin="normal">
           <Controller
             name="publicKey"
@@ -137,7 +129,7 @@ export default function ResidentTab() {
           )}
         </FormControl>
       </form>
-      <Box sx={{ minHeight: '37pt', marginTop: 1 }}>
+      <Box sx={{ minHeight: '57pt', marginTop: 1 }}>
         {submissionState === 'FAILED' ? (
           <Alert
             sx={{ mb: 2 }}
@@ -165,9 +157,22 @@ export default function ResidentTab() {
         </Button>
         <Divider sx={{ minWidth: 7 }} />
         <Button
+          onClick={() => setCheckResidencyForm(true)}
+          type="submit"
+          form="award_resident_form"
+          variant="outlined"
+          aria-label="status"
+          endIcon={isResident ? <DoneIcon /> : null}
+        >
+          residency
+        </Button>
+        <Divider sx={{ minWidth: 7 }} />
+        <Button
+          onClick={() => setCheckResidencyForm(false)}
           type="submit"
           form="award_resident_form"
           variant="contained"
+          aria-label="award"
           sx={{ backgroundColor: '#1B1464' }}
         >
           award
