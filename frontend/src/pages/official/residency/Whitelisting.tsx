@@ -143,7 +143,7 @@ export default function Whitelisting() {
           form="official_whitelisting"
           fullWidth
           variant="contained"
-          sx={{ backgroundColor: 'cadetblue' }}
+          sx={{ backgroundColor: '#0097e6' }}
           onClick={() => setToRemove(false)}
         >
           add

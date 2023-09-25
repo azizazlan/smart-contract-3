@@ -79,7 +79,7 @@ export default function DrawerMenu({
           </ListItemButton>
         </ListItem>
         <Divider />
-        <ListItem key="Verify" disablePadding>
+        <ListItem key="award_residency" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/residency">
             <ListItemIcon>
               <PersonAddIcon sx={{ color: 'grey' }} />
@@ -93,7 +93,7 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Verify" disablePadding>
+        <ListItem key="revoke_residency" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/residency">
             <ListItemIcon />
             <ListItemText
@@ -106,7 +106,7 @@ export default function DrawerMenu({
           </ListItemButton>
         </ListItem>
         <Divider />
-        <ListItem key="Verify" disablePadding>
+        <ListItem key="add_whitelisting" disablePadding>
           <ListItemButton
             component={Link}
             to="/signedofficial/whitelist-residency"
@@ -123,7 +123,7 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Verify" disablePadding>
+        <ListItem key="remove_whitelisting" disablePadding>
           <ListItemButton
             component={Link}
             to="/signedofficial/whitelist-residency"
@@ -139,7 +139,7 @@ export default function DrawerMenu({
           </ListItemButton>
         </ListItem>
         <Divider />
-        <ListItem key="Verify" disablePadding>
+        <ListItem key="verify_residency" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/check-residency">
             <ListItemIcon />
             <ListItemText
@@ -151,7 +151,7 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Verify" disablePadding>
+        <ListItem key="transfer_ft" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/transfer">
             <ListItemIcon />
             <ListItemText
