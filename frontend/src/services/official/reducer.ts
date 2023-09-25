@@ -5,6 +5,7 @@ import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
 import residentialStatus from './thunks/residentialStat';
 import hasRole from './thunks/hasRole';
+import ethBal from './thunks/ethBal';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -67,6 +68,14 @@ export const officialSlice = createSlice({
     });
     builder.addCase(hasRole.fulfilled, (state, { payload }) => {
       state.isOfficer = payload.hasRole;
+      state.submissionState = 'OK';
+    });
+
+    builder.addCase(ethBal.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(ethBal.fulfilled, (state, { payload }) => {
+      state.etherBal = payload.ethBal;
       state.submissionState = 'OK';
     });
   },

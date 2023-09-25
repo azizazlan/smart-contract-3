@@ -1,12 +1,17 @@
-import { Box, Typography } from '@mui/material';
-import ethLogo from '../../../assets/eth-logo.png';
+import { Box, IconButton, Typography } from '@mui/material';
+import ReplayIcon from '@mui/icons-material/Replay';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+
+import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 export default function Balance({
   etherBal,
   publicKey,
+  handleReloadBal,
 }: {
   etherBal: string;
   publicKey: string;
+  handleReloadBal: () => void;
 }) {
   return (
     <Box
@@ -25,16 +30,17 @@ export default function Balance({
           alignItems: 'center',
         }}
       >
-        <img src={ethLogo} alt="Eth logo" style={{ width: '95px' }} />
+        <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
         <Typography
+          color="primary"
           style={{
-            fontFamily: 'Abel',
-            fontSize: '11.5pt',
+            fontFamily: 'Oswald',
+            fontSize: '16pt',
             marginTop: '0px',
             marginBottom: '5px',
           }}
         >
-          {publicKey}
+          {truncateEthAddr(publicKey)}
         </Typography>
         <Typography
           style={{
@@ -45,17 +51,20 @@ export default function Balance({
         >
           Ether Balance
         </Typography>
-        <Typography
-          style={{
-            fontFamily: 'Abel',
-            fontSize: '27pt',
-            fontWeight: 'bold',
-            marginTop: '-10px',
-            marginBottom: '15px',
-          }}
-        >
-          {etherBal}
-        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Typography
+            color="primary"
+            style={{
+              fontFamily: 'Oswald',
+              fontSize: '16pt',
+            }}
+          >
+            {etherBal}
+          </Typography>
+          <IconButton onClick={handleReloadBal}>
+            <ReplayIcon color="primary" fontSize="small" />
+          </IconButton>
+        </Box>
       </Box>
     </Box>
   );

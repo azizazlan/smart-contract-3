@@ -24,14 +24,6 @@ const residentialStatus = createAsyncThunk(
       contractABI.abi,
       provider
     );
-
-    console.log(publicKey);
-    console.log(nric);
-    const cname = await contract.name();
-    console.log(cname);
-    const csym = await contract.symbol();
-    console.log(csym);
-
     const isResident: boolean = await contract.verifyResident(
       publicKey,
       ethers.utils.formatBytes32String(nric)

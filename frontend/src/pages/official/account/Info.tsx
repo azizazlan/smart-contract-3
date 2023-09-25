@@ -10,6 +10,7 @@ import residentialStatus from '../../../services/official/thunks/residentialStat
 import hasRole from '../../../services/official/thunks/hasRole';
 import Balance from './Balance';
 import Status from './Status';
+import ethBal from '../../../services/official/thunks/ethBal';
 
 // Official info page
 export default function Info() {
@@ -38,16 +39,30 @@ export default function Info() {
     );
   };
 
+  const handleReloadBal = () => {
+    dispatch(
+      ethBal({
+        publicKey: publicKey as string,
+      })
+    );
+  };
+
   return (
     <Box sx={styles.container}>
-      <Status
-        nric={nric || 'NA'}
-        isResident={isResident}
-        handleReloadResidentStat={handleReloadResidentStat}
-        isOfficer={isOfficer}
-        handleReloadRole={handleReloadRole}
-      />
-      <Balance publicKey={publicKey || 'NA'} etherBal={etherBal} />
+      <Box sx={{ marginTop: 5 }}>
+        <Status
+          nric={nric || 'NA'}
+          isResident={isResident}
+          handleReloadResidentStat={handleReloadResidentStat}
+          isOfficer={isOfficer}
+          handleReloadRole={handleReloadRole}
+        />
+        <Balance
+          publicKey={publicKey || 'NA'}
+          etherBal={etherBal}
+          handleReloadBal={handleReloadBal}
+        />
+      </Box>
     </Box>
   );
 }

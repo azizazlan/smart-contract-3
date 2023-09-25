@@ -73,7 +73,11 @@ export default function Status({
           </Typography>
         )}
         <IconButton onClick={handleReloadResidentStat}>
-          <ReplayIcon color="primary" fontSize="small" />
+          <ReplayIcon
+            color="secondary"
+            fontSize="small"
+            sx={{ color: `${isResident ? 'silver' : '#c23616'}` }}
+          />
         </IconButton>
       </Box>
 
@@ -107,7 +111,11 @@ export default function Status({
           </Typography>
         )}
         <IconButton onClick={handleReloadRole}>
-          <ReplayIcon color="primary" fontSize="small" />
+          <ReplayIcon
+            color="primary"
+            fontSize="small"
+            sx={{ color: `${isOfficer ? 'silver' : '#c23616'}` }}
+          />
         </IconButton>
       </Box>
     </Box>
