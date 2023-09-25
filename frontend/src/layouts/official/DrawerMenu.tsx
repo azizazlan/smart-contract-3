@@ -6,12 +6,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LinkIcon from '@mui/icons-material/Link';
-import LinkOffIcon from '@mui/icons-material/LinkOff';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -98,9 +95,7 @@ export default function DrawerMenu({
         </ListItem>
         <ListItem key="Verify" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/residency">
-            <ListItemIcon>
-              <PersonRemoveIcon sx={{ color: 'grey' }} />
-            </ListItemIcon>
+            <ListItemIcon />
             <ListItemText
               primary={
                 <Typography color="secondary" sx={{ fontFamily: 'Oswald' }}>
@@ -133,9 +128,7 @@ export default function DrawerMenu({
             component={Link}
             to="/signedofficial/whitelist-residency"
           >
-            <ListItemIcon>
-              <LinkOffIcon sx={{ color: 'grey' }} />
-            </ListItemIcon>
+            <ListItemIcon />
             <ListItemText
               primary={
                 <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>

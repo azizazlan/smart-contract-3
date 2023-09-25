@@ -22,6 +22,7 @@ import { default as initOfficial } from './services/official/thunks/initialize';
 import NotFound from './pages/404/NotFound';
 import Residency from './pages/official/residency/Residency';
 import Whitelisting from './pages/official/residency/Whitelisting';
+import TransferFT from './pages/official/transfer/TransferFT';
 
 function App() {
   const location = useLocation();
@@ -60,6 +61,7 @@ function App() {
         <Route path="residency" element={<Residency />} />
         <Route path="whitelist-residency" element={<Whitelisting />} />
         <Route path="check-residency" element={<VerifyResidency />} />
+        <Route path="transfer" element={<TransferFT />} />
       </Route>
       <Route path="/admin" element={<OfficialLayout />}>
         <Route index element={<AdminLanding />} />
