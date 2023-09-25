@@ -4,13 +4,17 @@ import { SubmissionStates } from '../submissionState';
 import metamaskInfo from './thunks/metamaskInfo';
 import awardResident from './thunks/awardResident';
 import checkResident from './thunks/checkResidency';
+import checkRole from './thunks/checkRole';
+import assignRole from './thunks/assignRole';
 
 interface AdminState {
   submissionState: SubmissionStates;
   networkId: string;
   etherBal: string;
   publicKey: string | null;
-  isResident: boolean;
+  isClaimantResident: boolean;
+  isClaimantOfficer: boolean;
+  claimantPublicKey: string | null;
 }
 
 const initialState: AdminState = {
@@ -18,7 +22,9 @@ const initialState: AdminState = {
   networkId: '-1',
   etherBal: '0',
   publicKey: null,
-  isResident: false,
+  isClaimantResident: false,
+  isClaimantOfficer: false,
+  claimantPublicKey: null,
 };
 
 export const adminSlice = createSlice({
@@ -27,7 +33,8 @@ export const adminSlice = createSlice({
   reducers: {
     reset: () => initialState,
     resetSubmission: (state) => {
-      state.isResident = false;
+      state.isClaimantResident = false;
+      state.claimantPublicKey = null;
       state.submissionState = 'IDLE';
     },
   },
@@ -45,19 +52,47 @@ export const adminSlice = createSlice({
       state.submissionState = 'PENDING';
     });
     builder.addCase(awardResident.rejected, (state, action) => {
-      console.log(action);
       state.submissionState = 'FAILED';
     });
     builder.addCase(awardResident.fulfilled, (state, { payload }) => {
-      console.log(payload);
-      state.isResident = payload?.isResident;
+      state.isClaimantResident = payload?.isResident;
       state.submissionState = 'OK';
     });
     builder.addCase(checkResident.pending, (state, {}) => {
       state.submissionState = 'PENDING';
     });
     builder.addCase(checkResident.fulfilled, (state, { payload }) => {
-      state.isResident = payload?.isResident;
+      state.isClaimantResident = payload?.isResident;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(checkRole.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(checkRole.rejected, (state, {}) => {
+      state.submissionState = 'FAILED';
+    });
+    builder.addCase(checkRole.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.isClaimantOfficer = false;
+        return;
+      }
+      state.isClaimantOfficer = payload.isOfficer;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(assignRole.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(assignRole.rejected, (state, {}) => {
+      state.claimantPublicKey = null;
+      state.submissionState = 'FAILED';
+    });
+    builder.addCase(assignRole.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.claimantPublicKey = null;
+        state.submissionState = 'FAILED';
+        return;
+      }
+      state.claimantPublicKey = payload.publicKey;
       state.submissionState = 'OK';
     });
   },

@@ -44,7 +44,7 @@ type ResidentAwardFields = {
 export default function ResidentTab() {
   const [checkResidencyForm, setCheckResidencyForm] = React.useState(false);
   const dispatch = useAdminDispatch();
-  const { submissionState, isResident } = useAdminSelector(
+  const { submissionState, isClaimantResident } = useAdminSelector(
     (state: AdminState) => state.admin
   );
   const {
@@ -65,7 +65,7 @@ export default function ResidentTab() {
     dispatch(resetSubmission());
   };
 
-  const handleResetSubmission = () => {
+  const handleCloseAlert = () => {
     dispatch(resetSubmission());
   };
 
@@ -136,7 +136,7 @@ export default function ResidentTab() {
             icon={false}
             severity="error"
             action={
-              <IconButton size="small" onClick={handleResetSubmission}>
+              <IconButton size="small" onClick={handleCloseAlert}>
                 <CloseIcon fontSize="inherit" />
               </IconButton>
             }
@@ -162,7 +162,7 @@ export default function ResidentTab() {
           form="award_resident_form"
           variant="outlined"
           aria-label="status"
-          endIcon={isResident ? <DoneIcon /> : null}
+          endIcon={isClaimantResident ? <DoneIcon /> : null}
         >
           residency
         </Button>

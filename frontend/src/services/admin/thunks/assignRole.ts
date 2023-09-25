@@ -4,22 +4,24 @@ import { ethers, Wallet } from 'ethers';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
 
+const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
+  ethers.utils.toUtf8Bytes('GOVERNMENT_OFFICER_ROLE')
+);
 const METAMASK_PRIVATE_KEY = import.meta.env.VITE_APP_METAMASK_PRIVATE_KEY;
 
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type AwardResidentFields = {
-  nric: string;
+type AssignRoleFields = {
   publicKey: string;
 };
 
-const awardResident = createAsyncThunk(
-  'adminAwardResident',
-  async (props: AwardResidentFields) => {
+const assignRole = createAsyncThunk(
+  'adminAssignRole',
+  async (props: AssignRoleFields) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const { publicKey, nric } = props;
+    const { publicKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
@@ -33,17 +35,13 @@ const awardResident = createAsyncThunk(
       contractABI.abi,
       web3Provider
     );
-    const bytesNric = ethers.utils.formatBytes32String(nric);
-
     await contract
       .connect(metaMaskWallet)
-      .awardResidentialStatus(publicKey, bytesNric);
-
-    const isResident = await contract.verifyResident(publicKey, bytesNric);
+      .grantRole(GOVERNMENT_OFFICER_ROLE, publicKey);
 
     return {
-      isResident,
+      publicKey,
     };
   }
 );
-export default awardResident;
+export default assignRole;
