@@ -122,6 +122,18 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
+        <ListItem key="Verify" disablePadding>
+          <ListItemButton component={Link} to="/signedofficial/transfer">
+            <ListItemIcon />
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  Transfer subsidy
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
         <Divider />
         <ListItem key="About" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/about">
