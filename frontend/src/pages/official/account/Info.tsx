@@ -6,7 +6,7 @@ import {
   useOfficialDispatch,
   useOfficialSelector,
 } from '../../../services/hook';
-import residentialStatus from '../../../services/official/thunks/residentialStat';
+import residentialStatus from '../../../services/official/thunks/checkResidencyStat';
 import hasRole from '../../../services/official/thunks/hasRole';
 import Balance from './Balance';
 import Status from './Status';

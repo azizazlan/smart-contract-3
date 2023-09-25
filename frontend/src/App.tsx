@@ -10,6 +10,7 @@ import { default as OfficialSignup } from './pages/official/account/Signup';
 import Restore from './pages/resident/account/Restore';
 import { default as OfficialRestore } from './pages/official/account/Restore';
 import { default as OfficialAccountInfo } from './pages/official/account/Info';
+import { default as VerifyResidency } from './pages/official/residency/Verify';
 import { default as AccountInfo } from './pages/resident/account/Info';
 import AdminLanding from './pages/admin/Landing';
 import About from './pages/about/About';
@@ -20,6 +21,7 @@ import { default as initResident } from './services/resident/thunks/initialize';
 import { default as initOfficial } from './services/official/thunks/initialize';
 import NotFound from './pages/404/NotFound';
 import Residency from './pages/official/residency/Residency';
+import Whitelisting from './pages/official/residency/Whitelisting';
 
 function App() {
   const location = useLocation();
@@ -56,6 +58,8 @@ function App() {
       <Route path="/signedofficial" element={<OfficialAppbarLayout />}>
         <Route index element={<OfficialAccountInfo />} />
         <Route path="residency" element={<Residency />} />
+        <Route path="whitelist-residency" element={<Whitelisting />} />
+        <Route path="check-residency" element={<VerifyResidency />} />
       </Route>
       <Route path="/admin" element={<OfficialLayout />}>
         <Route index element={<AdminLanding />} />

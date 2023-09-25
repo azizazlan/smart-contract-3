@@ -12,7 +12,6 @@ import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import styles from './styles';
-import awardResidency from '../../../services/official/thunks/awardResidency';
 import {
   useOfficialDispatch,
   useOfficialSelector,
@@ -34,19 +33,18 @@ const schema = Yup.object().shape({
     ),
 });
 
-type ResidentAwardFields = {
+type VerifyResidencyFields = {
   nric: string;
   publicKey: string;
 };
 
-export default function Residency() {
-  const [toRevoke, setToRevoke] = React.useState(false);
+export default function VerifyResidency() {
   const {
     reset,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ResidentAwardFields>({
+  } = useForm<VerifyResidencyFields>({
     resolver: yupResolver(schema),
     defaultValues: {
       nric: '',
@@ -59,32 +57,21 @@ export default function Residency() {
     (state: OfficialState) => state.official
   );
 
-  const onSubmit: SubmitHandler<ResidentAwardFields> = (data) => {
+  const onSubmit: SubmitHandler<VerifyResidencyFields> = (data) => {
     const { nric, publicKey } = data;
-    if (toRevoke) {
-      console.log('to revoke!');
-      return;
-    }
-    if (!seedPhrase) {
-      console.log('seedPhrase is null');
-      return;
-    }
-    dispatch(
-      awardResidency({ nric, publicKey, officialSeedphrase: seedPhrase })
-    );
+    console.log(`${nric} ${publicKey}`);
   };
 
   const handleReset = () => {
-    setToRevoke(false);
     reset();
   };
 
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
       <Typography variant="h5" color="primary">
-        Residency
+        Residency and whitelisting status
       </Typography>
-      <form id="official_residency_status" onSubmit={handleSubmit(onSubmit)}>
+      <form id="official_verify_residency" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
@@ -137,26 +124,14 @@ export default function Residency() {
       <Box sx={styles.formButtons}>
         <Button
           type="submit"
-          form="official_residency_status"
+          form="official_verify_residency"
           fullWidth
           variant="contained"
           color="primary"
-          onClick={() => setToRevoke(false)}
         >
-          award
+          verify
         </Button>
-        <Box sx={{ height: 9 }} />
-        <Button
-          type="submit"
-          form="official_residency_status"
-          fullWidth
-          variant="contained"
-          color="secondary"
-          onClick={() => setToRevoke(true)}
-        >
-          revoke
-        </Button>
-        <Box sx={{ height: 12 }} />
+        <Box sx={{ height: 7 }} />
         <Button
           fullWidth
           variant="outlined"

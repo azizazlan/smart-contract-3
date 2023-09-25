@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
-import residentialStatus from './thunks/residentialStat';
+import residentialStatus from './thunks/checkResidencyStat';
 import hasRole from './thunks/hasRole';
 import ethBal from './thunks/ethBal';
 

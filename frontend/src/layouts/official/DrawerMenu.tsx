@@ -5,11 +5,13 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
+import LinkIcon from '@mui/icons-material/Link';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -108,15 +110,49 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
+        <Divider />
         <ListItem key="Verify" disablePadding>
-          <ListItemButton component={Link} to="/signedofficial/verify">
+          <ListItemButton
+            component={Link}
+            to="/signedofficial/whitelist-residency"
+          >
             <ListItemIcon>
-              <SensorOccupiedIcon sx={{ color: 'grey' }} />
+              <LinkIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
             <ListItemText
               primary={
                 <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-                  Verify resident
+                  Add whitelist
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="Verify" disablePadding>
+          <ListItemButton
+            component={Link}
+            to="/signedofficial/whitelist-residency"
+          >
+            <ListItemIcon>
+              <LinkOffIcon sx={{ color: 'grey' }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  Remove whitelist
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem key="Verify" disablePadding>
+          <ListItemButton component={Link} to="/signedofficial/check-residency">
+            <ListItemIcon />
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  Verify residency
                 </Typography>
               }
             />

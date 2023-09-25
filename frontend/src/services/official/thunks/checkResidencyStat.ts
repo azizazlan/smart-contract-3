@@ -7,14 +7,14 @@ const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type ResidentialStatusFields = {
+type CheckResidencyStatFields = {
   nric: string;
   publicKey: string;
 };
 
-const residentialStatus = createAsyncThunk(
-  'residentialStatus',
-  async (props: ResidentialStatusFields) => {
+const checkResidencyStat = createAsyncThunk(
+  'officialCheckResidencyStat',
+  async (props: CheckResidencyStatFields) => {
     const { nric, publicKey } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
@@ -34,4 +34,4 @@ const residentialStatus = createAsyncThunk(
     };
   }
 );
-export default residentialStatus;
+export default checkResidencyStat;

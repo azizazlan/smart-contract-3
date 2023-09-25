@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { Wallet, ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
@@ -10,19 +10,21 @@ const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
 type AwardResidencyFields = {
   nric: string;
   publicKey: string;
+  officialSeedphrase: string;
 };
 
 const awardResidency = createAsyncThunk(
   'officialAwardResidency',
   async (props: AwardResidencyFields) => {
-    const { nric, publicKey } = props;
+    const { nric, publicKey, officialSeedphrase } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const wallet = Wallet.fromMnemonic(officialSeedphrase).connect(provider);
 
     const contract = new ethers.Contract(
       MELAKA_RESIDENT_CONTRACT_ADDR,
       contractABI.abi,
-      provider
+      wallet
     );
 
     const bytesNric = ethers.utils.formatBytes32String(nric);
