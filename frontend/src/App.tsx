@@ -18,6 +18,8 @@ import { default as OfficialLanding } from './pages/official/landing/Landing';
 import { useResidentDispatch, useOfficialDispatch } from './services/hook';
 import { default as initResident } from './services/resident/thunks/initialize';
 import { default as initOfficial } from './services/official/thunks/initialize';
+import NotFound from './pages/404/NotFound';
+import Residency from './pages/official/residency/Residency';
 
 function App() {
   const location = useLocation();
@@ -53,10 +55,12 @@ function App() {
       </Route>
       <Route path="/signedofficial" element={<OfficialAppbarLayout />}>
         <Route index element={<OfficialAccountInfo />} />
+        <Route path="residency" element={<Residency />} />
       </Route>
       <Route path="/admin" element={<OfficialLayout />}>
         <Route index element={<AdminLanding />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

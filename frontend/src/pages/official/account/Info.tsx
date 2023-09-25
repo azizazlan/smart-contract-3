@@ -49,7 +49,7 @@ export default function Info() {
 
   return (
     <Box sx={styles.container}>
-      <Box sx={{ marginTop: 5 }}>
+      <Box sx={{ marginTop: 3 }}>
         <Status
           nric={nric || 'NA'}
           isResident={isResident}

@@ -8,6 +8,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -49,7 +51,6 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-
         <ListItem key="QrCodeDlg" disablePadding>
           <ListItemButton onClick={toggleQrCode}>
             <ListItemIcon>
@@ -64,7 +65,6 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-
         <ListItem key="ClearStorage" disablePadding>
           <ListItemButton onClick={toggleClearCache}>
             <ListItemIcon>
@@ -79,11 +79,37 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-
         <Divider />
-
         <ListItem key="Verify" disablePadding>
-          <ListItemButton component={Link} to="/account/verify">
+          <ListItemButton component={Link} to="/signedofficial/residency">
+            <ListItemIcon>
+              <PersonAddIcon sx={{ color: 'grey' }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  Award residency
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="Verify" disablePadding>
+          <ListItemButton component={Link} to="/signedofficial/residency">
+            <ListItemIcon>
+              <PersonRemoveIcon sx={{ color: 'grey' }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography color="secondary" sx={{ fontFamily: 'Oswald' }}>
+                  Revoke residency
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="Verify" disablePadding>
+          <ListItemButton component={Link} to="/signedofficial/verify">
             <ListItemIcon>
               <SensorOccupiedIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
@@ -98,7 +124,7 @@ export default function DrawerMenu({
         </ListItem>
         <Divider />
         <ListItem key="About" disablePadding>
-          <ListItemButton component={Link} to="/account/about">
+          <ListItemButton component={Link} to="/signedofficial/about">
             <ListItemIcon>
               <InfoIcon sx={{ color: 'grey' }} />
             </ListItemIcon>

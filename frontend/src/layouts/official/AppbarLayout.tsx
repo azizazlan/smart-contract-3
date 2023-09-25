@@ -69,7 +69,7 @@ function Appbar() {
             component="div"
             sx={{ fontFamily: 'Oswald', flexGrow: 1 }}
           >
-            Melaka State Official
+            MES Official
           </Typography>
         </Toolbar>
       </AppBar>

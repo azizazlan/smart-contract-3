@@ -19,6 +19,9 @@ const theme = createTheme({
     h3: {
       fontFamily: 'Oswald',
     },
+    h5: {
+      fontFamily: 'Oswald',
+    },
     button: {
       fontFamily: 'Oswald',
     },
