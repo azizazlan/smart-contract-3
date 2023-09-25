@@ -81,14 +81,16 @@ export default function TransferFT() {
               />
             )}
           />
-          {errors.publicKey ? (
-            <FormHelperText error>{errors.publicKey.message}</FormHelperText>
-          ) : (
-            <FormHelperText>
-              Recipient address. Example:
-              0xd4C94252d9a182FBEd2b0576F07778470F2h2835
-            </FormHelperText>
-          )}
+          <Box sx={{ minHeight: 46 }}>
+            {errors.publicKey ? (
+              <FormHelperText error>{errors.publicKey.message}</FormHelperText>
+            ) : (
+              <FormHelperText>
+                Recipient address. Example:
+                0xd4C94252d9a182FBEd2b0576F07778470F2h2835
+              </FormHelperText>
+            )}
+          </Box>
         </FormControl>
       </form>
       <Box sx={styles.formButtons}>
