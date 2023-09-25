@@ -77,9 +77,9 @@ export default function Residency() {
             render={({ field }) => (
               <TextField
                 type="number"
-                placeholder="34567891011"
+                placeholder="790411336798"
                 InputLabelProps={{ shrink: true }}
-                label="Official NRIC"
+                label="NRIC"
                 id="nric"
                 {...field}
               />
@@ -88,7 +88,9 @@ export default function Residency() {
           {errors.nric ? (
             <FormHelperText error>{errors.nric.message}</FormHelperText>
           ) : (
-            <FormHelperText>*Without dash or any symbol</FormHelperText>
+            <FormHelperText>
+              *New NRIC without dash or any symbol
+            </FormHelperText>
           )}
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -98,6 +100,7 @@ export default function Residency() {
             control={control}
             render={({ field }) => (
               <TextField
+                placeholder="0xd4C94252d9a182FBEd2b0576F07778470F2h2835"
                 InputLabelProps={{ shrink: true }}
                 id="publicKey"
                 label="Public key"
@@ -110,8 +113,7 @@ export default function Residency() {
             <FormHelperText error>{errors.publicKey.message}</FormHelperText>
           ) : (
             <FormHelperText>
-              Resident public key. Eg:
-              0xd4C94252d9a182FBEd2b0576F07778470F2h2835
+              Example: 0xd4C94252d9a182FBEd2b0576F07778470F2h2835
             </FormHelperText>
           )}
         </FormControl>

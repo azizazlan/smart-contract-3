@@ -11,6 +11,7 @@ interface ResidentState {
   nric: string | null;
   publicKey: string | null;
   seedPhrase: string | null;
+  isResident: boolean;
   isWhitelisted: boolean;
   ftRiceBalance: number;
 }
@@ -21,6 +22,7 @@ const initialState: ResidentState = {
   nric: null,
   publicKey: null,
   seedPhrase: null,
+  isResident: false,
   isWhitelisted: false,
   ftRiceBalance: 0,
 };

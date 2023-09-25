@@ -2,17 +2,18 @@ import React from 'react';
 import { Alert, Box, IconButton, Snackbar, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import AdjustIcon from '@mui/icons-material/Adjust';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 export default function Balance({
-  etherBal,
+  ftBal,
   publicKey,
   handleReloadBal,
 }: {
-  etherBal: string;
+  ftBal: string;
   publicKey: string;
   handleReloadBal: () => void;
 }) {
@@ -76,7 +77,26 @@ export default function Balance({
             </IconButton>
           </CopyToClipboard>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+
+        <Typography
+          style={{
+            fontFamily: 'Oswald',
+            fontSize: '12pt',
+            color: 'silver',
+            marginRight: '3px',
+            marginTop: '4px',
+          }}
+        >
+          Rice token balance
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+        >
           <Typography
             color="primary"
             style={{
@@ -84,7 +104,7 @@ export default function Balance({
               fontSize: '16pt',
             }}
           >
-            {etherBal} Ξ
+            {ftBal}
           </Typography>
           <IconButton onClick={handleReloadBal}>
             <ReplayIcon color="primary" fontSize="small" />

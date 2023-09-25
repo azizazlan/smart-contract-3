@@ -1,12 +1,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import styles from './styles';
 import nonResidentImg from '../../../assets/resident-non.png';
 import residentImg from '../../../assets/resident-ok.png';
-import riceIcon from '../../../assets/rice.svg';
-import emptyBox from '../../../assets/empty-box.png';
 import QrCodeDlg from '../../../dialogs/QrCodeDlg';
 import {
   useResidentDispatch,
@@ -15,142 +12,19 @@ import {
 import { ResidentState } from '../../../services/store';
 import { Navigate } from 'react-router-dom';
 import whitelistStat from '../../../services/resident/thunks/whitelistStat';
-
-function Balance({
-  isWhitelisted,
-  ftRiceBalance,
-}: {
-  isWhitelisted: boolean;
-  ftRiceBalance: number;
-}) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '25px',
-      }}
-    >
-      <Typography
-        style={{
-          fontFamily: 'Abel',
-          fontSize: '12pt',
-          fontWeight: 'bold',
-          color: 'silver',
-          marginRight: '3px',
-          marginTop: '15px',
-          marginBottom: '0px',
-        }}
-      >
-        SUBSIDISED ITEMS
-      </Typography>
-      <Avatar
-        sx={{ width: 135, height: 135, color: 'silver' }}
-        src={isWhitelisted ? riceIcon : emptyBox}
-        alt="rice icon"
-      />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          marginTop: '-17px',
-          alignItems: 'center',
-        }}
-      >
-        <Typography
-          style={{
-            fontFamily: 'Abel',
-            fontSize: '12pt',
-            fontWeight: 'bold',
-            color: 'silver',
-            marginTop: '15px',
-          }}
-        >
-          Balance
-        </Typography>
-        <Typography
-          style={{
-            fontFamily: 'Abel',
-            fontSize: '27pt',
-            fontWeight: 'bold',
-            marginTop: '-10px',
-            marginBottom: '15px',
-          }}
-        >
-          {ftRiceBalance}
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
-
-function ResidentAvatar({ isWhitelisted }: { isWhitelisted: boolean }) {
-  const [openQrCode, setOpenQrCode] = React.useState(false);
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '35px',
-      }}
-    >
-      <QrCodeDlg
-        open={openQrCode}
-        handleClose={() => setOpenQrCode((o) => !o)}
-      />
-      <img
-        style={{ width: '95px' }}
-        src={isWhitelisted ? residentImg : nonResidentImg}
-        alt="non resident icon"
-        onClick={() => setOpenQrCode((o) => !o)}
-      />
-    </Box>
-  );
-}
-
-function Nric({ nric }: { nric: string }) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '9px',
-      }}
-    >
-      <Typography
-        style={{
-          fontFamily: 'Abel',
-          fontSize: '12pt',
-          fontWeight: 'bold',
-          color: 'silver',
-          marginRight: '3px',
-          marginTop: '4px',
-        }}
-      >
-        NRIC
-      </Typography>
-      <Typography
-        style={{
-          fontFamily: 'Abel',
-          fontSize: '21pt',
-          fontWeight: 'bold',
-          marginTop: '-9px',
-        }}
-      >
-        {nric}
-      </Typography>
-    </Box>
-  );
-}
+import Balance from './Balance';
+import Status from './Status';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
-  const { publicKey, seedPhrase, isWhitelisted, nric, ftRiceBalance } =
-    useResidentSelector((state: ResidentState) => state.resident);
+  const {
+    publicKey,
+    seedPhrase,
+    isResident,
+    isWhitelisted,
+    nric,
+    ftRiceBalance,
+  } = useResidentSelector((state: ResidentState) => state.resident);
 
   if (!publicKey && !seedPhrase) {
     return <Navigate to="/" />;
@@ -175,11 +49,26 @@ export default function Info() {
     return () => clearInterval(pollingInterval);
   }, []);
 
+  const handleReloadBal = () => {};
+
+  const handleReloadResidentStat = () => {};
+
+  const handleReloadWhitelistStat = () => {};
+
   return (
-    <Box sx={styles.container}>
-      <ResidentAvatar isWhitelisted={isWhitelisted} />
-      <Nric nric={nric || 'NA'} />
-      <Balance isWhitelisted={isWhitelisted} ftRiceBalance={ftRiceBalance} />
+    <Box sx={{ ...styles.container, marginTop: 3 }}>
+      <Status
+        nric={nric || 'Error'}
+        isResident={isResident}
+        handleReloadResidentStat={handleReloadResidentStat}
+        isWhitelisted={isWhitelisted}
+        handleReloadWhitelistStat={handleReloadWhitelistStat}
+      />
+      <Balance
+        ftBal={ftRiceBalance.toString()}
+        publicKey={publicKey || ''}
+        handleReloadBal={handleReloadBal}
+      />
     </Box>
   );
 }
