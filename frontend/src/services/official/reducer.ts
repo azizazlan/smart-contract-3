@@ -6,9 +6,11 @@ import initialize from './thunks/initialize';
 import checkStatus from './thunks/checkStatus';
 import hasRole from './thunks/hasRole';
 import ethBal from './thunks/ethBal';
+import awardResidency from './thunks/awardResidency';
 
 interface OfficialState {
   submissionState: SubmissionStates;
+  submissionMsg: string | null;
   networkId: number;
   nric: string | null;
   publicKey: string | null;
@@ -22,6 +24,7 @@ interface OfficialState {
 
 const initialState: OfficialState = {
   submissionState: 'IDLE',
+  submissionMsg: null,
   networkId: -1,
   nric: null,
   publicKey: null,
@@ -41,6 +44,10 @@ export const officialSlice = createSlice({
     resetVerifySubmission: (state) => {
       state.isClaimResident = false;
       state.isClaimWhitelisted = false;
+      state.submissionState = 'IDLE';
+    },
+    resetResidencySubmission: (state) => {
+      state.submissionMsg = null;
       state.submissionState = 'IDLE';
     },
   },
@@ -91,8 +98,23 @@ export const officialSlice = createSlice({
       state.etherBal = payload.ethBal;
       state.submissionState = 'OK';
     });
+    builder.addCase(awardResidency.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+    });
+    builder.addCase(awardResidency.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      let msg = action.error?.message || 'An error occurred';
+      msg = msg.substring(0, msg.length / 3);
+      state.submissionMsg = msg;
+    });
+    builder.addCase(awardResidency.fulfilled, (state, { payload }) => {
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
   },
 });
 
-export const { reset, resetVerifySubmission } = officialSlice.actions;
+export const { reset, resetVerifySubmission, resetResidencySubmission } =
+  officialSlice.actions;
 export default officialSlice.reducer;

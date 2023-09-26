@@ -107,10 +107,7 @@ export default function DrawerMenu({
         </ListItem>
         <Divider />
         <ListItem key="add_whitelisting" disablePadding>
-          <ListItemButton
-            component={Link}
-            to="/signedofficial/whitelist-residency"
-          >
+          <ListItemButton component={Link} to="/signedofficial/whitelisting">
             <ListItemIcon>
               <LinkIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
@@ -124,10 +121,7 @@ export default function DrawerMenu({
           </ListItemButton>
         </ListItem>
         <ListItem key="remove_whitelisting" disablePadding>
-          <ListItemButton
-            component={Link}
-            to="/signedofficial/whitelist-residency"
-          >
+          <ListItemButton component={Link} to="/signedofficial/whitelisting">
             <ListItemIcon />
             <ListItemText
               primary={
@@ -140,7 +134,7 @@ export default function DrawerMenu({
         </ListItem>
         <Divider />
         <ListItem key="verify_residency" disablePadding>
-          <ListItemButton component={Link} to="/signedofficial/check-residency">
+          <ListItemButton component={Link} to="/signedofficial/verification">
             <ListItemIcon />
             <ListItemText
               primary={

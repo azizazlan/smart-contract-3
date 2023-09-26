@@ -10,7 +10,9 @@ import { default as OfficialSignup } from './pages/official/account/Signup';
 import Restore from './pages/resident/account/Restore';
 import { default as OfficialRestore } from './pages/official/account/Restore';
 import { default as OfficialAccountInfo } from './pages/official/account/Info';
-import { default as VerifyResidency } from './pages/official/residency/Verify';
+import { default as OfficialVerification } from './pages/official/verification/Verification';
+import { default as OfficialResidency } from './pages/official/residency/Residency';
+import { default as OfficialWhitelisting } from './pages/official/whitelisting/Whitelisting';
 import { default as AccountInfo } from './pages/resident/account/Info';
 import AdminLanding from './pages/admin/Landing';
 import About from './pages/about/About';
@@ -20,8 +22,6 @@ import { useResidentDispatch, useOfficialDispatch } from './services/hook';
 import { default as initResident } from './services/resident/thunks/initialize';
 import { default as initOfficial } from './services/official/thunks/initialize';
 import NotFound from './pages/404/NotFound';
-import Residency from './pages/official/residency/Residency';
-import Whitelisting from './pages/official/residency/Whitelisting';
 import TransferFT from './pages/official/transfer/TransferFT';
 
 function App() {
@@ -31,7 +31,10 @@ function App() {
   const officialDispatch = useOfficialDispatch();
 
   React.useEffect(() => {
-    if (location.pathname.includes('/official')) {
+    if (
+      location.pathname.includes('/official') ||
+      location.pathname.includes('/signedofficial')
+    ) {
       officialDispatch(initOfficial());
       return;
     }
@@ -58,9 +61,9 @@ function App() {
       </Route>
       <Route path="/signedofficial" element={<OfficialAppbarLayout />}>
         <Route index element={<OfficialAccountInfo />} />
-        <Route path="residency" element={<Residency />} />
-        <Route path="whitelist-residency" element={<Whitelisting />} />
-        <Route path="check-residency" element={<VerifyResidency />} />
+        <Route path="residency" element={<OfficialResidency />} />
+        <Route path="whitelisting" element={<OfficialWhitelisting />} />
+        <Route path="verification" element={<OfficialVerification />} />
         <Route path="transfer" element={<TransferFT />} />
       </Route>
       <Route path="/admin" element={<OfficialLayout />}>

@@ -1,51 +1,17 @@
-import React from 'react';
 import {
+  FormControl,
+  TextField,
+  FormHelperText,
   Box,
   Button,
-  Card,
-  FormControl,
-  FormHelperText,
-  List,
-  ListItem,
-  ListItemText,
-  TextField,
-  Typography,
 } from '@mui/material';
+import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-
 import styles from './styles';
-import {
-  useOfficialDispatch,
-  useOfficialSelector,
-} from '../../../services/hook';
-import { OfficialState } from '../../../services/store';
 import checkStatus from '../../../services/official/thunks/checkStatus';
-import { SubmissionStates } from '../../../services/submissionState';
+import { useOfficialDispatch } from '../../../services/hook';
 import { resetVerifySubmission } from '../../../services/official/reducer';
-import BackdropLoader from '../../../commons/BackdropLoader';
-
-function Label(props: { label: string }) {
-  return (
-    <Typography
-      component="span"
-      color="primary"
-      variant="body2"
-      sx={{ fontFamily: 'Oswald' }}
-    >
-      {props.label}
-    </Typography>
-  );
-}
-
-function Value(props: { value: string; submissionState: SubmissionStates }) {
-  return (
-    <Typography component="span" variant="body2">
-      {props.submissionState === 'IDLE' ? '-' : `${props.value}`}
-    </Typography>
-  );
-}
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -67,7 +33,8 @@ type VerifyResidencyFields = {
   publicKey: string;
 };
 
-export default function VerifyResidency() {
+export default function VerificationForm() {
+  const dispatch = useOfficialDispatch();
   const {
     reset,
     control,
@@ -80,10 +47,6 @@ export default function VerifyResidency() {
       publicKey: '',
     },
   });
-
-  const dispatch = useOfficialDispatch();
-  const { submissionState, isClaimResident, isClaimWhitelisted } =
-    useOfficialSelector((state: OfficialState) => state.official);
 
   const onSubmit: SubmitHandler<VerifyResidencyFields> = (data) => {
     const { nric, publicKey } = data;
@@ -103,11 +66,7 @@ export default function VerifyResidency() {
   };
 
   return (
-    <Box sx={{ ...styles.container, margin: 3 }}>
-      <BackdropLoader submissionState={submissionState} />
-      <Typography variant="h5" color="primary">
-        Residency and whitelisting status
-      </Typography>
+    <div>
       <form id="official_verify_residency" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
@@ -158,46 +117,6 @@ export default function VerifyResidency() {
           )}
         </FormControl>
       </form>
-      <Card
-        sx={{
-          height: '115px',
-          backgroundColor: '#f5f6fa',
-          paddingLeft: 2,
-          paddingTop: 1,
-          paddingRight: 2,
-        }}
-      >
-        <List sx={{ width: '100%' }} disablePadding>
-          <ListItem disablePadding>
-            <ListItemText
-              primary={<Label label="Residency status" />}
-              secondary={
-                <Value
-                  submissionState={submissionState}
-                  value={`${
-                    isClaimResident ? 'Is a resident ✅' : 'Non-resident ❌'
-                  }`}
-                />
-              }
-            />
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemText
-              primary={<Label label="Whitelisting status" />}
-              secondary={
-                <Value
-                  submissionState={submissionState}
-                  value={`${
-                    isClaimWhitelisted
-                      ? 'Whitelisted ✅'
-                      : 'Not in whitelisted ❌'
-                  }`}
-                />
-              }
-            />
-          </ListItem>
-        </List>
-      </Card>
       <Box sx={styles.formButtons}>
         <Button
           type="submit"
@@ -218,6 +137,6 @@ export default function VerifyResidency() {
           reset
         </Button>
       </Box>
-    </Box>
+    </div>
   );
 }

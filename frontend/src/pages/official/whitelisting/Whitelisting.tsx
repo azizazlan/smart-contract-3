@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import styles from './styles';
+import styles from '../residency/styles';
 import awardResidency from '../../../services/official/thunks/awardResidency';
 import {
   useOfficialDispatch,
