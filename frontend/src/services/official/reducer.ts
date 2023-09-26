@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
-import residentialStatus from './thunks/checkResidencyStat';
+import checkStatus from './thunks/checkStatus';
 import hasRole from './thunks/hasRole';
 import ethBal from './thunks/ethBal';
 
@@ -16,6 +16,8 @@ interface OfficialState {
   etherBal: string;
   isResident: boolean;
   isOfficer: boolean;
+  isClaimResident: boolean;
+  isClaimWhitelisted: boolean;
 }
 
 const initialState: OfficialState = {
@@ -27,6 +29,8 @@ const initialState: OfficialState = {
   etherBal: '0',
   isOfficer: false,
   isResident: false,
+  isClaimResident: false,
+  isClaimWhitelisted: false,
 };
 
 export const officialSlice = createSlice({
@@ -34,6 +38,11 @@ export const officialSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    resetVerifySubmission: (state) => {
+      state.isClaimResident = false;
+      state.isClaimWhitelisted = false;
+      state.submissionState = 'IDLE';
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(initialize.pending, (state, {}) => {
@@ -56,11 +65,16 @@ export const officialSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.submissionState = 'OK';
     });
-    builder.addCase(residentialStatus.pending, (state, {}) => {
+    builder.addCase(checkStatus.pending, (state, {}) => {
       state.submissionState = 'PENDING';
     });
-    builder.addCase(residentialStatus.fulfilled, (state, { payload }) => {
-      state.isResident = payload.isResident;
+    builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
+      if (payload.checkOfficer) {
+        state.isResident = payload.isResident;
+      } else {
+        state.isClaimResident = payload.isResident;
+        state.isClaimWhitelisted = payload.isWhitelisted;
+      }
       state.submissionState = 'OK';
     });
     builder.addCase(hasRole.pending, (state, {}) => {
@@ -70,7 +84,6 @@ export const officialSlice = createSlice({
       state.isOfficer = payload.hasRole;
       state.submissionState = 'OK';
     });
-
     builder.addCase(ethBal.pending, (state, {}) => {
       state.submissionState = 'PENDING';
     });
@@ -81,5 +94,5 @@ export const officialSlice = createSlice({
   },
 });
 
-export const { reset } = officialSlice.actions;
+export const { reset, resetVerifySubmission } = officialSlice.actions;
 export default officialSlice.reducer;

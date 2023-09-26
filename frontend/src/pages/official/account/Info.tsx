@@ -6,7 +6,7 @@ import {
   useOfficialDispatch,
   useOfficialSelector,
 } from '../../../services/hook';
-import residentialStatus from '../../../services/official/thunks/checkResidencyStat';
+import checkStatus from '../../../services/official/thunks/checkStatus';
 import hasRole from '../../../services/official/thunks/hasRole';
 import Balance from './Balance';
 import Status from './Status';
@@ -24,7 +24,8 @@ export default function Info() {
 
   const handleReloadResidentStat = () => {
     dispatch(
-      residentialStatus({
+      checkStatus({
+        checkOfficer: true,
         publicKey: publicKey as string,
         nric: nric as string,
       })

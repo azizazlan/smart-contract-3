@@ -8,7 +8,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   formButtons: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '7px',
+    marginTop: '12px',
   },
 };
 export default styles;

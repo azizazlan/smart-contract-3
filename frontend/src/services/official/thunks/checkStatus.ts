@@ -7,15 +7,18 @@ const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type CheckResidencyStatFields = {
+type CheckStatusFields = {
+  checkOfficer: boolean;
   nric: string;
   publicKey: string;
 };
 
-const checkResidencyStat = createAsyncThunk(
-  'officialCheckResidencyStat',
-  async (props: CheckResidencyStatFields) => {
-    const { nric, publicKey } = props;
+const checkStatus = createAsyncThunk(
+  'official_check_residency_whitelisting',
+  async (props: CheckStatusFields) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const { checkOfficer, nric, publicKey } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
@@ -29,9 +32,13 @@ const checkResidencyStat = createAsyncThunk(
       ethers.utils.formatBytes32String(nric)
     );
 
+    const isWhitelisted = await contract.isResidentWhitelisted(publicKey);
+
     return {
+      checkOfficer,
       isResident,
+      isWhitelisted,
     };
   }
 );
-export default checkResidencyStat;
+export default checkStatus;

@@ -2,8 +2,12 @@ import React from 'react';
 import {
   Box,
   Button,
+  Card,
   FormControl,
   FormHelperText,
+  List,
+  ListItem,
+  ListItemText,
   TextField,
   Typography,
 } from '@mui/material';
@@ -17,6 +21,31 @@ import {
   useOfficialSelector,
 } from '../../../services/hook';
 import { OfficialState } from '../../../services/store';
+import checkStatus from '../../../services/official/thunks/checkStatus';
+import { SubmissionStates } from '../../../services/submissionState';
+import { resetVerifySubmission } from '../../../services/official/reducer';
+import BackdropLoader from '../../../commons/BackdropLoader';
+
+function Label(props: { label: string }) {
+  return (
+    <Typography
+      component="span"
+      color="primary"
+      variant="body2"
+      sx={{ fontFamily: 'Oswald' }}
+    >
+      {props.label}
+    </Typography>
+  );
+}
+
+function Value(props: { value: string; submissionState: SubmissionStates }) {
+  return (
+    <Typography component="span" variant="body2">
+      {props.submissionState === 'IDLE' ? '-' : `${props.value}`}
+    </Typography>
+  );
+}
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -53,21 +82,29 @@ export default function VerifyResidency() {
   });
 
   const dispatch = useOfficialDispatch();
-  const { seedPhrase } = useOfficialSelector(
-    (state: OfficialState) => state.official
-  );
+  const { submissionState, isClaimResident, isClaimWhitelisted } =
+    useOfficialSelector((state: OfficialState) => state.official);
 
   const onSubmit: SubmitHandler<VerifyResidencyFields> = (data) => {
     const { nric, publicKey } = data;
     console.log(`${nric} ${publicKey}`);
+    dispatch(
+      checkStatus({
+        checkOfficer: false,
+        nric,
+        publicKey,
+      })
+    );
   };
 
   const handleReset = () => {
     reset();
+    dispatch(resetVerifySubmission());
   };
 
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
+      <BackdropLoader submissionState={submissionState} />
       <Typography variant="h5" color="primary">
         Residency and whitelisting status
       </Typography>
@@ -121,6 +158,46 @@ export default function VerifyResidency() {
           )}
         </FormControl>
       </form>
+      <Card
+        sx={{
+          height: '115px',
+          backgroundColor: '#f5f6fa',
+          paddingLeft: 2,
+          paddingTop: 1,
+          paddingRight: 2,
+        }}
+      >
+        <List sx={{ width: '100%' }} disablePadding>
+          <ListItem disablePadding>
+            <ListItemText
+              primary={<Label label="Residency status" />}
+              secondary={
+                <Value
+                  submissionState={submissionState}
+                  value={`${
+                    isClaimResident ? 'Is a resident ✅' : 'Non-resident ❌'
+                  }`}
+                />
+              }
+            />
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemText
+              primary={<Label label="Whitelisting status" />}
+              secondary={
+                <Value
+                  submissionState={submissionState}
+                  value={`${
+                    isClaimWhitelisted
+                      ? 'Whitelisted ✅'
+                      : 'Not in whitelisted ❌'
+                  }`}
+                />
+              }
+            />
+          </ListItem>
+        </List>
+      </Card>
       <Box sx={styles.formButtons}>
         <Button
           type="submit"
