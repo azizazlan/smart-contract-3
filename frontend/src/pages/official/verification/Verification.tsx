@@ -9,11 +9,11 @@ import FormHeader from '../../../commons/FormHeader';
 import Result from './Result';
 
 export default function Verification() {
-  const { submissionState } = useOfficialSelector(
+  const { submissionState, submissionMsg } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
 
-  if (submissionState === 'OK') {
+  if (submissionState === 'OK' && submissionMsg) {
     return <Result />;
   }
 

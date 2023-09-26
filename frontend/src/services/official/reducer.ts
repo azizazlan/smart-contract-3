@@ -7,6 +7,7 @@ import checkStatus from './thunks/checkStatus';
 import hasRole from './thunks/hasRole';
 import ethBal from './thunks/ethBal';
 import awardResidency from './thunks/awardResidency';
+import addWhitelist from './thunks/addWhitelist';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -42,11 +43,16 @@ export const officialSlice = createSlice({
   reducers: {
     reset: () => initialState,
     resetVerifySubmission: (state) => {
+      state.submissionMsg = null;
       state.isClaimResident = false;
       state.isClaimWhitelisted = false;
       state.submissionState = 'IDLE';
     },
     resetResidencySubmission: (state) => {
+      state.submissionMsg = null;
+      state.submissionState = 'IDLE';
+    },
+    resetWhitelistSubmission: (state) => {
       state.submissionMsg = null;
       state.submissionState = 'IDLE';
     },
@@ -74,6 +80,7 @@ export const officialSlice = createSlice({
     });
     builder.addCase(checkStatus.pending, (state, {}) => {
       state.submissionState = 'PENDING';
+      state.submissionMsg = null;
     });
     builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
       if (payload.checkOfficer) {
@@ -82,6 +89,7 @@ export const officialSlice = createSlice({
         state.isClaimResident = payload.isResident;
         state.isClaimWhitelisted = payload.isWhitelisted;
       }
+      state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
     builder.addCase(hasRole.pending, (state, {}) => {
@@ -112,9 +120,21 @@ export const officialSlice = createSlice({
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
+    builder.addCase(addWhitelist.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+    });
+    builder.addCase(addWhitelist.fulfilled, (state, { payload }) => {
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
   },
 });
 
-export const { reset, resetVerifySubmission, resetResidencySubmission } =
-  officialSlice.actions;
+export const {
+  reset,
+  resetVerifySubmission,
+  resetResidencySubmission,
+  resetWhitelistSubmission,
+} = officialSlice.actions;
 export default officialSlice.reducer;

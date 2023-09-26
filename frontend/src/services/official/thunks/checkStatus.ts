@@ -34,10 +34,13 @@ const checkStatus = createAsyncThunk(
 
     const isWhitelisted = await contract.isResidentWhitelisted(publicKey);
 
+    const message = `Successfully checked residency and whitelisting status`;
+
     return {
       checkOfficer,
       isResident,
       isWhitelisted,
+      message,
     };
   }
 );

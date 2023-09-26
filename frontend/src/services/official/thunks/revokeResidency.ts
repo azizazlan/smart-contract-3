@@ -8,15 +8,15 @@ const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type AwardResidencyFields = {
+type RevokeResidencyFields = {
   nric: string;
   publicKey: string;
   officialSeedphrase: string;
 };
 
-const awardResidency = createAsyncThunk(
-  'official_award_residency',
-  async (props: AwardResidencyFields) => {
+const revokeResidency = createAsyncThunk(
+  'official_revoke_residency',
+  async (props: RevokeResidencyFields) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const { nric, publicKey, officialSeedphrase } = props;
@@ -31,9 +31,9 @@ const awardResidency = createAsyncThunk(
     );
 
     const bytesNric = ethers.utils.formatBytes32String(nric);
-    await contract.awardResidentialStatus(publicKey, bytesNric);
+    // await contract.revokeResidentialStatus(publicKey, bytesNric);
 
-    const message = `Successfully award residency status to ${truncateEthAddr(
+    const message = `Successfully revoke residency status of ${truncateEthAddr(
       publicKey
     )} with NRIC# ${nric}`;
 
@@ -46,4 +46,4 @@ const awardResidency = createAsyncThunk(
     };
   }
 );
-export default awardResidency;
+export default revokeResidency;

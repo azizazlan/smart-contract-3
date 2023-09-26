@@ -1,4 +1,6 @@
 import Box from '@mui/material/Box';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   useOfficialDispatch,
   useOfficialSelector,
@@ -41,7 +43,17 @@ export default function Result() {
             Residency
           </Typography>
           <Typography variant="body2" gutterBottom>
-            {isClaimResident ? 'Resident' : 'Non-resident'}
+            {isClaimResident ? (
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Typography>Resident</Typography>
+                <CheckIcon color="primary" />
+              </Box>
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Typography>Non-resident</Typography>
+                <CloseIcon color="primary" />
+              </Box>
+            )}
           </Typography>
           <Typography
             color="primary"
@@ -51,7 +63,17 @@ export default function Result() {
             Whitelisting
           </Typography>
           <Typography variant="body2">
-            {isClaimWhitelisted ? 'Whitelisted' : 'Not in whitelist'}
+            {isClaimWhitelisted ? (
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Typography>Whitelisted</Typography>
+                <CheckIcon color="primary" />
+              </Box>
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Typography>Not in the whitelist</Typography>
+                <CloseIcon color="primary" />
+              </Box>
+            )}
           </Typography>
         </CardContent>
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>

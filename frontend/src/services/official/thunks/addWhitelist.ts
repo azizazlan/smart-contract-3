@@ -8,15 +8,15 @@ const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type AwardResidencyFields = {
+type AddWhitelistFields = {
   nric: string;
   publicKey: string;
   officialSeedphrase: string;
 };
 
-const awardResidency = createAsyncThunk(
-  'official_award_residency',
-  async (props: AwardResidencyFields) => {
+const addWhitelist = createAsyncThunk(
+  'official_add_whitelist',
+  async (props: AddWhitelistFields) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const { nric, publicKey, officialSeedphrase } = props;
@@ -31,9 +31,9 @@ const awardResidency = createAsyncThunk(
     );
 
     const bytesNric = ethers.utils.formatBytes32String(nric);
-    await contract.awardResidentialStatus(publicKey, bytesNric);
+    // await contract.addResidentWhitelist(publicKey, bytesNric);
 
-    const message = `Successfully award residency status to ${truncateEthAddr(
+    const message = `Successfully added to whitelist: ${truncateEthAddr(
       publicKey
     )} with NRIC# ${nric}`;
 
@@ -46,4 +46,4 @@ const awardResidency = createAsyncThunk(
     };
   }
 );
-export default awardResidency;
+export default addWhitelist;
