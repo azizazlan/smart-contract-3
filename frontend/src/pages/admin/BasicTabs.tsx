@@ -2,8 +2,6 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import detectEthereumProvider from '@metamask/detect-provider';
-import { utils } from 'ethers';
 import InfoTab from './InfoTab';
 import ResidentTab from './ResidentTab';
 import OfficerTab from './OfficerTab';
@@ -23,6 +21,7 @@ function CustomTabPanel(props: TabPanelProps) {
 
   return (
     <div
+      style={{ paddingLeft: '65px', paddingRight: '65px' }}
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -59,8 +58,14 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}
+      >
         <Tabs
+          sx={{ marginLeft: '65px' }}
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"

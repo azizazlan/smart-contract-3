@@ -27,9 +27,5 @@ export default function Landing() {
     );
   }
 
-  return (
-    <Box sx={{ width: '90%', margin: 3 }}>
-      <BasicTabs />
-    </Box>
-  );
+  return <BasicTabs />;
 }

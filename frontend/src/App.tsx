@@ -16,6 +16,7 @@ import { default as OfficialResidency } from './pages/official/residency/Residen
 import { default as OfficialWhitelisting } from './pages/official/whitelisting/Whitelisting';
 import { default as AccountInfo } from './pages/resident/account/Info';
 import AdminLanding from './pages/admin/Landing';
+import { default as AdminAccount } from './pages/admin/AccountForm';
 import About from './pages/about/About';
 import Verify from './pages/verify/Verify';
 import { default as OfficialLanding } from './pages/official/landing/Landing';
@@ -69,6 +70,7 @@ function App() {
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminLanding />} />
+        <Route path="account" element={<AdminAccount />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

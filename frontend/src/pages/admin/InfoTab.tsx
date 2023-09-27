@@ -1,8 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import WarningIcon from '@mui/icons-material/Warning';
+import { Link } from 'react-router-dom';
 
 const melaka_resident_contract_addr = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
@@ -80,6 +81,12 @@ export default function InfoTab(props: InfoTabProps) {
           />
         </ListItem>
       )}
+      <Link to="/admin/account">
+        <Typography sx={{ fontFamily: 'Oswald' }} variant="caption">
+          Change account
+        </Typography>
+      </Link>
+      <Box sx={{ height: '17px' }} />
       <ListItem key={2} disablePadding>
         <ListItemText
           primary={<Label label="Ether balance" />}

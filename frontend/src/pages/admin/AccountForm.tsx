@@ -1,0 +1,121 @@
+import React from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  TextField,
+  Typography,
+} from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import styles from './styles';
+import { useAdminDispatch, useAdminSelector } from '../../services/hook';
+import { AdminState } from '../../services/store';
+import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
+import applyPrivateKey from '../../services/admin/thunks/applyPrivateKey';
+import { Link } from 'react-router-dom';
+
+const schema = Yup.object().shape({
+  privateKey: Yup.string().required('Please key the private key'),
+});
+
+type AdminAccountFprmFields = {
+  privateKey: string;
+};
+
+export default function AccountForm() {
+  const dispatch = useAdminDispatch();
+
+  React.useEffect(() => {
+    dispatch(metamaskInfo());
+  }, []);
+
+  const { publicKey } = useAdminSelector((state: AdminState) => state.admin);
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AdminAccountFprmFields>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      privateKey: '',
+    },
+  });
+
+  const onSubmit: SubmitHandler<AdminAccountFprmFields> = (data) => {
+    const { privateKey } = data;
+    dispatch(applyPrivateKey({ privateKey }));
+  };
+
+  const handleReset = () => {
+    reset();
+  };
+
+  return (
+    <Box sx={styles.container}>
+      <form
+        style={styles.form}
+        id="admin_account_private_key"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Box sx={{ marginTop: 1, marginLeft: 2, marginBottom: 1 }}>
+          {publicKey ? (
+            <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
+          ) : (
+            <CircularProgress color="secondary" sx={{ minHeight: '55px' }} />
+          )}
+          <Typography sx={{ fontSize: 12 }}>Public key</Typography>
+          <Typography>{publicKey ? publicKey : '...'}</Typography>
+        </Box>
+
+        <FormControl fullWidth margin="normal">
+          <Controller
+            name="privateKey"
+            defaultValue=""
+            control={control}
+            render={({ field }) => (
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                id="privateKey"
+                label="Private Key"
+                variant="outlined"
+                {...field}
+              />
+            )}
+          />
+          <Box sx={{ minHeight: 46 }}>
+            {errors.privateKey ? (
+              <FormHelperText error>{errors.privateKey.message}</FormHelperText>
+            ) : (
+              <FormHelperText>Admin private key</FormHelperText>
+            )}
+          </Box>
+        </FormControl>
+      </form>
+      <Box sx={styles.formButtons}>
+        <Box sx={{ flexGrow: 1 }} />
+        <Button component={Link} to="/admin">
+          close
+        </Button>
+        <Box sx={{ width: 12 }} />
+        <Button variant="outlined" color="secondary" onClick={handleReset}>
+          reset
+        </Button>
+        <Box sx={{ width: 12 }} />
+        <Button
+          color="primary"
+          type="submit"
+          form="admin_account_private_key"
+          variant="contained"
+        >
+          save
+        </Button>
+      </Box>
+    </Box>
+  );
+}

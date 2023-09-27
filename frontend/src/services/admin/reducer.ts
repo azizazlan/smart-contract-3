@@ -7,6 +7,7 @@ import checkResident from './thunks/checkResidency';
 import checkRole from './thunks/checkRole';
 import assignRole from './thunks/assignRole';
 import contractInfo from './thunks/contractInfo';
+import applyPrivateKey from './thunks/applyPrivateKey';
 
 interface AdminState {
   submissionState: SubmissionStates;
@@ -14,6 +15,7 @@ interface AdminState {
   networkId: string;
   etherBal: string;
   publicKey: string | null;
+  privateKey: string | null;
   isClaimantResident: boolean;
   isClaimantOfficer: boolean;
   claimantPublicKey: string | null;
@@ -26,6 +28,7 @@ const initialState: AdminState = {
   networkId: '-1',
   etherBal: '0',
   publicKey: null,
+  privateKey: null,
   isClaimantResident: false,
   isClaimantOfficer: false,
   claimantPublicKey: null,
@@ -149,6 +152,26 @@ export const adminSlice = createSlice({
       state.submissionMsg = payload.message;
       state.claimantPublicKey = payload.publicKey;
       state.submissionState = 'OK';
+    });
+
+    builder.addCase(applyPrivateKey.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+      state.publicKey = null;
+      state.privateKey = null;
+    });
+    builder.addCase(applyPrivateKey.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.submissionMsg = null;
+        state.publicKey = null;
+        state.privateKey = null;
+        state.submissionState = 'FAILED';
+        return;
+      }
+      state.submissionState = 'OK';
+      state.submissionMsg = payload?.message;
+      state.publicKey = payload?.publicKey;
+      state.privateKey = payload?.privateKey;
     });
   },
 });

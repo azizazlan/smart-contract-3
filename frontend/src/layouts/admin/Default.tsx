@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import Footer from '../Footer';
 
 export default function Layout() {
@@ -21,12 +21,15 @@ export default function Layout() {
         }}
       >
         <Typography
+          component={Link}
+          to="/admin"
           sx={{
-            paddingLeft: '75px',
+            paddingLeft: '64px',
             fontFamily: 'Oswald',
             fontSize: '21pt',
             fontWeight: 'bold',
           }}
+          color="primary"
         >
           Administrator
         </Typography>

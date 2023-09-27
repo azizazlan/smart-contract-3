@@ -2,7 +2,6 @@ import React from 'react';
 import { Alert, Box, IconButton, Snackbar, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import AdjustIcon from '@mui/icons-material/Adjust';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
