@@ -3,7 +3,7 @@ import { Wallet } from "ethers";
 
 const RPC_URL = "http://127.0.0.1:8545";
 const METAMASK_PRIVATE_KEY =
-  "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+  "de9be858da4a475276426320d5e9262ecfc3ba460bfac56360bfa6c4c28b4ee0";
 
 async function main() {
   const provider = new ethers.providers.JsonRpcProvider(RPC_URL);

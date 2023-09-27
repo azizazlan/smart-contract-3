@@ -5,6 +5,7 @@ import Layout from './layouts/Default';
 import { default as OfficialLayout } from './layouts/official/Default';
 import { default as AppbarLayout } from './layouts/resident/AppbarLayout';
 import { default as OfficialAppbarLayout } from './layouts/official/AppbarLayout';
+import { default as AdminLayout } from './layouts/admin/Default';
 import Signup from './pages/resident/account/Signup';
 import { default as OfficialSignup } from './pages/official/account/Signup';
 import Restore from './pages/resident/account/Restore';
@@ -66,7 +67,7 @@ function App() {
         <Route path="verification" element={<OfficialVerification />} />
         <Route path="transfer" element={<TransferFT />} />
       </Route>
-      <Route path="/admin" element={<OfficialLayout />}>
+      <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminLanding />} />
       </Route>
       <Route path="*" element={<NotFound />} />

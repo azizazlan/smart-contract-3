@@ -1,7 +1,8 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import WarningIcon from '@mui/icons-material/Warning';
 
 const melaka_resident_contract_addr = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
@@ -11,76 +12,101 @@ type InfoTabProps = {
   chainId: string;
   publicKey: string;
   balance: string;
+  isGomenOfficer: boolean;
 };
 
 function Label(props: { label: string }) {
   return (
-    <Typography color="primary" variant="body2" sx={{ fontFamily: 'Oswald' }}>
+    <Typography
+      color="primary"
+      component="span"
+      variant="body2"
+      sx={{ fontFamily: 'Oswald' }}
+    >
       {props.label}
     </Typography>
   );
 }
 
+function RedLabel(props: { label: string }) {
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <WarningIcon
+        sx={{ fontSize: 15, marginTop: 0.4, marginRight: 0.5 }}
+        color="error"
+      />
+      <Typography
+        color="error"
+        component="span"
+        variant="body2"
+        sx={{ fontFamily: 'Oswald' }}
+      >
+        {props.label}
+      </Typography>
+    </Box>
+  );
+}
+
 function Value(props: { value: string }) {
-  return <Typography variant="body1">{props.value}</Typography>;
+  return (
+    <Typography component="span" variant="body1">
+      {props.value}
+    </Typography>
+  );
 }
 
 export default function InfoTab(props: InfoTabProps) {
-  const { chainId, publicKey, balance } = props;
+  const { chainId, publicKey, balance, isGomenOfficer } = props;
   return (
     <List sx={{ width: '100%' }} disablePadding>
-      <ListItem disablePadding>
+      <ListItem key={0} disablePadding>
         <ListItemText
           primary={<Label label="NetworkId" />}
           secondary={<Value value={chainId} />}
         />
       </ListItem>
-      <ListItem disablePadding>
-        <ListItemText
-          primary={<Label label="Public key" />}
-          secondary={<Value value={publicKey} />}
-        />
-      </ListItem>
-      <ListItem disablePadding>
+      {isGomenOfficer ? (
+        <ListItem key={1} disablePadding>
+          <ListItemText
+            primary={<Label label="Public key" />}
+            secondary={<Value value={publicKey} />}
+          />
+        </ListItem>
+      ) : (
+        <ListItem key={1} disablePadding>
+          <ListItemText
+            primary={<RedLabel label="Public key is not an officer" />}
+            secondary={<Value value={publicKey} />}
+          />
+        </ListItem>
+      )}
+      <ListItem key={2} disablePadding>
         <ListItemText
           primary={<Label label="Ether balance" />}
           secondary={<Value value={balance} />}
         />
       </ListItem>
-      <ListItem disablePadding>
-        <ListItemText
-          primary={<Label label="MelakaResident address" />}
-          secondary={<Value value={melaka_resident_contract_addr} />}
-        />
-      </ListItem>
-      <ListItem disablePadding>
+      {isGomenOfficer ? (
+        <ListItem key={3} disablePadding>
+          <ListItemText
+            primary={<Label label="MelakaResident address. Officer Role" />}
+            secondary={<Value value={melaka_resident_contract_addr} />}
+          />
+        </ListItem>
+      ) : (
+        <ListItem key={3} disablePadding>
+          <ListItemText
+            primary={
+              <RedLabel label="MelakaResident address. Not an officer" />
+            }
+            secondary={<Value value={melaka_resident_contract_addr} />}
+          />
+        </ListItem>
+      )}
+      <ListItem key={4} disablePadding>
         <ListItemText
           primary={<Label label="MelakaRice address" />}
           secondary={<Value value={melaka_rice_contract_addr} />}
-        />
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemText
-          primary={<Label label="Number of IDs" />}
-          secondary={<Value value="0" />}
-        />
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemText
-          primary={<Label label="Number of residents" />}
-          secondary={<Value value="0" />}
-        />
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemText
-          primary={<Label label="Number of tokens transferred" />}
-          secondary={<Value value="0" />}
-        />
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemText
-          primary={<Label label="Number of state officers" />}
-          secondary={<Value value="0" />}
         />
       </ListItem>
     </List>

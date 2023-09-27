@@ -10,6 +10,7 @@ import OfficerTab from './OfficerTab';
 import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
 import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
+import contractInfo from '../../services/admin/thunks/contractInfo';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,13 +43,14 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const dispatch = useAdminDispatch();
-  const { networkId, publicKey, etherBal } = useAdminSelector(
+  const { networkId, publicKey, etherBal, isGomenOfficer } = useAdminSelector(
     (state: AdminState) => state.admin
   );
   const [value, setValue] = React.useState(0);
 
   React.useEffect(() => {
     dispatch(metamaskInfo());
+    dispatch(contractInfo());
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -63,7 +65,7 @@ export default function BasicTabs() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Info" {...a11yProps(0)} />
+          <Tab label="Admin info" {...a11yProps(0)} />
           <Tab label="Resident" {...a11yProps(1)} />
           <Tab label="Officer" {...a11yProps(2)} />
         </Tabs>
@@ -73,6 +75,7 @@ export default function BasicTabs() {
           chainId={networkId || ''}
           publicKey={publicKey || ''}
           balance={etherBal || ''}
+          isGomenOfficer={isGomenOfficer}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>

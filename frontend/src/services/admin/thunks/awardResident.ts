@@ -43,6 +43,7 @@ const awardResident = createAsyncThunk(
 
     return {
       isResident,
+      message: 'Successfully award resident',
     };
   }
 );

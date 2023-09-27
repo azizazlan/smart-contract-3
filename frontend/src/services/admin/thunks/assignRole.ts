@@ -41,6 +41,7 @@ const assignRole = createAsyncThunk(
 
     return {
       publicKey,
+      message: 'Successfully assigned role',
     };
   }
 );
