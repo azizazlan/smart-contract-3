@@ -9,6 +9,7 @@ import assignRole from './thunks/assignRole';
 import contractInfo from './thunks/contractInfo';
 import applyPrivateKey from './thunks/applyPrivateKey';
 import revokeResidency from './thunks/revokeResidency';
+import revokeRole from './thunks/revokeRole';
 
 interface AdminState {
   submissionState: SubmissionStates;
@@ -174,7 +175,25 @@ export const adminSlice = createSlice({
       state.claimantPublicKey = payload.publicKey;
       state.submissionState = 'OK';
     });
-
+    builder.addCase(revokeRole.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+    });
+    builder.addCase(revokeRole.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      let msg = action.error?.message || 'An error occurred';
+      msg = msg.substring(0, msg.length / 3);
+      state.submissionMsg = msg;
+    });
+    builder.addCase(revokeRole.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.submissionMsg = 'Payload is null but revoke role failed.';
+        state.submissionState = 'FAILED';
+        return;
+      }
+      state.submissionMsg = payload?.message;
+      state.submissionState = 'OK';
+    });
     builder.addCase(applyPrivateKey.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;

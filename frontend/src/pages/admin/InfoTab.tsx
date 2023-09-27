@@ -83,7 +83,9 @@ export default function InfoTab(props: InfoTabProps) {
           />
         </ListItem>
       )}
-      <Link to="/admin/account">...</Link>
+      <Link to="/admin/account" style={{ textDecoration: 'none' }}>
+        ...
+      </Link>
       <Box sx={{ height: '17px' }} />
       <ListItem key={2} disablePadding>
         <ListItemText

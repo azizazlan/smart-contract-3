@@ -3,6 +3,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Wallet } from 'ethers';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
@@ -14,7 +15,7 @@ type AwardResidentFields = {
 };
 
 const awardResident = createAsyncThunk(
-  'adminAwardResident',
+  'admin_award_resident',
   async (props: AwardResidentFields) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -42,7 +43,9 @@ const awardResident = createAsyncThunk(
 
     return {
       isResident,
-      message: 'Successfully award resident',
+      message: `Successfully award resident to public key ${truncateEthAddr(
+        publicKey
+      )} and NRIC ${nric}`,
     };
   }
 );

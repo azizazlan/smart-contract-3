@@ -12,17 +12,19 @@ const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type AssignRoleFields = {
+type RevokeRoleFields = {
   publicKey: string;
   privateKey: string;
 };
 
-const assignRole = createAsyncThunk(
-  'admin_assign_role',
-  async (props: AssignRoleFields) => {
+const revokeRole = createAsyncThunk(
+  'admin_revoke_role',
+  async (props: RevokeRoleFields) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const { publicKey, privateKey } = props;
+    console.log(`public  key ${publicKey}`);
+    console.log(`private key ${privateKey}`);
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
@@ -39,14 +41,14 @@ const assignRole = createAsyncThunk(
 
     await contract
       .connect(metaMaskWallet)
-      .grantRole(GOVERNMENT_OFFICER_ROLE, publicKey);
+      .revokeRole(GOVERNMENT_OFFICER_ROLE, publicKey);
 
     return {
       publicKey,
-      message: `Successfully assigned role as goverment officer to ${truncateEthAddr(
+      message: `Successfully revoke role as goverment officer to ${truncateEthAddr(
         publicKey
       )}`,
     };
   }
 );
-export default assignRole;
+export default revokeRole;

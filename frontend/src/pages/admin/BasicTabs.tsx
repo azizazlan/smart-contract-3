@@ -4,11 +4,12 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import InfoTab from './InfoTab';
 import ResidentTab from './ResidentTab';
-import OfficerTab from './OfficerTab';
+import RoleAssignmentTab from './RoleAssignmentTab';
 import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
 import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
 import contractInfo from '../../services/admin/thunks/contractInfo';
+import { resetSubmission } from '../../services/admin/reducer';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,6 +57,7 @@ export default function BasicTabs() {
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    dispatch(resetSubmission());
     setValue(newValue);
   };
 
@@ -90,7 +92,7 @@ export default function BasicTabs() {
         <ResidentTab />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <OfficerTab />
+        <RoleAssignmentTab />
       </CustomTabPanel>
     </Box>
   );

@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
-import BackdropLoader from '../../commons/BackdropLoader';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
-import ResidentForm from './ResidentForm';
+import BackdropLoader from '../../commons/BackdropLoader';
+import RoleAssignmentForm from './RoleAssignmentForm';
 import Result from './Result';
 
-export default function ResidentTab() {
+export default function RoleAssignmentTab() {
   const { submissionState, submissionMsg } = useAdminSelector(
     (state: AdminState) => state.admin
   );
@@ -31,7 +31,7 @@ export default function ResidentTab() {
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />
-      <ResidentForm />
+      <RoleAssignmentForm />
     </Box>
   );
 }

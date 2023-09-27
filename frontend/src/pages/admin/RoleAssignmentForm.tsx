@@ -6,10 +6,7 @@ import {
   Divider,
   FormControl,
   FormHelperText,
-  Alert,
-  IconButton,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -17,8 +14,8 @@ import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import checkRole from '../../services/admin/thunks/checkRole';
 import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
-import BackdropLoader from '../../commons/BackdropLoader';
 import assignRole from '../../services/admin/thunks/assignRole';
+import revokeRole from '../../services/admin/thunks/revokeRole';
 
 const schema = Yup.object().shape({
   publicKey: Yup.string()
@@ -33,11 +30,10 @@ type AssignRoleFields = {
   publicKey: string;
 };
 
-export default function OfficerTab() {
-  const [checkRoleForm, setCheckRoleForm] = React.useState(false);
+export default function RoleAssignmentForm() {
+  const [checkRevoke, setCheckRevoke] = React.useState(false);
   const dispatch = useAdminDispatch();
-  const { submissionState, isClaimantOfficer, claimantPublicKey } =
-    useAdminSelector((state: AdminState) => state.admin);
+  const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
 
   const {
     reset,
@@ -53,28 +49,26 @@ export default function OfficerTab() {
 
   const onSubmit: SubmitHandler<AssignRoleFields> = (data) => {
     const { publicKey } = data;
-    if (checkRoleForm) {
-      dispatch(checkRole({ publicKey }));
+    if (!privateKey) {
+      console.log('Could not dispatch because privateKey is null');
       return;
     }
-    dispatch(assignRole({ publicKey }));
+    if (checkRevoke) {
+      dispatch(revokeRole({ publicKey, privateKey }));
+      return;
+    }
+    dispatch(assignRole({ publicKey, privateKey }));
   };
 
   const handleReset = () => {
     reset();
     dispatch(resetSubmission());
-    setCheckRoleForm(false);
-  };
-
-  const handleCloseAlert = () => {
-    dispatch(resetSubmission());
-    setCheckRoleForm(false);
+    setCheckRevoke(false);
   };
 
   return (
-    <Box sx={{ marginTop: 0 }}>
-      <BackdropLoader submissionState={submissionState} />
-      <form id="assign_role_form" onSubmit={handleSubmit(onSubmit)}>
+    <div>
+      <form id="assign_revoke_role_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal">
           <Controller
             name="publicKey"
@@ -100,69 +94,32 @@ export default function OfficerTab() {
           )}
         </FormControl>
       </form>
-      <Box sx={{ minHeight: '57pt', marginTop: 1 }}>
-        {submissionState === 'OK' && checkRoleForm && !errors.publicKey ? (
-          <Alert
-            sx={{ mb: 2 }}
-            icon={false}
-            severity="success"
-            action={
-              <IconButton size="small" onClick={handleCloseAlert}>
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            {isClaimantOfficer
-              ? `Public key is an officer!`
-              : `No role was assigned to the public key.`}
-          </Alert>
-        ) : null}
-
-        {submissionState === 'OK' && !checkRoleForm && claimantPublicKey ? (
-          <Alert
-            sx={{ mb: 2 }}
-            icon={false}
-            severity="success"
-            action={
-              <IconButton size="small" onClick={handleCloseAlert}>
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            Successfully assigned as an officer!
-          </Alert>
-        ) : null}
-      </Box>
       <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: 3 }}>
         <Box sx={{ flexGrow: 1 }} />
         <Button variant="outlined" color="secondary" onClick={handleReset}>
           reset
         </Button>
         <Divider sx={{ minWidth: 7 }} />
-        <Button variant="contained" color="secondary">
+        <Button
+          type="submit"
+          form="assign_revoke_role_form"
+          variant="contained"
+          color="secondary"
+          onClick={() => setCheckRevoke(true)}
+        >
           revoke
         </Button>
         <Divider sx={{ minWidth: 7 }} />
         <Button
           type="submit"
-          form="assign_role_form"
-          variant="outlined"
-          color="primary"
-          onClick={() => setCheckRoleForm(true)}
-        >
-          check role
-        </Button>
-        <Divider sx={{ minWidth: 7 }} />
-        <Button
-          type="submit"
-          form="assign_role_form"
+          form="assign_revoke_role_form"
           variant="contained"
           color="primary"
-          onClick={() => setCheckRoleForm(false)}
+          onClick={() => setCheckRevoke(false)}
         >
           assign
         </Button>
       </Box>
-    </Box>
+    </div>
   );
 }

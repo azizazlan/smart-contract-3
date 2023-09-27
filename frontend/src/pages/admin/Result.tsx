@@ -9,12 +9,12 @@ import {
 import { useAdminDispatch } from '../../services/hook';
 import { resetSubmission } from '../../services/admin/reducer';
 
-type ResultResidentFormProps = {
+type ResultProps = {
   message: string;
   error: boolean;
 };
 
-export default function ResultResidentForm(props: ResultResidentFormProps) {
+export default function Result(props: ResultProps) {
   const dispatch = useAdminDispatch();
 
   const handleClose = () => {
@@ -24,7 +24,10 @@ export default function ResultResidentForm(props: ResultResidentFormProps) {
   return (
     <Box sx={{ margin: 2 }}>
       <Card sx={{ minWidth: 275, backgroundColor: '#f5f6fa' }}>
-        <CardHeader title="Award residency" sx={{ color: '#273c75' }} />
+        <CardHeader
+          title="Award residency"
+          sx={{ color: `${props.error ? 'red' : '#273c75'}` }}
+        />
         {!props.error ? (
           <CardContent>{props.message}</CardContent>
         ) : (
