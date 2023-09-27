@@ -42,14 +42,17 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const dispatch = useAdminDispatch();
-  const { networkId, publicKey, etherBal, isGomenOfficer } = useAdminSelector(
-    (state: AdminState) => state.admin
-  );
+  const { networkId, publicKey, privateKey, etherBal, isGomenOfficer } =
+    useAdminSelector((state: AdminState) => state.admin);
   const [value, setValue] = React.useState(0);
 
   React.useEffect(() => {
-    dispatch(metamaskInfo());
-    dispatch(contractInfo());
+    if (!privateKey) {
+      console.log('private key is null');
+      return;
+    }
+    dispatch(metamaskInfo({ privateKey }));
+    dispatch(contractInfo({ privateKey }));
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

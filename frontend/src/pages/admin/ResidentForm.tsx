@@ -15,7 +15,7 @@ import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import awardResident from '../../services/admin/thunks/awardResident';
 import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
-import checkResidency from '../../services/admin/thunks/checkResidency';
+import revokeResidency from '../../services/admin/thunks/revokeResidency';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -38,9 +38,9 @@ type ResidentAwardFields = {
 };
 
 export default function ResidentForm() {
-  const [checkResidencyForm, setCheckResidencyForm] = React.useState(false);
+  const [toRevoke, setToRevoke] = React.useState(false);
   const dispatch = useAdminDispatch();
-  const { submissionState, isClaimantResident } = useAdminSelector(
+  const { submissionState, privateKey, isClaimantResident } = useAdminSelector(
     (state: AdminState) => state.admin
   );
   const {
@@ -63,11 +63,15 @@ export default function ResidentForm() {
 
   const onSubmit: SubmitHandler<ResidentAwardFields> = (data) => {
     const { nric, publicKey } = data;
-    if (checkResidencyForm) {
-      dispatch(checkResidency({ publicKey, nric }));
+    if (!privateKey || !publicKey || !nric) {
+      console.log('One of the param is null');
       return;
     }
-    dispatch(awardResident({ publicKey, nric }));
+    if (toRevoke) {
+      dispatch(revokeResidency({ publicKey, privateKey, nric }));
+      return;
+    }
+    dispatch(awardResident({ publicKey, privateKey, nric }));
   };
 
   return (
@@ -126,23 +130,19 @@ export default function ResidentForm() {
           reset
         </Button>
         <Divider sx={{ minWidth: 7 }} />
-        <Button variant="contained" color="secondary">
+        <Button
+          color="secondary"
+          onClick={() => setToRevoke(true)}
+          type="submit"
+          form="award_resident_form"
+          variant="contained"
+          aria-label="status"
+        >
           revoke
         </Button>
         <Divider sx={{ minWidth: 7 }} />
         <Button
-          onClick={() => setCheckResidencyForm(true)}
-          type="submit"
-          form="award_resident_form"
-          variant="outlined"
-          aria-label="status"
-          endIcon={isClaimantResident ? <DoneIcon /> : null}
-        >
-          residency
-        </Button>
-        <Divider sx={{ minWidth: 7 }} />
-        <Button
-          onClick={() => setCheckResidencyForm(false)}
+          onClick={() => setToRevoke(false)}
           type="submit"
           form="award_resident_form"
           variant="contained"

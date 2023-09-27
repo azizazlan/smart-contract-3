@@ -1,22 +1,23 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { Wallet, ethers } from 'ethers';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { ethers, Wallet } from 'ethers';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type AwardResidentFields = {
+type RevokeResidencyFields = {
   nric: string;
   publicKey: string;
   privateKey: string;
 };
 
-const awardResident = createAsyncThunk(
-  'adminAwardResident',
-  async (props: AwardResidentFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+const revokeResidency = createAsyncThunk(
+  'admin_revoke_residency',
+  async (props: RevokeResidencyFields) => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     const { publicKey, privateKey, nric } = props;
     const provider = await detectEthereumProvider({ silent: true });
@@ -32,18 +33,23 @@ const awardResident = createAsyncThunk(
       contractABI.abi,
       web3Provider
     );
-    const bytesNric = ethers.utils.formatBytes32String(nric);
 
+    const bytesNric = ethers.utils.formatBytes32String(nric);
     await contract
       .connect(metaMaskWallet)
-      .awardResidentialStatus(publicKey, bytesNric);
+      .revokeResidentialStatus(publicKey, bytesNric);
 
-    const isResident = await contract.verifyResident(publicKey, bytesNric);
+    const message = `Successfully revoke residency status of ${truncateEthAddr(
+      publicKey
+    )} with NRIC# ${nric}`;
+
+    // throw new Error('Simulated rejection'); // simulate rejected
 
     return {
-      isResident,
-      message: 'Successfully award resident',
+      message,
+      nric,
+      publicKey,
     };
   }
 );
-export default awardResident;
+export default revokeResidency;

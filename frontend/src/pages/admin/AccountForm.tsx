@@ -29,9 +29,14 @@ type AdminAccountFprmFields = {
 
 export default function AccountForm() {
   const dispatch = useAdminDispatch();
+  const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
 
   React.useEffect(() => {
-    dispatch(metamaskInfo());
+    if (!privateKey) {
+      console.log('private key is null');
+      return;
+    }
+    dispatch(metamaskInfo({ privateKey }));
   }, []);
 
   const { publicKey } = useAdminSelector((state: AdminState) => state.admin);
@@ -65,9 +70,13 @@ export default function AccountForm() {
       >
         <Box sx={{ marginTop: 1, marginLeft: 2, marginBottom: 1 }}>
           {publicKey ? (
-            <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
+            <Box sx={{ minHeight: '55px' }}>
+              <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
+            </Box>
           ) : (
-            <CircularProgress color="secondary" sx={{ minHeight: '55px' }} />
+            <Box sx={{ minHeight: '55px' }}>
+              {publicKey ? <CircularProgress color="secondary" /> : null}
+            </Box>
           )}
           <Typography sx={{ fontSize: 12 }}>Public key</Typography>
           <Typography>{publicKey ? publicKey : '...'}</Typography>
