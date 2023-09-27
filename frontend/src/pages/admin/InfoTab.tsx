@@ -94,28 +94,21 @@ export default function InfoTab(props: InfoTabProps) {
         />
       </ListItem>
       {isGomenOfficer ? (
-        <ListItem key={3} disablePadding>
-          <ListItemText
-            primary={<Label label="MelakaResident address. Officer Role" />}
-            secondary={<Value value={melaka_resident_contract_addr} />}
-          />
-        </ListItem>
-      ) : (
-        <ListItem key={3} disablePadding>
-          <ListItemText
-            primary={
-              <RedLabel label="MelakaResident address. Not an officer" />
-            }
-            secondary={<Value value={melaka_resident_contract_addr} />}
-          />
-        </ListItem>
-      )}
-      <ListItem key={4} disablePadding>
-        <ListItemText
-          primary={<Label label="MelakaRice address" />}
-          secondary={<Value value={melaka_rice_contract_addr} />}
-        />
-      </ListItem>
+        <div>
+          <ListItem key={3} disablePadding>
+            <ListItemText
+              primary={<Label label="MelakaResident address" />}
+              secondary={<Value value={melaka_resident_contract_addr} />}
+            />
+          </ListItem>
+          <ListItem key={4} disablePadding>
+            <ListItemText
+              primary={<Label label="MelakaRice address" />}
+              secondary={<Value value={melaka_rice_contract_addr} />}
+            />
+          </ListItem>
+        </div>
+      ) : null}
     </List>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -76,11 +76,6 @@ function Appbar() {
 }
 
 export default function Layout() {
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate('/');
-  };
-
   return (
     <Box>
       <Appbar />

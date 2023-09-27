@@ -7,7 +7,6 @@ import {
   FormHelperText,
   Divider,
 } from '@mui/material';
-import DoneIcon from '@mui/icons-material/Done';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -40,9 +39,7 @@ type ResidentAwardFields = {
 export default function ResidentForm() {
   const [toRevoke, setToRevoke] = React.useState(false);
   const dispatch = useAdminDispatch();
-  const { submissionState, privateKey, isClaimantResident } = useAdminSelector(
-    (state: AdminState) => state.admin
-  );
+  const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
   const {
     reset,
     control,

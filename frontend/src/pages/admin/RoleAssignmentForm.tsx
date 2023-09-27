@@ -11,7 +11,6 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAdminDispatch, useAdminSelector } from '../../services/hook';
-import checkRole from '../../services/admin/thunks/checkRole';
 import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
 import assignRole from '../../services/admin/thunks/assignRole';

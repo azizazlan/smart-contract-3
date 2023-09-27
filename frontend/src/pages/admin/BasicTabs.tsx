@@ -57,9 +57,40 @@ export default function BasicTabs() {
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log(event);
     dispatch(resetSubmission());
     setValue(newValue);
   };
+
+  if (!isGomenOfficer) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        >
+          <Tabs
+            sx={{ marginLeft: '65px' }}
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Admin info" {...a11yProps(0)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <InfoTab
+            chainId={networkId || ''}
+            publicKey={publicKey || ''}
+            balance={etherBal || ''}
+            isGomenOfficer={isGomenOfficer}
+          />
+        </CustomTabPanel>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ width: '100%' }}>

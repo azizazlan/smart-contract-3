@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Button,
@@ -12,12 +11,6 @@ import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import styles from './styles';
-import awardResidency from '../../../services/official/thunks/awardResidency';
-import {
-  useOfficialDispatch,
-  useOfficialSelector,
-} from '../../../services/hook';
-import { OfficialState } from '../../../services/store';
 
 const schema = Yup.object().shape({
   publicKey: Yup.string()
@@ -46,13 +39,14 @@ export default function TransferFT() {
     },
   });
 
-  const dispatch = useOfficialDispatch();
-  const { seedPhrase } = useOfficialSelector(
-    (state: OfficialState) => state.official
-  );
+  // const dispatch = useOfficialDispatch();
+  // const { seedPhrase } = useOfficialSelector(
+  //   (state: OfficialState) => state.official
+  // );
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
     const { publicKey } = data;
+    console.log(publicKey);
   };
 
   const handleReset = () => {

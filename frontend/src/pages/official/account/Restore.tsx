@@ -33,7 +33,9 @@ export default function Restore() {
     },
   });
 
-  const onSubmit: SubmitHandler<RestoreFields> = (data) => {};
+  const onSubmit: SubmitHandler<RestoreFields> = (data) => {
+    console.log(data);
+  };
 
   return (
     <Box sx={styles.container}>
