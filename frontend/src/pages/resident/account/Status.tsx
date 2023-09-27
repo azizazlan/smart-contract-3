@@ -1,5 +1,7 @@
 import { Box, Typography, IconButton } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
+import residentIcon from '../../../assets/resident.png';
+import nonResidentIcon from '../../../assets/non-resident.png';
 
 export default function Status({
   nric,
@@ -23,6 +25,11 @@ export default function Status({
         marginTop: '9px',
       }}
     >
+      <img
+        src={isResident && isWhitelisted ? residentIcon : nonResidentIcon}
+        alt="resident icon"
+        style={{ width: '65px' }}
+      />
       <Typography
         style={{
           fontFamily: 'Oswald',
@@ -99,7 +106,7 @@ export default function Status({
             color="primary"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            Yes
+            Whitelisted
           </Typography>
         ) : (
           <Typography

@@ -8,16 +8,16 @@ const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type AddWhitelistFields = {
+type RemoveWhitelistFields = {
   nric: string;
   publicKey: string;
   officialSeedphrase: string;
 };
 
-const addWhitelist = createAsyncThunk(
-  'official_add_whitelist',
-  async (props: AddWhitelistFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
+const removeWhitelist = createAsyncThunk(
+  'official_remove_whitelist',
+  async (props: RemoveWhitelistFields) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const { nric, publicKey, officialSeedphrase } = props;
 
@@ -31,13 +31,15 @@ const addWhitelist = createAsyncThunk(
     );
 
     const bytesNric = ethers.utils.formatBytes32String(nric);
-    await contract.addResidentWhitelist(publicKey, bytesNric);
+    await contract.removeResidentWhitelist(publicKey, bytesNric);
 
-    const message = `Successfully added to whitelist: ${truncateEthAddr(
+    const message = `Successfully remove resident from whitelist: ${truncateEthAddr(
       publicKey
     )} with NRIC# ${nric}`;
 
-    // throw new Error('Simulated rejection'); // simulate rejected
+    // throw new Error(
+    //   'Simulated rejection. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old'
+    // ); // simulate rejected
 
     return {
       message,
@@ -46,4 +48,4 @@ const addWhitelist = createAsyncThunk(
     };
   }
 );
-export default addWhitelist;
+export default removeWhitelist;

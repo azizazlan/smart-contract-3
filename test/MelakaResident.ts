@@ -10,9 +10,6 @@ describe("MelakaResident and MelakaRice", function () {
   const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
     ethers.utils.toUtf8Bytes("GOVERNMENT_OFFICER_ROLE")
   );
-  const SUBSIDY_RECIPIENT: string = ethers.utils.keccak256(
-    ethers.utils.toUtf8Bytes("SUBSIDY_RECIPIENT")
-  );
 
   async function deployContracts() {
     const [resident1, resident2, officer1, officer2] =
@@ -104,9 +101,6 @@ describe("MelakaResident and MelakaRice", function () {
         .connect(officer1)
         .addResidentWhitelist(resident1.address, nric1);
       await expect(
-        await melakaResident.hasRole(SUBSIDY_RECIPIENT, resident1.address)
-      ).to.be.true;
-      await expect(
         await melakaResident.isResidentWhitelisted(resident1.address)
       ).to.be.true;
     });
@@ -116,42 +110,18 @@ describe("MelakaResident and MelakaRice", function () {
       );
       await melakaResident.grantRole(GOVERNMENT_OFFICER_ROLE, officer1.address);
       const nric1 = ethers.utils.formatBytes32String("760119097876");
-      // Test if RoleGranted got emitted
-      const transactionAdd = await melakaResident
+
+      await melakaResident
         .connect(officer1)
         .addResidentWhitelist(resident1.address, nric1);
-      await transactionAdd.wait();
-      const receiptAdd = await ethers.provider.getTransactionReceipt(
-        transactionAdd.hash
-      );
-      const eventsAdd = melakaResident.interface.parseLog(receiptAdd.logs[0]);
-      expect(eventsAdd.name).to.equal("RoleGranted");
-      expect(eventsAdd.args[0]).to.equal(SUBSIDY_RECIPIENT);
-      await expect(
-        await melakaResident.hasRole(SUBSIDY_RECIPIENT, resident1.address)
-      ).to.be.true;
+
       // Now remove resident1 from white list
       const transactionRm = await melakaResident
         .connect(officer1)
         .removeResidentWhitelist(resident1.address, nric1);
-      await transactionRm.wait();
-      const receiptRm = await ethers.provider.getTransactionReceipt(
-        transactionRm.hash
-      );
-      const eventsRm = melakaResident.interface.parseLog(receiptRm.logs[0]);
-      expect(eventsRm.name).to.equal("RoleRevoked");
-      expect(eventsRm.args[0]).to.equal(SUBSIDY_RECIPIENT);
-      await expect(
-        await melakaResident.hasRole(SUBSIDY_RECIPIENT, resident1.address)
-      ).to.be.false;
+
       await expect(
         await melakaResident.isResidentWhitelisted(resident1.address)
-      ).to.be.false;
-    });
-    it("Resident not add in whitelist should have no subsidy role", async function () {
-      const { melakaResident, resident1 } = await loadFixture(deployContracts);
-      await expect(
-        await melakaResident.hasRole(SUBSIDY_RECIPIENT, resident1.address)
       ).to.be.false;
     });
     it("Should reject when recipient #2 attempts to add a same NRIC", async function () {
@@ -207,14 +177,30 @@ describe("MelakaResident and MelakaRice", function () {
 
   describe("Verify resident", function () {
     it("Should return true if added to whitelist", async function () {
-      const { melakaResident, officer1, resident1 } = await loadFixture(
+      const { melakaResident, officer2, resident2 } = await loadFixture(
         deployContracts
       );
-      await melakaResident.grantRole(GOVERNMENT_OFFICER_ROLE, officer1.address);
-      const nric1 = ethers.utils.formatBytes32String("760119097876");
-      await melakaResident.addResidentWhitelist(resident1.address, nric1);
+      await melakaResident.grantRole(GOVERNMENT_OFFICER_ROLE, officer2.address);
+      const nric2 = ethers.utils.formatBytes32String("760119097822");
+
+      await melakaResident
+        .connect(officer2)
+        .awardResidentialStatus(resident2.address, nric2);
+
+      await melakaResident
+        .connect(officer2)
+        .addResidentWhitelist(resident2.address, nric2);
+
+      await expect(await melakaResident.whitelistedResidents(resident2.address))
+        .to.be.true;
+      await expect(await melakaResident.whitelistedResidentNrics(nric2)).to.be
+        .true;
+      await expect(await melakaResident.residents(resident2.address)).to.be
+        .true;
+      await expect(await melakaResident.residentNrics(nric2)).to.be.true;
+
       await expect(
-        await melakaResident.verifyWhitelistedResident(resident1.address, nric1)
+        await melakaResident.verifyWhitelistedResident(resident2.address, nric2)
       ).to.be.true;
     });
     it("Should return false if not added to whitelist", async function () {

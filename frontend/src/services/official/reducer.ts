@@ -8,6 +8,8 @@ import hasRole from './thunks/hasRole';
 import ethBal from './thunks/ethBal';
 import awardResidency from './thunks/awardResidency';
 import addWhitelist from './thunks/addWhitelist';
+import revokeResidency from './thunks/revokeResidency';
+import removeWhitelist from './thunks/removeWhitelist';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -120,11 +122,44 @@ export const officialSlice = createSlice({
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
+    builder.addCase(revokeResidency.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+    });
+    builder.addCase(revokeResidency.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      let msg = action.error?.message || 'An error occurred';
+      msg = msg.substring(0, msg.length / 3);
+      state.submissionMsg = msg;
+    });
+    builder.addCase(revokeResidency.fulfilled, (state, { payload }) => {
+      state.submissionState = 'OK';
+      state.submissionMsg = payload.message;
+    });
     builder.addCase(addWhitelist.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
     });
+    builder.addCase(addWhitelist.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      let msg = action.error?.message || 'An error occurred';
+      msg = msg.substring(0, msg.length / 3);
+      state.submissionMsg = msg;
+    });
     builder.addCase(addWhitelist.fulfilled, (state, { payload }) => {
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(removeWhitelist.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(removeWhitelist.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      let msg = action.error?.message || 'An error occurred';
+      msg = msg.substring(0, msg.length / 3);
+      state.submissionMsg = msg;
+    });
+    builder.addCase(removeWhitelist.fulfilled, (state, { payload }) => {
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

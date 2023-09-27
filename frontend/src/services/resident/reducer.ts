@@ -4,9 +4,11 @@ import { SubmissionStates } from '../submissionState';
 import signupResident from './thunks/signup';
 import initialize from './thunks/initialize';
 import clearLocalSto from './thunks/clearLocalSto';
+import checkStatus from './thunks/checkStatus';
 
 interface ResidentState {
   submissionState: SubmissionStates;
+  submissionMsg: string | null;
   networkId: number;
   nric: string | null;
   publicKey: string | null;
@@ -18,6 +20,7 @@ interface ResidentState {
 
 const initialState: ResidentState = {
   submissionState: 'IDLE',
+  submissionMsg: null,
   networkId: -1,
   nric: null,
   publicKey: null,
@@ -59,6 +62,16 @@ export const residentSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(checkStatus.pending, (state, {}) => {
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
+      state.isResident = payload.isResident;
+      state.isWhitelisted = payload.isWhitelisted;
+      state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
   },

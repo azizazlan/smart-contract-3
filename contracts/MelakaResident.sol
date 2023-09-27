@@ -17,7 +17,6 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant GOVERNMENT_OFFICER_ROLE =
         keccak256("GOVERNMENT_OFFICER_ROLE");
-    bytes32 public constant SUBSIDY_RECIPIENT = keccak256("SUBSIDY_RECIPIENT");
 
     // Residential status
     mapping(address => bool) public residents;
@@ -93,8 +92,6 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
         // Perform the whitelisting by adding the address to the mapping
         whitelistedResidents[account] = true;
         whitelistedResidentNrics[residentNric] = true;
-
-        grantRole(SUBSIDY_RECIPIENT, account);
     }
 
     // Remove an address from the whitelist
@@ -105,7 +102,6 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
         // Perform the whitelisting by adding the address to the mapping
         whitelistedResidents[account] = false;
         whitelistedResidentNrics[residentNric] = false;
-        revokeRole(SUBSIDY_RECIPIENT, account);
     }
 
     function isResidentWhitelisted(
@@ -126,11 +122,6 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
     }
 
     function transferFTToResident(address to) external onlyRole(MINTER_ROLE) {
-        require(
-            !hasRole(SUBSIDY_RECIPIENT, msg.sender),
-            "Only whitelist resident can receive FT"
-        );
-
         require(isResidentWhitelisted(to), "Resident not in whitelist");
 
         // Transfer an FT from this contract to the specified address

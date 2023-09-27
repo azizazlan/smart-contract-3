@@ -1,10 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
 import styles from './styles';
-import nonResidentImg from '../../../assets/resident-non.png';
-import residentImg from '../../../assets/resident-ok.png';
-import QrCodeDlg from '../../../dialogs/QrCodeDlg';
 import {
   useResidentDispatch,
   useResidentSelector,
@@ -14,6 +10,7 @@ import { Navigate } from 'react-router-dom';
 import whitelistStat from '../../../services/resident/thunks/whitelistStat';
 import Balance from './Balance';
 import Status from './Status';
+import checkStatus from '../../../services/resident/thunks/checkStatus';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
@@ -51,7 +48,12 @@ export default function Info() {
 
   const handleReloadBal = () => {};
 
-  const handleReloadResidentStat = () => {};
+  const handleReloadResidentStat = () => {
+    if (!nric || !publicKey) {
+      return;
+    }
+    dispatch(checkStatus({ nric, publicKey }));
+  };
 
   const handleReloadWhitelistStat = () => {};
 

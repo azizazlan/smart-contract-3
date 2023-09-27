@@ -16,6 +16,7 @@ import {
 } from '../../../services/hook';
 import { OfficialState } from '../../../services/store';
 import styles from './styles';
+import revokeResidency from '../../../services/official/thunks/revokeResidency';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -59,12 +60,14 @@ export default function ResidencyForm() {
 
   const onSubmit: SubmitHandler<ResidentAwardFields> = (data) => {
     const { nric, publicKey } = data;
-    if (toRevoke) {
-      console.log('to revoke!');
-      return;
-    }
     if (!seedPhrase) {
       console.log('seedPhrase is null');
+      return;
+    }
+    if (toRevoke) {
+      dispatch(
+        revokeResidency({ nric, publicKey, officialSeedphrase: seedPhrase })
+      );
       return;
     }
     dispatch(

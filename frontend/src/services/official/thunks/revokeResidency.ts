@@ -17,7 +17,7 @@ type RevokeResidencyFields = {
 const revokeResidency = createAsyncThunk(
   'official_revoke_residency',
   async (props: RevokeResidencyFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     const { nric, publicKey, officialSeedphrase } = props;
 
@@ -31,7 +31,7 @@ const revokeResidency = createAsyncThunk(
     );
 
     const bytesNric = ethers.utils.formatBytes32String(nric);
-    // await contract.revokeResidentialStatus(publicKey, bytesNric);
+    await contract.revokeResidentialStatus(publicKey, bytesNric);
 
     const message = `Successfully revoke residency status of ${truncateEthAddr(
       publicKey

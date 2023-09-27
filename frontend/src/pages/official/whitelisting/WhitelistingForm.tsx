@@ -16,6 +16,7 @@ import {
 import { OfficialState } from '../../../services/store';
 import styles from '../residency/styles';
 import addWhitelist from '../../../services/official/thunks/addWhitelist';
+import removeWhitelist from '../../../services/official/thunks/removeWhitelist';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -59,12 +60,14 @@ export default function WhitelistingForm() {
 
   const onSubmit: SubmitHandler<WhitelistingFields> = (data) => {
     const { nric, publicKey } = data;
-    if (toRemove) {
-      console.log('to revoke!');
-      return;
-    }
     if (!seedPhrase) {
       console.log('seedPhrase is null');
+      return;
+    }
+    if (toRemove) {
+      dispatch(
+        removeWhitelist({ nric, publicKey, officialSeedphrase: seedPhrase })
+      );
       return;
     }
     dispatch(addWhitelist({ nric, publicKey, officialSeedphrase: seedPhrase }));
