@@ -2,6 +2,7 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import InfoTab from './InfoTab';
 import ResidentTab from './ResidentTab';
 import RoleAssignmentTab from './RoleAssignmentTab';
@@ -10,6 +11,7 @@ import { AdminState } from '../../services/store';
 import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
 import contractInfo from '../../services/admin/thunks/contractInfo';
 import { resetSubmission } from '../../services/admin/reducer';
+import VerifyTab from './VerifyTab';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -78,6 +80,12 @@ export default function BasicTabs() {
             aria-label="basic tabs example"
           >
             <Tab label="Admin info" {...a11yProps(0)} />
+            <Tab
+              label="Verify"
+              icon={<SensorOccupiedIcon />}
+              iconPosition="start"
+              {...a11yProps(1)}
+            />
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
@@ -87,6 +95,9 @@ export default function BasicTabs() {
             balance={etherBal || ''}
             isGomenOfficer={isGomenOfficer}
           />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <VerifyTab />
         </CustomTabPanel>
       </Box>
     );
@@ -109,6 +120,12 @@ export default function BasicTabs() {
           <Tab label="Admin info" {...a11yProps(0)} />
           <Tab label="Resident" {...a11yProps(1)} />
           <Tab label="Officer" {...a11yProps(2)} />
+          <Tab
+            label="Verify"
+            icon={<SensorOccupiedIcon />}
+            iconPosition="start"
+            {...a11yProps(3)}
+          />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -124,6 +141,9 @@ export default function BasicTabs() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <RoleAssignmentTab />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <VerifyTab />
       </CustomTabPanel>
     </Box>
   );

@@ -11,16 +11,17 @@ const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
-type CheckRoleFields = {
+type CheckStatusFields = {
+  nric: string;
   publicKey: string;
 };
 
-const checkRole = createAsyncThunk(
-  'admin_check_role',
-  async (props: CheckRoleFields) => {
+const checkStatus = createAsyncThunk(
+  'admin_check_status',
+  async (props: CheckStatusFields) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const { publicKey } = props;
+    const { nric, publicKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
@@ -37,9 +38,26 @@ const checkRole = createAsyncThunk(
       GOVERNMENT_OFFICER_ROLE,
       publicKey
     );
+
+    const isResident: boolean = await contract.verifyResident(
+      publicKey,
+      ethers.utils.formatBytes32String(nric)
+    );
+
+    const isWhitelisted = await contract.isResidentWhitelisted(publicKey);
+
+    const message = `Resident status: ${
+      isResident ? 'Resident' : 'Non-resident'
+    } Official role: ${isOfficer ? 'Officer' : 'Non-officer'} Whitelisting: ${
+      isWhitelisted ? 'Added' : 'Removed'
+    }`;
+
     return {
+      isResident,
       isOfficer,
+      isWhitelisted,
+      message,
     };
   }
 );
-export default checkRole;
+export default checkStatus;

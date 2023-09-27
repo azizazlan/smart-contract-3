@@ -10,6 +10,7 @@ import contractInfo from './thunks/contractInfo';
 import applyPrivateKey from './thunks/applyPrivateKey';
 import revokeResidency from './thunks/revokeResidency';
 import revokeRole from './thunks/revokeRole';
+import checkStatus from './thunks/checkStatus';
 
 interface AdminState {
   submissionState: SubmissionStates;
@@ -20,6 +21,7 @@ interface AdminState {
   privateKey: string | null;
   isClaimantResident: boolean;
   isClaimantOfficer: boolean;
+  isClaimantWhitelisted: boolean;
   claimantPublicKey: string | null;
   isGomenOfficer: boolean;
 }
@@ -33,6 +35,7 @@ const initialState: AdminState = {
   privateKey: null,
   isClaimantResident: false,
   isClaimantOfficer: false,
+  isClaimantWhitelisted: false,
   claimantPublicKey: null,
   isGomenOfficer: false,
 };
@@ -212,6 +215,25 @@ export const adminSlice = createSlice({
       state.submissionMsg = payload?.message;
       state.publicKey = payload?.publicKey;
       state.privateKey = payload?.privateKey;
+    });
+    builder.addCase(checkStatus.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+      state.isClaimantResident = false;
+      state.isClaimantOfficer = false;
+      state.isClaimantWhitelisted = false;
+    });
+    builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.submissionMsg = 'Error message';
+        state.submissionState = 'FAILED';
+        return;
+      }
+      state.submissionMsg = payload?.message;
+      state.isClaimantResident = payload.isResident;
+      state.isClaimantOfficer = payload.isOfficer;
+      state.isClaimantWhitelisted = payload.isWhitelisted;
+      state.submissionState = 'OK';
     });
   },
 });
