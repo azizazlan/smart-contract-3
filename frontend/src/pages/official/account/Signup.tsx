@@ -1,65 +1,24 @@
 /* eslint-disable no-console */
-import {
-  Alert,
-  Backdrop,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CircularProgress,
-  Divider,
-  FormControl,
-  FormHelperText,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { isMobile } from 'react-device-detect';
-import styles from './styles.ts';
-import { Link } from 'react-router-dom';
-import {
-  useOfficialDispatch,
-  useOfficialSelector,
-} from '../../../services/hook.ts';
-import signupOfficial from '../../../services/official/thunks/signup.ts';
+import { useOfficialSelector } from '../../../services/hook.ts';
 import { OfficialState } from '../../../services/store.ts';
-
-const schema = Yup.object().shape({
-  nric: Yup.string()
-    .required('Please key in your NRIC')
-    .test('valid-nric', 'NRIC must be at least 12 digits numbers', (value) => {
-      if (!value) return false; // Skip validation if the value is empty or undefined
-      return /^[0-9]{12,}$/.test(value);
-    }),
-});
-
-type SignupFields = {
-  nric: string;
-};
+import BackdropLoader from '../../../commons/BackdropLoader.tsx';
+import SignupForm from './SignupForm.tsx';
+import styles from './styles.ts';
+import {
+  Box,
+  Alert,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+} from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function Signup() {
-  const dispatch = useOfficialDispatch();
-  const { submissionState, publicKey, seedPhrase } = useOfficialSelector(
+  const { publicKey, submissionState, seedPhrase } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupFields>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      nric: '',
-    },
-  });
-
-  const onSubmit: SubmitHandler<SignupFields> = (data) => {
-    const { nric } = data;
-    dispatch(signupOfficial({ nric }));
-  };
 
   if (submissionState === 'OK' && publicKey && seedPhrase) {
     return (
@@ -94,62 +53,9 @@ export default function Signup() {
   }
 
   return (
-    <Box sx={styles.container}>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={submissionState === 'PENDING'}
-        onClick={() => console.log('Close backdrop')}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <form id="official_signup_form" onSubmit={handleSubmit(onSubmit)}>
-        <FormControl fullWidth margin="normal" variant="outlined">
-          <Controller
-            name="nric"
-            defaultValue=""
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="number"
-                placeholder="34567891011"
-                InputLabelProps={{ shrink: true }}
-                label="Official NRIC"
-                id="nric"
-                {...field}
-              />
-            )}
-          />
-          {errors.nric ? (
-            <FormHelperText error>{errors.nric.message}</FormHelperText>
-          ) : (
-            <FormHelperText>
-              ** 12 digits without hyphens or any symbol.
-            </FormHelperText>
-          )}
-        </FormControl>
-      </form>
-      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
-        <Button
-          fullWidth={isMobile ? true : false}
-          variant="outlined"
-          color="secondary"
-          component={Link}
-          to="/official"
-        >
-          cancel
-        </Button>
-        <Divider sx={{ width: '7px', height: '7px' }} />
-        <Button
-          sx={{ backgroundColor: 'black' }}
-          fullWidth={isMobile ? true : false}
-          variant="contained"
-          color="primary"
-          type="submit"
-          form="official_signup_form"
-        >
-          signup
-        </Button>
-      </Box>
-    </Box>
+    <div>
+      <BackdropLoader submissionState={submissionState} />
+      <SignupForm />
+    </div>
   );
 }

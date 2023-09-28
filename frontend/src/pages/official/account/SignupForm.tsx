@@ -1,30 +1,20 @@
 /* eslint-disable no-console */
 import {
-  Alert,
   Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Divider,
   FormControl,
   FormHelperText,
   TextField,
-  Typography,
 } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { isMobile } from 'react-device-detect';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
-import { isMobile } from 'react-device-detect';
-import {
-  useResidentDispatch,
-  useResidentSelector,
-} from '../../../services/hook.ts';
-import signupResident from '../../../services/resident/thunks/signup.ts';
-import { ResidentState } from '../../../services/store.ts';
-import BackdropLoader from '../../../commons/BackdropLoader.tsx';
+import { useOfficialDispatch } from '../../../services/hook.ts';
+import signupOfficial from '../../../services/official/thunks/signup.ts';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -39,11 +29,9 @@ type SignupFields = {
   nric: string;
 };
 
-export default function Signup() {
-  const dispatch = useResidentDispatch();
-  const { submissionState, publicKey, seedPhrase } = useResidentSelector(
-    (state: ResidentState) => state.resident
-  );
+export default function SignupForm() {
+  const dispatch = useOfficialDispatch();
+
   const {
     control,
     handleSubmit,
@@ -57,45 +45,12 @@ export default function Signup() {
 
   const onSubmit: SubmitHandler<SignupFields> = (data) => {
     const { nric } = data;
-    dispatch(signupResident({ nric }));
+    dispatch(signupOfficial({ nric }));
   };
 
-  if (submissionState === 'OK' && publicKey && seedPhrase) {
-    return (
-      <Box sx={{ ...styles.container, marginLeft: 7, marginRight: 7 }}>
-        <Alert icon={false} severity="success">
-          Signup success! Important to keep your unique seed phrases below.
-        </Alert>
-        <Card sx={{ minWidth: 175 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 15, color: 'black' }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {seedPhrase}
-            </Typography>
-          </CardContent>
-          <CardActions
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <Button variant="outlined" component={Link} to="/">
-              OK, view my account
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
-    );
-  }
-
   return (
-    <Box sx={styles.container}>
-      <BackdropLoader submissionState={submissionState} />
-      <form id="resident_signup_form" onSubmit={handleSubmit(onSubmit)}>
+    <Box sx={{ ...styles.container }}>
+      <form id="official_signup_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
@@ -104,9 +59,9 @@ export default function Signup() {
             render={({ field }) => (
               <TextField
                 type="number"
-                placeholder="845678910112"
+                placeholder="34567891011"
                 InputLabelProps={{ shrink: true }}
-                label="NRIC"
+                label="Official NRIC"
                 id="nric"
                 {...field}
               />
@@ -116,7 +71,7 @@ export default function Signup() {
             <FormHelperText error>{errors.nric.message}</FormHelperText>
           ) : (
             <FormHelperText>
-              * 12 digits without hyphens or any symbol.
+              ** 12 digits without hyphens or any symbol.
             </FormHelperText>
           )}
         </FormControl>
@@ -127,17 +82,18 @@ export default function Signup() {
           variant="outlined"
           color="secondary"
           component={Link}
-          to="/"
+          to="/official"
         >
           cancel
         </Button>
         <Divider sx={{ width: '7px', height: '7px' }} />
         <Button
+          sx={{ backgroundColor: 'black' }}
           fullWidth={isMobile ? true : false}
           variant="contained"
           color="primary"
           type="submit"
-          form="resident_signup_form"
+          form="official_signup_form"
         >
           signup
         </Button>

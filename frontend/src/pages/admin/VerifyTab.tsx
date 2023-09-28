@@ -34,9 +34,9 @@ export default function VerifyTab() {
   return (
     <Box>
       <BackdropLoader submissionState={submissionState} />
-      <Alert icon={false} severity="info">
-        Verify residency, whitelist status and to check if public key has been
-        assigned as government officer role.
+      <Alert variant="outlined" icon={false} severity="info">
+        This page allows you to verify residency, whitelist status and to check
+        if public key has been assigned as government officer role.
       </Alert>
       <VerifyForm />
     </Box>

@@ -31,8 +31,8 @@ export default function RoleAssignmentTab() {
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />
-      <Alert icon={false} severity="info">
-        Assign a public key to represent state government officer.
+      <Alert icon={false} severity="info" variant="outlined">
+        This page allows you to assign officer role to a public key.
       </Alert>
       <RoleAssignmentForm />
     </Box>

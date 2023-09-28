@@ -31,8 +31,8 @@ export default function ResidentTab() {
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />
-      <Alert icon={false} severity="info">
-        Award public key as Melaka resident.
+      <Alert icon={false} severity="info" variant="outlined">
+        This page allows you to award resident status to public key.
       </Alert>
       <ResidentForm />
     </Box>

@@ -1,10 +1,11 @@
-import { Box, Typography } from '@mui/material';
+import { Alert, Box, Divider, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import WarningIcon from '@mui/icons-material/Warning';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { Link } from 'react-router-dom';
+import truncateEthAddr from '../../utils/truncateEthAddr';
 
 const melaka_resident_contract_addr = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
@@ -118,7 +119,19 @@ export default function InfoTab(props: InfoTabProps) {
             />
           </ListItem>
         </div>
-      ) : null}
+      ) : (
+        <div>
+          <Divider />
+          <Alert sx={{ marginTop: 3 }} severity="warning" icon={false}>
+            <b>WARNING! </b>Ensure that the public key{' '}
+            <b>
+              <code>{truncateEthAddr(publicKey)}</code>
+            </b>{' '}
+            above was the deployer and initial owner of the smart contracts.
+            Resolve this before proceeding.
+          </Alert>
+        </div>
+      )}
     </List>
   );
 }
