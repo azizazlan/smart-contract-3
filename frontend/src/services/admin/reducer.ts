@@ -30,7 +30,7 @@ const initialState: AdminState = {
   submissionState: 'IDLE',
   submissionMsg: null,
   networkId: '-1',
-  etherBal: '0',
+  etherBal: '0.0',
   publicKey: null,
   privateKey: null,
   isClaimantResident: false,

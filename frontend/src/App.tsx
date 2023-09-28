@@ -9,7 +9,7 @@ import { default as AdminLayout } from './layouts/admin/Default';
 import Signup from './pages/resident/account/Signup';
 import { default as OfficialSignup } from './pages/official/account/Signup';
 import Restore from './pages/resident/account/Restore';
-import { default as OfficialRestore } from './pages/official/account/Restore';
+import { default as OfficialRestore } from './pages/official/account/RestoreForm';
 import { default as OfficialAccountInfo } from './pages/official/account/Info';
 import { default as OfficialVerification } from './pages/official/verification/Verification';
 import { default as OfficialResidency } from './pages/official/residency/Residency';
@@ -50,7 +50,7 @@ function App() {
         <Route path="signup" element={<Signup />} />
         <Route path="restore" element={<Restore />} />
       </Route>
-      <Route path="/account" element={<AppbarLayout />}>
+      <Route path="/signedresident" element={<AppbarLayout />}>
         <Route index element={<AccountInfo />} />
         <Route path="about" element={<About />} />
         <Route path="verify" element={<Verify />} />
@@ -72,6 +72,9 @@ function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminLanding />} />
         <Route path="account" element={<AdminAccount />} />
+      </Route>
+      <Route path="/verify" element={<Layout />}>
+        <Route index element={<Verify />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

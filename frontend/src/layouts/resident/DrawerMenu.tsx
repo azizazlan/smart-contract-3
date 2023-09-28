@@ -36,7 +36,7 @@ export default function DrawerMenu({
     >
       <List>
         <ListItem key="Account" disablePadding>
-          <ListItemButton component={Link} to="/account">
+          <ListItemButton component={Link} to="/signedresident">
             <ListItemIcon>
               <AccountCircleIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
@@ -81,7 +81,7 @@ export default function DrawerMenu({
         </ListItem>
 
         <ListItem key="Verify" disablePadding>
-          <ListItemButton component={Link} to="/account/verify">
+          <ListItemButton component={Link} to="/signedresident/verify">
             <ListItemIcon>
               <SensorOccupiedIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
@@ -96,7 +96,7 @@ export default function DrawerMenu({
         </ListItem>
         <Divider />
         <ListItem key="About" disablePadding>
-          <ListItemButton component={Link} to="/account/about">
+          <ListItemButton component={Link} to="/signedresident/about">
             <ListItemIcon>
               <InfoIcon sx={{ color: 'grey' }} />
             </ListItemIcon>

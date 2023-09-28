@@ -15,7 +15,7 @@ export default function Landing() {
   );
 
   if (publicKey && seedPhrase) {
-    return <Navigate to="/account" />;
+    return <Navigate to="/signedresident" />;
   }
 
   return (
@@ -44,8 +44,8 @@ export default function Landing() {
         Restore
       </Button>
       <Divider />
-      <Button variant="outlined" color="primary">
-        Verify resident
+      <Button variant="outlined" color="primary" component={Link} to="/verify">
+        Verify
       </Button>
     </Stack>
   );

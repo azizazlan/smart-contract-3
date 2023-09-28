@@ -24,6 +24,7 @@ export default function Info() {
   } = useResidentSelector((state: ResidentState) => state.resident);
 
   if (!publicKey && !seedPhrase) {
+    window.location.reload();
     return <Navigate to="/" />;
   }
 

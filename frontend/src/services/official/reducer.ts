@@ -10,6 +10,7 @@ import awardResidency from './thunks/awardResidency';
 import addWhitelist from './thunks/addWhitelist';
 import revokeResidency from './thunks/revokeResidency';
 import removeWhitelist from './thunks/removeWhitelist';
+import restore from './thunks/restore';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -33,7 +34,7 @@ const initialState: OfficialState = {
   nric: null,
   publicKey: null,
   seedPhrase: null,
-  etherBal: '0',
+  etherBal: '0.0',
   nEtherBal: 0,
   isOfficer: false,
   isResident: false,
@@ -46,6 +47,10 @@ export const officialSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    resetSubmissionState: (state) => {
+      state.submissionMsg = null;
+      state.submissionState = 'IDLE';
+    },
     resetVerifySubmission: (state) => {
       state.submissionMsg = null;
       state.isClaimResident = false;
@@ -166,11 +171,23 @@ export const officialSlice = createSlice({
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
+    builder.addCase(restore.pending, (state, {}) => {
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(restore.fulfilled, (state, { payload }) => {
+      state.nric = payload.nric;
+      state.publicKey = payload.publicKey;
+      state.seedPhrase = payload.seedPhrase;
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
   },
 });
 
 export const {
   reset,
+  resetSubmissionState,
   resetVerifySubmission,
   resetResidencySubmission,
   resetWhitelistSubmission,

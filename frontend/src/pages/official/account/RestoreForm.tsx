@@ -13,12 +13,12 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { isMobile } from 'react-device-detect';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
-import { useResidentDispatch } from '../../../services/hook.ts';
-import restore from '../../../services/resident/thunks/restore.ts';
+import { useOfficialDispatch } from '../../../services/hook.ts';
+import restore from '../../../services/official/thunks/restore.ts';
 
 const schema = Yup.object().shape({
-  nric: Yup.string().required('Please key in your NRIC'),
   seedPhrase: Yup.string().required('Please key in your 12 seed phrases'),
+  nric: Yup.string().required('Please key in your NRIC'),
 });
 
 type RestoreFields = {
@@ -27,7 +27,8 @@ type RestoreFields = {
 };
 
 export default function RestoreForm() {
-  const dispatch = useResidentDispatch();
+  const dispatch = useOfficialDispatch();
+
   const {
     control,
     handleSubmit,
@@ -47,7 +48,7 @@ export default function RestoreForm() {
 
   return (
     <Box sx={styles.container}>
-      <form id="resident_restore_form" onSubmit={handleSubmit(onSubmit)}>
+      <form id="official_restore_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
@@ -100,7 +101,7 @@ export default function RestoreForm() {
           variant="outlined"
           color="secondary"
           component={Link}
-          to="/"
+          to="/official"
         >
           cancel
         </Button>
@@ -110,7 +111,7 @@ export default function RestoreForm() {
           variant="contained"
           color="primary"
           type="submit"
-          form="resident_restore_form"
+          form="official_restore_form"
         >
           restore
         </Button>

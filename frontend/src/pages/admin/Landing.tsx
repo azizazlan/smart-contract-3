@@ -2,6 +2,7 @@ import React from 'react';
 import detectEthereumProvider from '@metamask/detect-provider';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
+import { isMobile } from 'react-device-detect';
 import BasicTabs from './BasicTabs';
 
 export default function Landing() {
@@ -15,6 +16,19 @@ export default function Landing() {
 
     getProvider();
   }, []);
+
+  if (isMobile) {
+    return (
+      <Box sx={{ margin: 3 }}>
+        <Typography variant="body1" color="primary" gutterBottom>
+          This application is designed for desktop usages.
+        </Typography>
+        <Typography variant="body1" color="primary" gutterBottom>
+          Please switch to desktop browser and refresh this page.
+        </Typography>
+      </Box>
+    );
+  }
 
   if (!hasProvider) {
     return (

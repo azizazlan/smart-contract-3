@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
+import { isMobile } from 'react-device-detect';
 import {
   useResidentDispatch,
   useResidentSelector,
@@ -118,12 +119,19 @@ export default function Signup() {
           )}
         </FormControl>
       </form>
-      <Box sx={styles.formButtons}>
-        <Button variant="outlined" color="secondary" component={Link} to="/">
+      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
+        <Button
+          fullWidth={isMobile ? true : false}
+          variant="outlined"
+          color="secondary"
+          component={Link}
+          to="/"
+        >
           cancel
         </Button>
-        <Divider sx={{ width: '7px' }} />
+        <Divider sx={{ width: '7px', height: '7px' }} />
         <Button
+          fullWidth={isMobile ? true : false}
           variant="contained"
           color="primary"
           type="submit"

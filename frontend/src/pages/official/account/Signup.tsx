@@ -17,6 +17,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { isMobile } from 'react-device-detect';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
 import {
@@ -125,8 +126,9 @@ export default function Signup() {
           )}
         </FormControl>
       </form>
-      <Box sx={styles.formButtons}>
+      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
         <Button
+          fullWidth={isMobile ? true : false}
           variant="outlined"
           color="secondary"
           component={Link}
@@ -134,8 +136,9 @@ export default function Signup() {
         >
           cancel
         </Button>
-        <Divider sx={{ width: '7px' }} />
+        <Divider sx={{ width: '7px', height: '7px' }} />
         <Button
+          fullWidth={isMobile ? true : false}
           variant="contained"
           color="primary"
           type="submit"
