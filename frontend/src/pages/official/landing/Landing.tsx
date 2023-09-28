@@ -28,7 +28,7 @@ export default function Landing() {
         <CircularProgress color="inherit" />
       </Backdrop>
       <Button
-        sx={{ minWidth: '235px' }}
+        sx={{ minWidth: '235px', backgroundColor: 'black' }}
         variant="contained"
         component={Link}
         to="/official/signup"

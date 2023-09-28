@@ -68,24 +68,34 @@ export default function InfoTab(props: InfoTabProps) {
         />
       </ListItem>
       <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
-      {isGomenOfficer ? (
-        <ListItem key={1} disablePadding>
-          <ListItemText
-            primary={<Label label="Public key" />}
-            secondary={<Value value={publicKey} />}
-          />
-        </ListItem>
-      ) : (
-        <ListItem key={1} disablePadding>
-          <ListItemText
-            primary={<RedLabel label="Public key is not an officer" />}
-            secondary={<Value value={publicKey || 'NA'} />}
-          />
-        </ListItem>
-      )}
-      <Link to="/admin/account" style={{ textDecoration: 'none' }}>
-        ...
-      </Link>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        {isGomenOfficer ? (
+          <ListItem key={1} disablePadding>
+            <ListItemText
+              primary={<Label label="Public key" />}
+              secondary={<Value value={publicKey} />}
+            />
+          </ListItem>
+        ) : (
+          <ListItem key={1} disablePadding>
+            <ListItemText
+              primary={<RedLabel label="Public key is not an officer" />}
+              secondary={<Value value={publicKey || 'NA'} />}
+            />
+          </ListItem>
+        )}
+        <Link
+          to="/admin/account"
+          style={{
+            fontFamily: 'Oswald',
+            textDecoration: 'none',
+            fontSize: '11pt',
+            color: 'navy',
+          }}
+        >
+          Change account
+        </Link>
+      </Box>
       <Box sx={{ height: '17px' }} />
       <ListItem key={2} disablePadding>
         <ListItemText

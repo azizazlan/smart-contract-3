@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import BackdropLoader from '../../commons/BackdropLoader';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
@@ -31,6 +31,9 @@ export default function ResidentTab() {
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />
+      <Alert icon={false} severity="info">
+        Award public key as Melaka resident.
+      </Alert>
       <ResidentForm />
     </Box>
   );

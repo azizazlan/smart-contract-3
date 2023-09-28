@@ -20,10 +20,27 @@ export default function Footer() {
       <Typography variant="caption" sx={{ color: 'silver' }}>
         Network id {networkId}
         <br />
-        Built with love for <Link to="/official">Melaka</Link> folks by{' '}
-        <span style={{ fontFamily: 'Oswald', fontWeight: 'bold' }}>
+        Built with love for{' '}
+        <Link
+          to="/official"
+          style={{ textDecoration: 'none', color: 'silver' }}
+        >
+          Melaka
+        </Link>{' '}
+        <Link to="/" style={{ textDecoration: 'none', color: 'silver' }}>
+          folks{' '}
+        </Link>
+        by{' '}
+        <Link
+          to="/admin"
+          style={{
+            fontFamily: 'Oswald',
+            textDecoration: 'none',
+            color: 'silver',
+          }}
+        >
           thuleen
-        </span>
+        </Link>
       </Typography>
     </Box>
   );

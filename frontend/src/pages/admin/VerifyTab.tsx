@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import VerifyForm from './VerifyForm';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
@@ -34,6 +34,10 @@ export default function VerifyTab() {
   return (
     <Box>
       <BackdropLoader submissionState={submissionState} />
+      <Alert icon={false} severity="info">
+        Verify residency, whitelist status and to check if public key has been
+        assigned as government officer role.
+      </Alert>
       <VerifyForm />
     </Box>
   );

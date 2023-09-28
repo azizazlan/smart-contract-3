@@ -1,7 +1,6 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Footer from '../Footer';
-import flag from '../../assets/malacca-flag.png';
 
 export default function Layout() {
   return (
@@ -13,11 +12,16 @@ export default function Layout() {
         paddingTop: 7,
       }}
     >
-      <img
-        src={flag}
-        alt="melaka flag"
-        style={{ width: '225px', marginBottom: 7 }}
-      />
+      <Typography
+        sx={{
+          fontFamily: 'Oswald',
+          fontSize: '35pt',
+          fontWeight: 'bold',
+          marginBottom: 5,
+        }}
+      >
+        MES Officer
+      </Typography>
       <Outlet />
       <Footer />
     </Box>

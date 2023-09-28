@@ -28,10 +28,11 @@ export default function Layout() {
             fontFamily: 'Oswald',
             fontSize: '21pt',
             fontWeight: 'bold',
+            textDecoration: 'none',
           }}
           color="primary"
         >
-          Administrator
+          MES Administrator
         </Typography>
       </Box>
       <Outlet />

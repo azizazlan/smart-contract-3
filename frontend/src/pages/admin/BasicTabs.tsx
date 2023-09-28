@@ -118,8 +118,8 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Admin info" {...a11yProps(0)} />
-          <Tab label="Resident" {...a11yProps(1)} />
-          <Tab label="Officer" {...a11yProps(2)} />
+          <Tab label="Residency" {...a11yProps(1)} />
+          <Tab label="Role" {...a11yProps(2)} />
           <Tab
             label="Verify"
             icon={<SensorOccupiedIcon />}
