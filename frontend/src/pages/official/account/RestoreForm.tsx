@@ -107,6 +107,7 @@ export default function RestoreForm() {
         </Button>
         <Divider sx={{ width: '7px', height: '7px' }} />
         <Button
+          sx={{ backgroundColor: 'black' }}
           fullWidth={isMobile ? true : false}
           variant="contained"
           color="primary"

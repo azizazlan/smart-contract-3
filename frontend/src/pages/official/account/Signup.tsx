@@ -102,7 +102,7 @@ export default function Signup() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <form id="resident_signup_form" onSubmit={handleSubmit(onSubmit)}>
+      <form id="official_signup_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
@@ -138,11 +138,12 @@ export default function Signup() {
         </Button>
         <Divider sx={{ width: '7px', height: '7px' }} />
         <Button
+          sx={{ backgroundColor: 'black' }}
           fullWidth={isMobile ? true : false}
           variant="contained"
           color="primary"
           type="submit"
-          form="resident_signup_form"
+          form="official_signup_form"
         >
           signup
         </Button>

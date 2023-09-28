@@ -9,7 +9,7 @@ export default function Layout() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: 7,
+        paddingTop: 3,
       }}
     >
       <Typography
@@ -17,7 +17,7 @@ export default function Layout() {
           fontFamily: 'Oswald',
           fontSize: '35pt',
           fontWeight: 'bold',
-          marginBottom: 5,
+          marginBottom: 1,
         }}
       >
         MES Officer

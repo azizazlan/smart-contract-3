@@ -15,14 +15,14 @@ export default function Layout() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: 7,
+        marginTop: 3,
       }}
     >
       <img
         onClick={handleClick}
         src={flag}
         alt="melaka flag"
-        style={{ width: '225px', marginBottom: 7 }}
+        style={{ width: '170px' }}
       />
       <Outlet />
       <Footer />
