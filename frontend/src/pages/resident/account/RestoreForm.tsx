@@ -66,7 +66,7 @@ export default function RestoreForm() {
             <FormHelperText error>{errors.nric.message}</FormHelperText>
           ) : (
             <FormHelperText>
-              *New NRIC without dash or any symbol
+              * 12 digits without hyphens or any symbol.
             </FormHelperText>
           )}
         </FormControl>

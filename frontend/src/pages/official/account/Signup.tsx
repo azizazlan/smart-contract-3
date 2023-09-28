@@ -122,7 +122,9 @@ export default function Signup() {
           {errors.nric ? (
             <FormHelperText error>{errors.nric.message}</FormHelperText>
           ) : (
-            <FormHelperText>*Without dash or any symbol</FormHelperText>
+            <FormHelperText>
+              ** 12 digits without hyphens or any symbol.
+            </FormHelperText>
           )}
         </FormControl>
       </form>

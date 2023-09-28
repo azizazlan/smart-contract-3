@@ -6,13 +6,12 @@ import { OfficialState } from '../../../services/store.ts';
 import BackdropLoader from '../../../commons/BackdropLoader.tsx';
 
 export default function Restore() {
-  const { publicKey, seedPhrase, submissionState } = useOfficialSelector(
-    (state: OfficialState) => state.resident
+  const { publicKey, submissionState, seedPhrase } = useOfficialSelector(
+    (state: OfficialState) => state.official
   );
 
-  if (submissionState === 'OK' && publicKey && seedPhrase) {
-    window.location.reload();
-    return <Navigate to="/official" />;
+  if (publicKey && seedPhrase) {
+    return <Navigate to="/signedofficial" />;
   }
 
   return (

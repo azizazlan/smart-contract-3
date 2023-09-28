@@ -9,7 +9,7 @@ import { default as AdminLayout } from './layouts/admin/Default';
 import Signup from './pages/resident/account/Signup';
 import { default as OfficialSignup } from './pages/official/account/Signup';
 import Restore from './pages/resident/account/Restore';
-import { default as OfficialRestore } from './pages/official/account/RestoreForm';
+import { default as OfficialRestore } from './pages/official/account/Restore';
 import { default as OfficialAccountInfo } from './pages/official/account/Info';
 import { default as OfficialVerification } from './pages/official/verification/Verification';
 import { default as OfficialResidency } from './pages/official/residency/Residency';

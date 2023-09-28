@@ -173,6 +173,8 @@ export const officialSlice = createSlice({
     });
     builder.addCase(restore.pending, (state, {}) => {
       state.submissionMsg = null;
+      state.publicKey = null;
+      state.seedPhrase = null;
       state.submissionState = 'PENDING';
     });
     builder.addCase(restore.fulfilled, (state, { payload }) => {

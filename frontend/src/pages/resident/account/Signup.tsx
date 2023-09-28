@@ -104,7 +104,7 @@ export default function Signup() {
             render={({ field }) => (
               <TextField
                 type="number"
-                placeholder="34567891011"
+                placeholder="845678910112"
                 InputLabelProps={{ shrink: true }}
                 label="NRIC"
                 id="nric"
@@ -115,7 +115,9 @@ export default function Signup() {
           {errors.nric ? (
             <FormHelperText error>{errors.nric.message}</FormHelperText>
           ) : (
-            <FormHelperText>*Without dash or any symbol</FormHelperText>
+            <FormHelperText>
+              * 12 digits without hyphens or any symbol.
+            </FormHelperText>
           )}
         </FormControl>
       </form>

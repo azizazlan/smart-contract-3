@@ -19,6 +19,7 @@ export default function Info() {
     useOfficialSelector((state: OfficialState) => state.official);
 
   if (!publicKey && !seedPhrase && !nric) {
+    console.log('Navigate official');
     return <Navigate to="/official" />;
   }
 

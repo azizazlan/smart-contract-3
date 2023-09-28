@@ -26,15 +26,9 @@ export default function Footer() {
           textAlign: 'center',
         }}
       >
-        <Alert severity="warning">
-          <Typography
-            component="span"
-            sx={{ fontWeight: 'bold', fontSize: '9pt' }}
-          >
-            WARNING
-          </Typography>
-          : Fail to connect to the web3 network. Report to Admin fix it before
-          proceeding.
+        <Alert severity="warning" icon={false}>
+          Fail to connect to web3 network. Report to service provider. Only
+          proceed once connected.
         </Alert>
       </Box>
     );

@@ -11,6 +11,7 @@ export default function Restore() {
   );
 
   if (publicKey && seedPhrase) {
+    console.log('signedresident ');
     return <Navigate to="/signedresident" />;
   }
 
