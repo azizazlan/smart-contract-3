@@ -5,6 +5,7 @@ import signupResident from './thunks/signup';
 import initialize from './thunks/initialize';
 import clearLocalSto from './thunks/clearLocalSto';
 import checkStatus from './thunks/checkStatus';
+import restore from './thunks/restore';
 
 interface ResidentState {
   submissionState: SubmissionStates;
@@ -71,6 +72,20 @@ export const residentSlice = createSlice({
     builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
       state.isResident = payload.isResident;
       state.isWhitelisted = payload.isWhitelisted;
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(restore.pending, (state, {}) => {
+      state.publicKey = null;
+      state.seedPhrase = null;
+      state.nric = null;
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(restore.fulfilled, (state, { payload }) => {
+      state.nric = payload.nric;
+      state.publicKey = payload.publicKey;
+      state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

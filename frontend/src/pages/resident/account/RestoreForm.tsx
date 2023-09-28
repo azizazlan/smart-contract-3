@@ -12,10 +12,12 @@ import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './styles.ts';
 import { Link } from 'react-router-dom';
+import { useResidentDispatch } from '../../../services/hook.ts';
+import restore from '../../../services/resident/thunks/restore.ts';
 
 const schema = Yup.object().shape({
-  seedPhrase: Yup.string().required('Please key in your 12 seed phrases'),
   nric: Yup.string().required('Please key in your NRIC'),
+  seedPhrase: Yup.string().required('Please key in your 12 seed phrases'),
 });
 
 type RestoreFields = {
@@ -23,7 +25,8 @@ type RestoreFields = {
   seedPhrase: string;
 };
 
-export default function Restore() {
+export default function RestoreForm() {
+  const dispatch = useResidentDispatch();
   const {
     control,
     handleSubmit,
@@ -37,12 +40,13 @@ export default function Restore() {
   });
 
   const onSubmit: SubmitHandler<RestoreFields> = (data) => {
-    console.log(data);
+    const { nric, seedPhrase } = data;
+    dispatch(restore({ nric, seedPhrase }));
   };
 
   return (
     <Box sx={styles.container}>
-      <form id="official_restore_form" onSubmit={handleSubmit(onSubmit)}>
+      <form id="resident_restore_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
@@ -90,12 +94,7 @@ export default function Restore() {
         </FormControl>
       </form>
       <Box sx={styles.formButtons}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          component={Link}
-          to="/official"
-        >
+        <Button variant="outlined" color="secondary" component={Link} to="/">
           cancel
         </Button>
         <Divider sx={{ width: '7px' }} />
@@ -103,7 +102,7 @@ export default function Restore() {
           variant="contained"
           color="primary"
           type="submit"
-          form="official_restore_form"
+          form="resident_restore_form"
         >
           restore
         </Button>

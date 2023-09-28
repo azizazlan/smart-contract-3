@@ -1,13 +1,19 @@
+import React from 'react';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useResidentSelector } from '../services/hook';
-import { ResidentState } from '../services/store';
 import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../services/hook';
+import { AppState } from '../services/store';
+import web3Info from '../services/app/thunks/web3Info';
 
 export default function Footer() {
-  const { networkId } = useResidentSelector(
-    (state: ResidentState) => state.resident
-  );
+  const dispatch = useAppDispatch();
+  const { networkId } = useAppSelector((state: AppState) => state.app);
+
+  React.useEffect(() => {
+    dispatch(web3Info());
+  }, []);
+
   return (
     <Box
       sx={{

@@ -3,12 +3,14 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import residentReducer from './resident/reducer';
 import officialReducer from './official/reducer';
 import adminReducer from './admin/reducer';
+import appReducer from './app/reducer';
 
 export const store = configureStore({
   reducer: {
     resident: residentReducer,
     official: officialReducer,
     admin: adminReducer,
+    app: appReducer,
   },
 });
 
@@ -22,3 +24,6 @@ export type OfficialDispatch = typeof store.dispatch;
 
 export type AdminState = ReturnType<typeof store.getState>;
 export type AdminDispatch = typeof store.dispatch;
+
+export type AppState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
