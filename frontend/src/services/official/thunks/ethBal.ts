@@ -22,8 +22,15 @@ const ethBal = createAsyncThunk(
       // Convert the balance to Ether (wei to Ether)
       const ethBalance = ethers.utils.formatEther(balance);
 
+      // Parse the Ethereum balance string back to a BigNumber
+      const balanceInWei = ethers.utils.parseEther(ethBalance);
+
+      // Convert the BigNumber to a JavaScript number (use toString or parseFloat)
+      const nEthBalance = parseFloat(ethers.utils.formatEther(balanceInWei));
+
       return {
         ethBal: ethBalance,
+        nEthBal: nEthBalance,
       };
     } catch (error) {
       // Handle any errors here

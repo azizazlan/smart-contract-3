@@ -7,9 +7,10 @@ import { OfficialState } from '../../../services/store';
 import Result from './Result';
 import BackdropLoader from '../../../commons/BackdropLoader';
 import ErrResult from './ErrResult';
+import InsufficientEthAlert from '../../../commons/InsufficientEthAlert';
 
 export default function Whitelisting() {
-  const { submissionState, submissionMsg } = useOfficialSelector(
+  const { submissionState, submissionMsg, nEtherBal } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
 
@@ -24,6 +25,7 @@ export default function Whitelisting() {
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
       <BackdropLoader submissionState={submissionState} />
+      {nEtherBal === 0 ? <InsufficientEthAlert /> : null}
       <FormHeader title="Whitelisting" />
       <WhitelistingForm />
     </Box>

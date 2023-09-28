@@ -122,7 +122,7 @@ export default function AccountForm() {
           form="admin_account_private_key"
           variant="contained"
         >
-          save
+          apply
         </Button>
       </Box>
     </Box>

@@ -11,12 +11,6 @@ const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
 export default function About() {
   return (
     <Box sx={styles.container}>
-      <Typography
-        color="primary"
-        sx={{ fontFamily: 'Oswald', fontSize: '15pt' }}
-      >
-        About
-      </Typography>
       <Box
         sx={{
           display: 'flex',

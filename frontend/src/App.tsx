@@ -67,6 +67,7 @@ function App() {
         <Route path="whitelisting" element={<OfficialWhitelisting />} />
         <Route path="verification" element={<OfficialVerification />} />
         <Route path="transfer" element={<TransferFT />} />
+        <Route path="about" element={<About />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminLanding />} />

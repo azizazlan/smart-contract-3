@@ -7,9 +7,10 @@ import ResidencyForm from './ResidencyForm';
 import BackdropLoader from '../../../commons/BackdropLoader';
 import Result from './Result';
 import ErrResult from './ErrResult';
+import InsufficientEthAlert from '../../../commons/InsufficientEthAlert';
 
 export default function Residency() {
-  const { submissionState, submissionMsg } = useOfficialSelector(
+  const { submissionState, submissionMsg, nEtherBal } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
 
@@ -24,6 +25,7 @@ export default function Residency() {
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
       <BackdropLoader submissionState={submissionState} />
+      {nEtherBal === 0 ? <InsufficientEthAlert /> : null}
       <FormHeader title="Residency" />
       <ResidencyForm />
     </Box>

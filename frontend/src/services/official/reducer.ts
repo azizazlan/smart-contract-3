@@ -19,6 +19,7 @@ interface OfficialState {
   publicKey: string | null;
   seedPhrase: string | null;
   etherBal: string;
+  nEtherBal: number;
   isResident: boolean;
   isOfficer: boolean;
   isClaimResident: boolean;
@@ -33,6 +34,7 @@ const initialState: OfficialState = {
   publicKey: null,
   seedPhrase: null,
   etherBal: '0',
+  nEtherBal: 0,
   isOfficer: false,
   isResident: false,
   isClaimResident: false,
@@ -106,6 +108,7 @@ export const officialSlice = createSlice({
     });
     builder.addCase(ethBal.fulfilled, (state, { payload }) => {
       state.etherBal = payload.ethBal;
+      state.nEtherBal = payload.nEthBal;
       state.submissionState = 'OK';
     });
     builder.addCase(awardResidency.pending, (state, {}) => {

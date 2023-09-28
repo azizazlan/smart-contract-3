@@ -3,7 +3,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
     minWidth: '325px',
-    margin: '9px',
+    margin: 3,
   },
   formButtons: {
     display: 'flex',

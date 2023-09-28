@@ -11,6 +11,9 @@ import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import styles from './styles';
+import InsufficientEthAlert from '../../../commons/InsufficientEthAlert';
+import { useOfficialSelector } from '../../../services/hook';
+import { OfficialState } from '../../../services/store';
 
 const schema = Yup.object().shape({
   publicKey: Yup.string()
@@ -40,9 +43,9 @@ export default function TransferFT() {
   });
 
   // const dispatch = useOfficialDispatch();
-  // const { seedPhrase } = useOfficialSelector(
-  //   (state: OfficialState) => state.official
-  // );
+  const { nEtherBal } = useOfficialSelector(
+    (state: OfficialState) => state.official
+  );
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
     const { publicKey } = data;
@@ -55,6 +58,7 @@ export default function TransferFT() {
 
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
+      {nEtherBal === 0 ? <InsufficientEthAlert /> : null}
       <Typography variant="h5" color="primary">
         Transfer rice token
       </Typography>
