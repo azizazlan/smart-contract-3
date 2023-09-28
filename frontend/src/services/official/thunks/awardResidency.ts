@@ -17,8 +17,6 @@ type AwardResidencyFields = {
 const awardResidency = createAsyncThunk(
   'official_award_residency',
   async (props: AwardResidencyFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { nric, publicKey, officialSeedphrase } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);

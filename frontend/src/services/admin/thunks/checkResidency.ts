@@ -17,8 +17,6 @@ const checkResidency = createAsyncThunk(
   async (props: CheckResidencyFields) => {
     const { publicKey, nric } = props;
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');

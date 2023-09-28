@@ -16,8 +16,6 @@ type CheckStatusFields = {
 const checkStatus = createAsyncThunk(
   'official_check_residency_whitelisting',
   async (props: CheckStatusFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { checkOfficer, nric, publicKey } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);

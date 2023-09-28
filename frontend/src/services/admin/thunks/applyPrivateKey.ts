@@ -9,8 +9,6 @@ type ApplyPrivateKeyFields = {
 const applyPrivateKey = createAsyncThunk(
   'admin_apply_private_key',
   async (props: ApplyPrivateKeyFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
     const { privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {

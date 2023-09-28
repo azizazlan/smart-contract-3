@@ -17,8 +17,6 @@ type RevokeResidencyFields = {
 const revokeResidency = createAsyncThunk(
   'admin_revoke_residency',
   async (props: RevokeResidencyFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
     const { publicKey, privateKey, nric } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {

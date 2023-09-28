@@ -19,8 +19,6 @@ type CheckStatusFields = {
 const checkStatus = createAsyncThunk(
   'admin_check_status',
   async (props: CheckStatusFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { nric, publicKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {

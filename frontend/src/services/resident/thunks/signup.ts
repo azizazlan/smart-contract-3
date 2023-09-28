@@ -8,8 +8,6 @@ type SignupResidentFields = {
 const signupResident = createAsyncThunk(
   'signupResident',
   async (props: SignupResidentFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     const { nric } = props;
     const wallet = ethers.Wallet.createRandom();
     const publicKey = wallet.address;

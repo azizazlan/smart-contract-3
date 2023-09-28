@@ -20,8 +20,6 @@ type AssignRoleFields = {
 const assignRole = createAsyncThunk(
   'admin_assign_role',
   async (props: AssignRoleFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { publicKey, privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {

@@ -17,8 +17,6 @@ type AddWhitelistFields = {
 const addWhitelist = createAsyncThunk(
   'official_add_whitelist',
   async (props: AddWhitelistFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
     const { nric, publicKey, officialSeedphrase } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);

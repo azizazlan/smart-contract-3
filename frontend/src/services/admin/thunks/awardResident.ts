@@ -17,8 +17,6 @@ type AwardResidentFields = {
 const awardResident = createAsyncThunk(
   'admin_award_resident',
   async (props: AwardResidentFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { publicKey, privateKey, nric } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {

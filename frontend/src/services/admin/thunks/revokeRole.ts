@@ -20,8 +20,6 @@ type RevokeRoleFields = {
 const revokeRole = createAsyncThunk(
   'admin_revoke_role',
   async (props: RevokeRoleFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { publicKey, privateKey } = props;
     console.log(`public  key ${publicKey}`);
     console.log(`private key ${privateKey}`);

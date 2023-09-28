@@ -18,8 +18,6 @@ type CheckRoleFields = {
 const checkRole = createAsyncThunk(
   'admin_check_role',
   async (props: CheckRoleFields) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     const { publicKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
