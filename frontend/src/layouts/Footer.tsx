@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../services/hook';
@@ -8,11 +8,37 @@ import web3Info from '../services/app/thunks/web3Info';
 
 export default function Footer() {
   const dispatch = useAppDispatch();
-  const { networkId } = useAppSelector((state: AppState) => state.app);
+  const { networkId, submissionState } = useAppSelector(
+    (state: AppState) => state.app
+  );
 
   React.useEffect(() => {
     dispatch(web3Info());
   }, []);
+
+  if (submissionState === 'FAILED') {
+    return (
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          textAlign: 'center',
+        }}
+      >
+        <Alert severity="warning">
+          <Typography
+            component="span"
+            sx={{ fontWeight: 'bold', fontSize: '9pt' }}
+          >
+            WARNING
+          </Typography>
+          : Fail to connect to the web3 network. Report to Admin fix it before
+          proceeding.
+        </Alert>
+      </Box>
+    );
+  }
 
   return (
     <Box

@@ -27,6 +27,11 @@ export const appSlice = createSlice({
       state.submissionMsg = null;
       state.networkId = '-1';
     });
+    builder.addCase(web3Info.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      state.submissionMsg = null;
+      state.networkId = '-1';
+    });
     builder.addCase(web3Info.fulfilled, (state, { payload }) => {
       if (!payload) {
         state.submissionState = 'FAILED';
