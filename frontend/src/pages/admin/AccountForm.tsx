@@ -65,7 +65,7 @@ export default function AccountForm() {
   };
 
   return (
-    <Box sx={styles.container}>
+    <Box sx={{ ...styles.container, marginTop: 3 }}>
       <form
         style={styles.form}
         id="admin_account_private_key"

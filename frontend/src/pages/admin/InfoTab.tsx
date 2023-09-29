@@ -38,25 +38,6 @@ function Label(props: { label: string }) {
   );
 }
 
-function RedLabel(props: { label: string }) {
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      <WarningIcon
-        sx={{ fontSize: 15, marginTop: 0.4, marginRight: 0.5 }}
-        color="error"
-      />
-      <Typography
-        color="error"
-        component="span"
-        variant="body2"
-        sx={{ fontFamily: 'Oswald' }}
-      >
-        {props.label}
-      </Typography>
-    </Box>
-  );
-}
-
 function Value(props: { value: string }) {
   return (
     <Typography component="span" variant="body1">
@@ -68,9 +49,9 @@ function Value(props: { value: string }) {
 export default function InfoTab(props: InfoTabProps) {
   const { publicKey, balance, isGomenOfficer } = props;
   return (
-    <List sx={{ width: '100%' }} disablePadding>
+    <List sx={{ width: '100%', marginTop: 3 }} disablePadding>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <ListItem key={1} disablePadding sx={{ maxWidth: '195px' }}>
+        <ListItem key={1} disablePadding sx={{ maxWidth: '215px' }}>
           <ListItemAvatar sx={{ marginRight: 1 }}>
             <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
           </ListItemAvatar>
@@ -79,7 +60,7 @@ export default function InfoTab(props: InfoTabProps) {
             secondary={<Value value={truncateEthAddr(publicKey)} />}
           />
         </ListItem>
-        <ListItem key={2} disablePadding sx={{ maxWidth: '215px' }}>
+        <ListItem key={2} disablePadding sx={{ maxWidth: '255px' }}>
           <ListItemText
             primary={<Label label="Ether balance" />}
             secondary={<Value value={balance} />}
