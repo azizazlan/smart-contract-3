@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import styles from './styles';
 import { Navigate } from 'react-router-dom';
@@ -11,12 +12,17 @@ import hasRole from '../../../services/official/thunks/hasRole';
 import Balance from './Balance';
 import Status from './Status';
 import ethBal from '../../../services/official/thunks/ethBal';
+import initialize from '../../../services/official/thunks/initialize';
 
 // Official info page
 export default function Info() {
   const dispatch = useOfficialDispatch();
   const { publicKey, seedPhrase, nric, etherBal, isResident, isOfficer } =
     useOfficialSelector((state: OfficialState) => state.official);
+
+  React.useEffect(() => {
+    dispatch(initialize());
+  }, []);
 
   if (!publicKey && !seedPhrase && !nric) {
     return <Navigate to="/official" />;

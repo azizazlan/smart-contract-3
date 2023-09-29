@@ -1,5 +1,4 @@
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Landing from './pages/resident/landing/Landing';
 import Layout from './layouts/Default';
 import { default as OfficialLayout } from './layouts/official/Default';
@@ -20,29 +19,10 @@ import { default as AdminAccount } from './pages/admin/AccountForm';
 import About from './pages/about/About';
 import Verify from './pages/verify/Verify';
 import { default as OfficialLanding } from './pages/official/landing/Landing';
-import { useResidentDispatch, useOfficialDispatch } from './services/hook';
-import { default as initResident } from './services/resident/thunks/initialize';
-import { default as initOfficial } from './services/official/thunks/initialize';
 import NotFound from './pages/404/NotFound';
 import TransferFT from './pages/official/transfer/TransferFT';
 
 function App() {
-  const location = useLocation();
-
-  const residentDispatch = useResidentDispatch();
-  const officialDispatch = useOfficialDispatch();
-
-  React.useEffect(() => {
-    if (
-      location.pathname.includes('/official') ||
-      location.pathname.includes('/signedofficial')
-    ) {
-      officialDispatch(initOfficial());
-      return;
-    }
-    residentDispatch(initResident());
-  }, []);
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

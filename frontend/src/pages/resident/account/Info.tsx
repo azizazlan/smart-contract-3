@@ -11,6 +11,7 @@ import whitelistStat from '../../../services/resident/thunks/whitelistStat';
 import Balance from './Balance';
 import Status from './Status';
 import checkStatus from '../../../services/resident/thunks/checkStatus';
+import initialize from '../../../services/resident/thunks/initialize';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
@@ -29,19 +30,25 @@ export default function Info() {
   }
 
   React.useEffect(() => {
+    dispatch(initialize());
+  }, []);
+
+  React.useEffect(() => {
     let pollingInterval: any;
 
     const fetchWhitelistStatus = async () => {
-      dispatch(whitelistStat());
+      dispatch(whitelistStat()).then(() => {
+        // console.log('isWhitelisted:', isWhitelisted);
+        // Check the value of isWhitelisted after dispatching the action
+        if (isWhitelisted) {
+          // If isWhitelisted is true, clear the polling interval
+          clearInterval(pollingInterval);
+        }
+      });
     };
 
-    // Stop polling when isWhitelisted is true
-    if (isWhitelisted) {
-      clearInterval(pollingInterval);
-    }
-
     // Set up a timer to fetch the variable periodically (e.g., every 5 seconds)
-    pollingInterval = setInterval(fetchWhitelistStatus, 5000); // 5000 milliseconds
+    pollingInterval = setInterval(fetchWhitelistStatus, 15000); // 15000 milliseconds
 
     // Clean up the timer when the component unmounts
     return () => clearInterval(pollingInterval);

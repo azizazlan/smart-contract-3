@@ -33,7 +33,7 @@ const awardResidency = createAsyncThunk(
 
     const message = `Successfully award residency status to ${truncateEthAddr(
       publicKey
-    )} with NRIC# ${nric}`;
+    )} with NRIC# ${nric}. This will take effect in about 15 seconds!`;
 
     // throw new Error('Simulated rejection'); // simulate rejected
 
