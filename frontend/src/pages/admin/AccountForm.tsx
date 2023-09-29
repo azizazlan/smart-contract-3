@@ -18,6 +18,7 @@ import { AdminState } from '../../services/store';
 import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
 import applyPrivateKey from '../../services/admin/thunks/applyPrivateKey';
 import { Link } from 'react-router-dom';
+import truncateEthAddr from '../../utils/truncateEthAddr';
 
 const schema = Yup.object().shape({
   privateKey: Yup.string().required('Please key the private key'),
@@ -29,7 +30,9 @@ type AdminAccountFprmFields = {
 
 export default function AccountForm() {
   const dispatch = useAdminDispatch();
-  const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
+  const { privateKey, isGomenOfficer } = useAdminSelector(
+    (state: AdminState) => state.admin
+  );
 
   React.useEffect(() => {
     if (!privateKey) {
@@ -68,7 +71,14 @@ export default function AccountForm() {
         id="admin_account_private_key"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Box sx={{ marginTop: 1, marginLeft: 2, marginBottom: 1 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginLeft: 0,
+            alignItems: 'center',
+          }}
+        >
           {publicKey ? (
             <Box sx={{ minHeight: '55px' }}>
               <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
@@ -78,10 +88,35 @@ export default function AccountForm() {
               {publicKey ? <CircularProgress color="secondary" /> : null}
             </Box>
           )}
-          <Typography sx={{ fontSize: 12 }}>Public key</Typography>
-          <Typography>{publicKey ? publicKey : '...'}</Typography>
+          <Typography sx={{ marginLeft: 1 }}>
+            {publicKey ? truncateEthAddr(publicKey) : '...'}
+          </Typography>
+          {isGomenOfficer ? (
+            <Typography
+              sx={{
+                marginLeft: 1,
+                marginBottom: 0.5,
+                fontFamily: 'Oswald',
+                fontSize: '11pt',
+                color: 'navy',
+              }}
+            >
+              ✓ Smart contracts owner
+            </Typography>
+          ) : (
+            <Typography
+              sx={{
+                marginLeft: 1,
+                marginBottom: 0.5,
+                fontFamily: 'Oswald',
+                fontSize: '11pt',
+                color: 'navy',
+              }}
+            >
+              <span style={{ color: 'red' }}>✖</span> Not smart contract owner
+            </Typography>
+          )}
         </Box>
-
         <FormControl fullWidth margin="normal">
           <Controller
             name="privateKey"

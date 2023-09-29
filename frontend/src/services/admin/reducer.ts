@@ -215,6 +215,7 @@ export const adminSlice = createSlice({
       state.submissionMsg = payload?.message;
       state.publicKey = payload?.publicKey;
       state.privateKey = payload?.privateKey;
+      state.isGomenOfficer = payload.isOwner;
     });
     builder.addCase(checkStatus.pending, (state, {}) => {
       state.submissionState = 'PENDING';

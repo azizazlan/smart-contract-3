@@ -1,4 +1,11 @@
-import { Alert, AlertTitle, Box, Divider, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Divider,
+  ListItemAvatar,
+  Typography,
+} from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -59,63 +66,55 @@ function Value(props: { value: string }) {
 }
 
 export default function InfoTab(props: InfoTabProps) {
-  const { chainId, publicKey, balance, isGomenOfficer } = props;
+  const { publicKey, balance, isGomenOfficer } = props;
   return (
     <List sx={{ width: '100%' }} disablePadding>
-      <ListItem key={0} disablePadding>
-        <ListItemText
-          primary={<Label label="NetworkId" />}
-          secondary={<Value value={chainId} />}
-        />
-      </ListItem>
-      <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        {isGomenOfficer ? (
-          <ListItem key={1} disablePadding>
-            <ListItemText
-              primary={<Label label="Public key" />}
-              secondary={<Value value={publicKey} />}
-            />
-          </ListItem>
-        ) : (
-          <ListItem key={1} disablePadding>
-            <ListItemText
-              primary={<RedLabel label="Public key is not an officer" />}
-              secondary={<Value value={publicKey || 'NA'} />}
-            />
-          </ListItem>
-        )}
+        <ListItem key={1} disablePadding sx={{ maxWidth: '195px' }}>
+          <ListItemAvatar sx={{ marginRight: 1 }}>
+            <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={<Label label="Public key" />}
+            secondary={<Value value={truncateEthAddr(publicKey)} />}
+          />
+        </ListItem>
+        <ListItem key={2} disablePadding sx={{ maxWidth: '215px' }}>
+          <ListItemText
+            primary={<Label label="Ether balance" />}
+            secondary={<Value value={balance} />}
+          />
+        </ListItem>
         <Link
           to="/admin/account"
           style={{
             fontFamily: 'Oswald',
             textDecoration: 'none',
-            fontSize: '11pt',
+            fontSize: '10pt',
             color: 'navy',
+            paddingTop: 7,
           }}
         >
-          Change account
+          Change account ...
         </Link>
       </Box>
       <Box sx={{ height: '17px' }} />
-      <ListItem key={2} disablePadding>
-        <ListItemText
-          primary={<Label label="Ether balance" />}
-          secondary={<Value value={balance} />}
-        />
-      </ListItem>
       {isGomenOfficer ? (
         <div>
           <ListItem key={3} disablePadding>
             <ListItemText
-              primary={<Label label="MelakaResident address" />}
-              secondary={<Value value={melaka_resident_contract_addr} />}
+              primary={<Label label="MelakaResident owner at" />}
+              secondary={
+                <Value value={truncateEthAddr(melaka_resident_contract_addr)} />
+              }
             />
           </ListItem>
           <ListItem key={4} disablePadding>
             <ListItemText
-              primary={<Label label="MelakaRice address" />}
-              secondary={<Value value={melaka_rice_contract_addr} />}
+              primary={<Label label="MelakaRice owner at" />}
+              secondary={
+                <Value value={truncateEthAddr(melaka_rice_contract_addr)} />
+              }
             />
           </ListItem>
         </div>
@@ -127,8 +126,7 @@ export default function InfoTab(props: InfoTabProps) {
             <b>
               <code>{truncateEthAddr(publicKey)}</code>
             </b>{' '}
-            above was the deployer and initial owner of the smart contracts.
-            Resolve this before proceeding.
+            above was the deployer and initial owner of contracts.
           </Alert>
           <Alert
             severity="info"
@@ -136,11 +134,40 @@ export default function InfoTab(props: InfoTabProps) {
             icon={false}
             sx={{ marginTop: 1 }}
           >
-            <AlertTitle sx={{ fontWeight: 'bold' }}>Solution steps</AlertTitle>
+            <AlertTitle sx={{ fontWeight: 'bold' }}>A. Solution</AlertTitle>
             <Typography component="span" variant="body2" color="primary">
               <ol>
-                <li>Ensure the endpoint rpc is active.</li>
-                <li>Ensure the Metamask is connected to this web page.</li>
+                <li>
+                  Ensure the Metamask is connected to an active RPC and this web
+                  page.
+                </li>
+                <li>
+                  On this page, click{' '}
+                  <span style={{ fontFamily: 'Oswald' }}>
+                    <b>Change account</b>
+                  </span>
+                  {'...'}
+                  and try to key other private key.
+                </li>
+                <li>
+                  Reload this page. If still fail, try Solution <b>B</b> below.
+                </li>
+              </ol>
+            </Typography>
+          </Alert>
+          <Alert
+            severity="info"
+            variant="outlined"
+            icon={false}
+            sx={{ marginTop: 1 }}
+          >
+            <AlertTitle sx={{ fontWeight: 'bold' }}>B. Solution</AlertTitle>
+            <Typography component="span" variant="body2" color="primary">
+              <ol>
+                <li>
+                  Ensure the Metamask is connected to an active RPC and this web
+                  page.
+                </li>
                 <li>
                   Ensure the selected account have some ETH balance and note
                   down <code>private key</code>.
