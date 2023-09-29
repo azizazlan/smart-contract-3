@@ -43,7 +43,7 @@ const awardResident = createAsyncThunk(
       isResident,
       message: `Successfully award resident to public key ${truncateEthAddr(
         publicKey
-      )} and NRIC ${nric}`,
+      )} and NRIC ${nric}. This will take effect in about 15 seconds!`,
     };
   }
 );

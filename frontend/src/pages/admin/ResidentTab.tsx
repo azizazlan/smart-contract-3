@@ -1,4 +1,4 @@
-import { Alert, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BackdropLoader from '../../commons/BackdropLoader';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
@@ -31,9 +31,13 @@ export default function ResidentTab() {
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />
-      <Alert icon={false} severity="info" variant="outlined">
+      <Typography
+        variant="body2"
+        color="primary"
+        sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
+      >
         This page allows you to award resident status to public key.
-      </Alert>
+      </Typography>
       <ResidentForm />
     </Box>
   );

@@ -6,7 +6,7 @@ type SignupOfficialFields = {
 };
 
 const signupOfficial = createAsyncThunk(
-  'signupOfficial',
+  'signup_official',
   async (props: SignupOfficialFields) => {
     const { nric } = props;
     const wallet = ethers.Wallet.createRandom();

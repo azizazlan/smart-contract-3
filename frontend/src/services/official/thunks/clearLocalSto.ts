@@ -1,14 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const clearLocalSto = createAsyncThunk(
-  'clearOfficialLocalStorage',
+  'official_clear_localstorage',
   async () => {
     localStorage.removeItem('thuleen.mfs.official.nric');
     localStorage.removeItem('thuleen.mfs.official.publicKey');
     localStorage.removeItem('thuleen.mfs.official.seedPhrase');
     localStorage.removeItem('thuleen.mfs.official.isResident');
     localStorage.removeItem('thuleen.mfs.official.isOfficer');
-    return true;
+    const message = 'Successfully clear local storaga for official';
+    return {
+      message,
+    };
   }
 );
 export default clearLocalSto;

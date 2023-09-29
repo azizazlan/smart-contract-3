@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const clearLocalSto = createAsyncThunk(
-  'clearResidentLocalStorage',
+  'clear_resident_localstorage',
   async () => {
     localStorage.removeItem('thuleen.mfs.resident.nric');
     localStorage.removeItem('thuleen.mfs.resident.publicKey');

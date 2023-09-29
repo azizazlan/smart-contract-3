@@ -43,7 +43,7 @@ const assignRole = createAsyncThunk(
       publicKey,
       message: `Successfully assigned role as goverment officer to ${truncateEthAddr(
         publicKey
-      )}`,
+      )}. This will take effect in about 15 seconds!`,
     };
   }
 );

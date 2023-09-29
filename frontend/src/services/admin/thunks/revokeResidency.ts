@@ -39,7 +39,7 @@ const revokeResidency = createAsyncThunk(
 
     const message = `Successfully revoke residency status of ${truncateEthAddr(
       publicKey
-    )} with NRIC# ${nric}`;
+    )} with NRIC# ${nric}. This will take effect in about 15 seconds!`;
 
     // throw new Error('Simulated rejection'); // simulate rejected
 

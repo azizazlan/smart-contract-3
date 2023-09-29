@@ -1,4 +1,4 @@
-import { Alert, Box, Divider, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Divider, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -122,13 +122,70 @@ export default function InfoTab(props: InfoTabProps) {
       ) : (
         <div>
           <Divider />
-          <Alert sx={{ marginTop: 3 }} severity="warning" icon={false}>
+          <Alert sx={{ marginTop: 1 }} severity="warning" icon={false}>
             <b>WARNING! </b>Ensure that the public key{' '}
             <b>
               <code>{truncateEthAddr(publicKey)}</code>
             </b>{' '}
             above was the deployer and initial owner of the smart contracts.
             Resolve this before proceeding.
+          </Alert>
+          <Alert
+            severity="info"
+            variant="outlined"
+            icon={false}
+            sx={{ marginTop: 1 }}
+          >
+            <AlertTitle sx={{ fontWeight: 'bold' }}>Solution steps</AlertTitle>
+            <Typography component="span" variant="body2" color="primary">
+              <ol>
+                <li>Ensure the endpoint rpc is active.</li>
+                <li>Ensure the Metamask is connected to this web page.</li>
+                <li>
+                  Ensure the selected account have some ETH balance and note
+                  down <code>private key</code>.
+                </li>
+                <li>
+                  In the <code>scripts/deploy.ts</code> and edit the{' '}
+                  <code>METAMASK_PRIVATE_KEY</code> value with the{' '}
+                  <code>private key</code> above.
+                </li>
+                <li>
+                  Then run deploy script: <br />
+                  <code>
+                    npx hardhat run --network localhost scripts/deploy.ts
+                  </code>
+                </li>
+                <li>
+                  Note down the contract addresses. For example:
+                  <br />
+                  <code>
+                    MelakaRice deployed to :
+                    0x850EC3780CeDfdb116E38B009d0bf7a1ef1b8b38
+                  </code>
+                  <br />
+                  <code>
+                    MelakaResident deployed to :
+                    0x1ACcBD355245AbA93CE46D33ab1D0152CE33Fd00
+                  </code>
+                </li>
+                <li>
+                  Edit the <code>frontend/.env</code> file as the followings:
+                  <br />
+                  <code>
+                    VITE_APP_ADDR_MLK_RICE=0x850EC3780CeDfdb116E38B009d0bf7a1ef1b8b38
+                  </code>
+                  <br />
+                  <code>
+                    VITE_APP_ADDR_MLK_RESIDENT=0x1ACcBD355245AbA93CE46D33ab1D0152CE33Fd00
+                  </code>
+                </li>
+                <li>
+                  Re-build the frontend: <code>npm run build</code>
+                </li>
+                <li>Reload this page.</li>
+              </ol>
+            </Typography>
           </Alert>
         </div>
       )}

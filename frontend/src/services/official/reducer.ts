@@ -11,6 +11,7 @@ import addWhitelist from './thunks/addWhitelist';
 import revokeResidency from './thunks/revokeResidency';
 import removeWhitelist from './thunks/removeWhitelist';
 import restore from './thunks/restore';
+import clearLocalSto from './thunks/clearLocalSto';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -181,6 +182,17 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(clearLocalSto.pending, (state, {}) => {
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(clearLocalSto.fulfilled, (state, { payload }) => {
+      state.nric = null;
+      state.publicKey = null;
+      state.seedPhrase = null;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

@@ -1,4 +1,4 @@
-import { Alert, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
 import BackdropLoader from '../../commons/BackdropLoader';
@@ -31,9 +31,13 @@ export default function RoleAssignmentTab() {
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />
-      <Alert icon={false} severity="info" variant="outlined">
+      <Typography
+        variant="body2"
+        color="primary"
+        sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
+      >
         This page allows you to assign officer role to a public key.
-      </Alert>
+      </Typography>
       <RoleAssignmentForm />
     </Box>
   );

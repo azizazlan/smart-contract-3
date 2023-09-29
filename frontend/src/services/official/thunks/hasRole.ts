@@ -15,24 +15,27 @@ type HasRoleFields = {
   publicKey: string;
 };
 
-const hasRole = createAsyncThunk('hasRole', async (props: HasRoleFields) => {
-  const { publicKey } = props;
+const hasRole = createAsyncThunk(
+  'official_check_hasrole',
+  async (props: HasRoleFields) => {
+    const { publicKey } = props;
 
-  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
-  const contract = new ethers.Contract(
-    MELAKA_RESIDENT_CONTRACT_ADDR,
-    contractABI.abi,
-    provider
-  );
+    const contract = new ethers.Contract(
+      MELAKA_RESIDENT_CONTRACT_ADDR,
+      contractABI.abi,
+      provider
+    );
 
-  const hasRole: boolean = await contract.hasRole(
-    GOVERNMENT_OFFICER_ROLE,
-    publicKey
-  );
+    const hasRole: boolean = await contract.hasRole(
+      GOVERNMENT_OFFICER_ROLE,
+      publicKey
+    );
 
-  return {
-    hasRole,
-  };
-});
+    return {
+      hasRole,
+    };
+  }
+);
 export default hasRole;

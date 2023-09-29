@@ -1,4 +1,4 @@
-import { Alert, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import VerifyForm from './VerifyForm';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
@@ -34,10 +34,14 @@ export default function VerifyTab() {
   return (
     <Box>
       <BackdropLoader submissionState={submissionState} />
-      <Alert variant="outlined" icon={false} severity="info">
+      <Typography
+        variant="body2"
+        color="primary"
+        sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
+      >
         This page allows you to verify residency, whitelist status and to check
-        if public key has been assigned as government officer role.
-      </Alert>
+        if public key has been assigned as officer.
+      </Typography>
       <VerifyForm />
     </Box>
   );

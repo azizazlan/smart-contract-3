@@ -45,7 +45,7 @@ const revokeRole = createAsyncThunk(
       publicKey,
       message: `Successfully revoke role as goverment officer to ${truncateEthAddr(
         publicKey
-      )}`,
+      )}. This will take effect in about 15 seconds!`,
     };
   }
 );
