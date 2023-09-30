@@ -152,8 +152,8 @@ export default function TransferTokenForm() {
           color="primary"
           sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
         >
-          This page allows you to transfer MelakaRice (ERC20) tokens to state
-          officer.
+          This page allows you to approve allowance and transfer MelakaRice
+          (ERC20) tokens to state officer.
         </Typography>
         <FormControl fullWidth margin="dense">
           <Controller

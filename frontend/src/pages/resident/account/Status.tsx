@@ -86,7 +86,7 @@ export default function Status({
           <ReplayIcon
             color="secondary"
             fontSize="small"
-            sx={{ color: `${isResident ? 'silver' : '#c23616'}` }}
+            sx={{ color: 'silver' }}
           />
         </IconButton>
       </Box>
@@ -123,7 +123,7 @@ export default function Status({
           <ReplayIcon
             color="secondary"
             fontSize="small"
-            sx={{ color: `${isWhitelisted ? 'silver' : '#c23616'}` }}
+            sx={{ color: 'silver' }}
           />
         </IconButton>
       </Box>

@@ -106,7 +106,7 @@ export default function Balance({
             {ftBal}
           </Typography>
           <IconButton onClick={handleReloadBal}>
-            <ReplayIcon color="primary" fontSize="small" />
+            <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
           </IconButton>
         </Box>
       </Box>

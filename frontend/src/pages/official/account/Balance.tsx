@@ -2,10 +2,12 @@ import React from 'react';
 import { Alert, Box, IconButton, Snackbar, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import truncateEthAddr from '../../../utils/truncateEthAddr';
+import { Link } from 'react-router-dom';
 
 export default function Balance({
   etherBal,
@@ -84,10 +86,40 @@ export default function Balance({
               fontSize: '16pt',
             }}
           >
-            {etherBal} Ξ
+            Ξ {etherBal}
           </Typography>
           <IconButton onClick={handleReloadBal}>
-            <ReplayIcon color="primary" fontSize="small" />
+            <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
+          </IconButton>
+        </Box>
+        <Typography
+          style={{
+            fontFamily: 'Oswald',
+            fontSize: '12pt',
+            color: 'silver',
+            marginRight: '3px',
+            marginTop: 21,
+          }}
+        >
+          Rice tokens allowance
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <IconButton component={Link} to="transfer">
+            <FileUploadIcon color="secondary" fontSize="small" />
+          </IconButton>
+          <Typography
+            color="primary"
+            style={{
+              marginLeft: 7,
+              marginRight: 7,
+              fontFamily: 'Oswald',
+              fontSize: '16pt',
+            }}
+          >
+            0
+          </Typography>
+          <IconButton onClick={handleReloadBal}>
+            <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
           </IconButton>
         </Box>
       </Box>
