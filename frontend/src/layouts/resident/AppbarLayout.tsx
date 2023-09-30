@@ -8,13 +8,18 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Footer from '../Footer';
 import DrawerMenu from './DrawerMenu';
-import QrCodeDlg from '../../dialogs/QrCodeDlg';
+import QrDialog from './QrDialog';
 import ClearCacheDlg from '../../dialogs/ClearCacheDlg';
-import { useResidentDispatch } from '../../services/hook';
+import { useResidentDispatch, useResidentSelector } from '../../services/hook';
 import clearLocalSto from '../../services/resident/thunks/clearLocalSto';
+import { ResidentState } from '../../services/store';
 
 function Appbar() {
   const dispatch = useResidentDispatch();
+  const { qrcode } = useResidentSelector(
+    (state: ResidentState) => state.resident
+  );
+
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openQrCode, setOpenQrCode] = React.useState(false);
   const [openClearCache, setOpenClearCache] = React.useState(false);
@@ -38,7 +43,7 @@ function Appbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <QrCodeDlg open={openQrCode} handleClose={toggleQrCode} />
+      <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
       <ClearCacheDlg
         open={openClearCache}
         handleClose={toggleClearCache}

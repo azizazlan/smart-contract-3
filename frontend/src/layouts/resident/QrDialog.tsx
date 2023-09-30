@@ -10,6 +10,8 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import Box from '@mui/material/Box';
 import { QRCodeCanvas } from 'qrcode.react';
+import truncateEthAddr from '../../utils/truncateEthAddr';
+import { DialogActions } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -20,13 +22,24 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function QrCodeDlg({
+export default function QrDialog({
+  qrcode,
   open,
   handleClose,
 }: {
+  qrcode: string | null;
   open: boolean;
   handleClose: () => void;
 }) {
+  let nric;
+  let publicKey;
+  let qrcodeSplits = qrcode?.split('_');
+
+  if (qrcodeSplits) {
+    nric = qrcodeSplits[0];
+    publicKey = qrcodeSplits[1];
+  }
+
   return (
     <Dialog
       fullScreen
@@ -60,14 +73,41 @@ export default function QrCodeDlg({
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          flexGrow: 1,
         }}
       >
-        <QRCodeCanvas
-          size={256}
-          fgColor="#273c75"
-          value="0xCE94dA7E3703Ff902E0b49f747Ca0A6346435fE3_750112091234"
-        />
+        {qrcode && nric && publicKey ? (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <QRCodeCanvas size={256} fgColor="#273c75" value={qrcode} />
+            <Typography
+              color="primary"
+              sx={{ marginTop: 3, fontFamily: 'Oswald', fontSize: '14pt' }}
+            >
+              {nric}
+            </Typography>
+            <Typography
+              color="primary"
+              sx={{ marginTop: 0, fontFamily: 'Oswald', fontSize: '14pt' }}
+            >
+              {truncateEthAddr(publicKey)}
+            </Typography>
+          </Box>
+        ) : (
+          <Typography variant="body2" color="error">
+            Error
+          </Typography>
+        )}
       </Box>
+      <DialogActions sx={{ paddingBottom: 3, paddingRight: 3 }}>
+        <Button onClick={handleClose}>close</Button>
+      </DialogActions>
     </Dialog>
   );
 }

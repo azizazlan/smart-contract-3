@@ -12,8 +12,11 @@ import Balance from './Balance';
 import Status from './Status';
 import checkStatus from '../../../services/resident/thunks/checkStatus';
 import initialize from '../../../services/resident/thunks/initialize';
+import QrDialog from '../../../layouts/resident/QrDialog';
 
 export default function Info() {
+  const [openQrCode, setOpenQrCode] = React.useState(false);
+
   const dispatch = useResidentDispatch();
   const {
     publicKey,
@@ -22,6 +25,7 @@ export default function Info() {
     isWhitelisted,
     nric,
     ftRiceBalance,
+    qrcode,
   } = useResidentSelector((state: ResidentState) => state.resident);
 
   if (!publicKey && !seedPhrase) {
@@ -54,6 +58,10 @@ export default function Info() {
     return () => clearInterval(pollingInterval);
   }, []);
 
+  const toggleQrCode = () => {
+    setOpenQrCode((o) => !o);
+  };
+
   const handleReloadBal = () => {};
 
   const handleReloadResidentStat = () => {
@@ -67,12 +75,14 @@ export default function Info() {
 
   return (
     <Box sx={{ ...styles.container, marginTop: 3 }}>
+      <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
       <Status
         nric={nric || 'Error'}
         isResident={isResident}
         handleReloadResidentStat={handleReloadResidentStat}
         isWhitelisted={isWhitelisted}
         handleReloadWhitelistStat={handleReloadWhitelistStat}
+        handleClickAvatar={toggleQrCode}
       />
       <Balance
         ftBal={ftRiceBalance.toString()}

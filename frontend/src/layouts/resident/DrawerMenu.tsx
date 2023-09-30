@@ -79,21 +79,6 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-
-        <ListItem key="Verify" disablePadding>
-          <ListItemButton component={Link} to="/signedresident/verify">
-            <ListItemIcon>
-              <SensorOccupiedIcon sx={{ color: 'grey' }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-                  Verify
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
         <Divider />
         <ListItem key="About" disablePadding>
           <ListItemButton component={Link} to="/signedresident/about">

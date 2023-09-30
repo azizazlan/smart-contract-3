@@ -9,12 +9,14 @@ export default function Status({
   handleReloadResidentStat,
   isWhitelisted,
   handleReloadWhitelistStat,
+  handleClickAvatar,
 }: {
   nric: string;
   isResident: boolean;
   handleReloadResidentStat: () => void;
   isWhitelisted: boolean;
   handleReloadWhitelistStat: () => void;
+  handleClickAvatar: () => void;
 }) {
   return (
     <Box
@@ -28,7 +30,8 @@ export default function Status({
       <img
         src={isResident && isWhitelisted ? residentIcon : nonResidentIcon}
         alt="resident icon"
-        style={{ width: '65px' }}
+        style={{ width: '65px', cursor: 'pointer' }}
+        onClick={handleClickAvatar}
       />
       <Typography
         style={{

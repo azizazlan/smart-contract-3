@@ -13,6 +13,7 @@ interface ResidentState {
   networkId: number;
   nric: string | null;
   publicKey: string | null;
+  qrcode: string | null;
   seedPhrase: string | null;
   isResident: boolean;
   isWhitelisted: boolean;
@@ -25,6 +26,7 @@ const initialState: ResidentState = {
   networkId: -1,
   nric: null,
   publicKey: null,
+  qrcode: null,
   seedPhrase: null,
   isResident: false,
   isWhitelisted: false,
@@ -44,6 +46,7 @@ export const residentSlice = createSlice({
     builder.addCase(initialize.fulfilled, (state, { payload }) => {
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
+      state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.seedPhrase = payload.seedPhrase;
       state.submissionState = 'OK';
     });
@@ -51,6 +54,7 @@ export const residentSlice = createSlice({
       state.submissionState = 'PENDING';
     });
     builder.addCase(clearLocalSto.fulfilled, (state, {}) => {
+      state.qrcode = null;
       state.nric = null;
       state.publicKey = null;
       state.seedPhrase = null;
@@ -62,6 +66,7 @@ export const residentSlice = createSlice({
     builder.addCase(signupResident.fulfilled, (state, { payload }) => {
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
+      state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.seedPhrase = payload.seedPhrase;
       state.submissionState = 'OK';
     });
@@ -85,6 +90,7 @@ export const residentSlice = createSlice({
     builder.addCase(restore.fulfilled, (state, { payload }) => {
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
+      state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
