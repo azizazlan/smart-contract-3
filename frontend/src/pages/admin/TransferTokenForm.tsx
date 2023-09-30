@@ -20,8 +20,8 @@ import { Link } from 'react-router-dom';
 import truncateEthAddr from '../../utils/truncateEthAddr';
 
 const schema = Yup.object().shape({
-  publicKey: Yup.string()
-    .required('Please key the resident public key')
+  recipientPublicKey: Yup.string()
+    .required('Please key in the state officer public key')
     .matches(
       /^(0x)?[0-9a-fA-F]{40}$/u,
       'Invalid Ethereum public key or address'
@@ -30,15 +30,14 @@ const schema = Yup.object().shape({
 });
 
 type TransferTokenFormFields = {
-  publicKey: string;
+  recipientPublicKey: string;
   units: number;
 };
 
 export default function TransferTokenForm() {
   const dispatch = useAdminDispatch();
-  const { privateKey, isGomenOfficer } = useAdminSelector(
-    (state: AdminState) => state.admin
-  );
+  const { privateKey, isGomenOfficer, riceTokenBal, etherBal } =
+    useAdminSelector((state: AdminState) => state.admin);
 
   React.useEffect(() => {
     if (!privateKey) {
@@ -57,13 +56,13 @@ export default function TransferTokenForm() {
   } = useForm<TransferTokenFormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      publicKey: '',
+      recipientPublicKey: '',
       units: 0,
     },
   });
 
   const onSubmit: SubmitHandler<TransferTokenFormFields> = (data) => {
-    const { publicKey } = data;
+    const { recipientPublicKey } = data;
     // dispatch(applyPrivateKey({ privateKey }));
   };
 
@@ -99,17 +98,41 @@ export default function TransferTokenForm() {
             {publicKey ? truncateEthAddr(publicKey) : '...'}
           </Typography>
           {isGomenOfficer ? (
-            <Typography
-              sx={{
-                marginLeft: 1,
-                marginBottom: 0.5,
-                fontFamily: 'Oswald',
-                fontSize: '11pt',
-                color: 'navy',
-              }}
-            >
-              ✓ Smart contracts owner
-            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Typography
+                sx={{
+                  marginLeft: 1,
+                  marginBottom: 0.5,
+                  fontFamily: 'Oswald',
+                  fontSize: '11pt',
+                  color: 'navy',
+                }}
+              >
+                ✓ Smart contracts owner
+              </Typography>
+              <Typography
+                sx={{
+                  marginLeft: 1,
+                  marginBottom: 0.5,
+                  fontFamily: 'Oswald',
+                  fontSize: '11pt',
+                  color: 'black',
+                }}
+              >
+                Balance token: <code>{riceTokenBal}</code>
+              </Typography>
+              <Typography
+                sx={{
+                  marginLeft: 1,
+                  marginBottom: 0.5,
+                  fontFamily: 'Oswald',
+                  fontSize: '11pt',
+                  color: 'black',
+                }}
+              >
+                Eth bal: <code>{etherBal}</code>
+              </Typography>
+            </Box>
           ) : (
             <Typography
               sx={{
@@ -129,26 +152,28 @@ export default function TransferTokenForm() {
           color="primary"
           sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
         >
-          This page allows you to transfer MelakaRice (ERC20) token to a state
+          This page allows you to transfer MelakaRice (ERC20) tokens to state
           officer.
         </Typography>
         <FormControl fullWidth margin="dense">
           <Controller
-            name="publicKey"
+            name="recipientPublicKey"
             defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
                 InputLabelProps={{ shrink: true }}
-                id="publicKey"
+                id="recipientPublicKey"
                 label="Recipient public Key"
                 variant="outlined"
                 {...field}
               />
             )}
           />
-          {errors.publicKey ? (
-            <FormHelperText error>{errors.publicKey.message}</FormHelperText>
+          {errors.recipientPublicKey ? (
+            <FormHelperText error>
+              {errors.recipientPublicKey.message}
+            </FormHelperText>
           ) : (
             <FormHelperText>Recipient public key</FormHelperText>
           )}
@@ -168,7 +193,7 @@ export default function TransferTokenForm() {
               />
             )}
           />
-          {errors.publicKey ? (
+          {errors.units ? (
             <FormHelperText error>{errors.units?.message}</FormHelperText>
           ) : (
             <FormHelperText>Number of token to transfer</FormHelperText>
@@ -188,7 +213,7 @@ export default function TransferTokenForm() {
         <Button
           color="primary"
           type="submit"
-          form="admin_account_private_key"
+          form="admin_transfer_token"
           variant="contained"
         >
           transfer
