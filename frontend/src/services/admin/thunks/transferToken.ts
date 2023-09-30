@@ -4,6 +4,7 @@ import { ethers, Wallet, BigNumber } from 'ethers';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
+import { TodayOutlined } from '@mui/icons-material';
 
 const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
   ethers.utils.toUtf8Bytes('GOVERNMENT_OFFICER_ROLE')
@@ -24,6 +25,7 @@ const transferToken = createAsyncThunk(
   'admin_transfer_token',
   async (props: TransferTokenFields) => {
     const { recipientPublicKey, privateKey, units } = props;
+    const unitsAsBigNumber = BigNumber.from(units);
 
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
@@ -39,8 +41,6 @@ const transferToken = createAsyncThunk(
       web3Provider
     );
 
-    const unitsAsBigNumber = BigNumber.from(units);
-
     await contractMlkResident
       .connect(metaMaskWallet)
       .transferFTToOfficer(recipientPublicKey, unitsAsBigNumber);
@@ -50,6 +50,10 @@ const transferToken = createAsyncThunk(
     //   contractABI.abi,
     //   web3Provider
     // );
+
+    // TODO: Check if the officer is a reseident and assigned as GOVERMENT OFFICER
+
+    // Only then transfer the tokens
 
     return {
       recipientPublicKey,

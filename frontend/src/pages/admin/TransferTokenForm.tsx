@@ -164,7 +164,7 @@ export default function TransferTokenForm() {
               <TextField
                 InputLabelProps={{ shrink: true }}
                 id="recipientPublicKey"
-                label="Recipient public Key"
+                label="Officer public Key"
                 variant="outlined"
                 {...field}
               />

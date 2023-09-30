@@ -36,7 +36,8 @@ export default function RoleAssignmentTab() {
         color="primary"
         sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
       >
-        This page allows you to assign officer role to a public key.
+        This page allows you to approve allowance MelakaRice tokens and assign
+        officer role to a public key.
       </Typography>
       <RoleAssignmentForm />
     </Box>

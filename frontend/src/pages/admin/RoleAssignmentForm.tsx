@@ -116,7 +116,7 @@ export default function RoleAssignmentForm() {
           color="primary"
           onClick={() => setCheckRevoke(false)}
         >
-          assign
+          approve & assign
         </Button>
       </Box>
     </div>
