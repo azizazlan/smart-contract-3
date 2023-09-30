@@ -45,8 +45,15 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const dispatch = useAdminDispatch();
-  const { networkId, publicKey, privateKey, etherBal, isGomenOfficer } =
-    useAdminSelector((state: AdminState) => state.admin);
+  const {
+    networkId,
+    publicKey,
+    privateKey,
+    etherBal,
+    isGomenOfficer,
+    riceTokenBal,
+    riceTokenTotalSupply,
+  } = useAdminSelector((state: AdminState) => state.admin);
   const [value, setValue] = React.useState(0);
 
   React.useEffect(() => {
@@ -92,8 +99,10 @@ export default function BasicTabs() {
           <InfoTab
             chainId={networkId || ''}
             publicKey={publicKey || ''}
-            balance={etherBal || ''}
+            etherBal={etherBal || ''}
             isGomenOfficer={isGomenOfficer}
+            riceTokenBal={riceTokenBal || '0'}
+            riceTokenTotalSupply={riceTokenTotalSupply || '0'}
           />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
@@ -132,8 +141,10 @@ export default function BasicTabs() {
         <InfoTab
           chainId={networkId || ''}
           publicKey={publicKey || ''}
-          balance={etherBal || ''}
+          etherBal={etherBal || ''}
           isGomenOfficer={isGomenOfficer}
+          riceTokenBal={riceTokenBal || '0'}
+          riceTokenTotalSupply={riceTokenTotalSupply || '0'}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>

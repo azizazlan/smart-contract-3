@@ -7,9 +7,10 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 contract MelakaRice is ERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    constructor() ERC20("Melaka Rice Subsidy", "MLKRICE") {
+    constructor(uint256 initialSupply) ERC20("Melaka Rice Subsidy", "MLKRICE") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
+        _mint(msg.sender, initialSupply);
     }
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {

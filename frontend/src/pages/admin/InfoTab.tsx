@@ -1,18 +1,11 @@
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Divider,
-  ListItemAvatar,
-  Typography,
-} from '@mui/material';
+import { Box, ListItemAvatar, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import WarningIcon from '@mui/icons-material/Warning';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { Link } from 'react-router-dom';
 import truncateEthAddr from '../../utils/truncateEthAddr';
+import NonOwnerAlert from './NonOwnerAlert';
 
 const melaka_resident_contract_addr = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
@@ -21,8 +14,10 @@ const melaka_rice_contract_addr = import.meta.env.VITE_APP_ADDR_MLK_RICE;
 type InfoTabProps = {
   chainId: string;
   publicKey: string;
-  balance: string;
+  etherBal: string;
   isGomenOfficer: boolean;
+  riceTokenBal: string;
+  riceTokenTotalSupply: string;
 };
 
 function Label(props: { label: string }) {
@@ -47,7 +42,13 @@ function Value(props: { value: string }) {
 }
 
 export default function InfoTab(props: InfoTabProps) {
-  const { publicKey, balance, isGomenOfficer } = props;
+  const {
+    publicKey,
+    etherBal,
+    isGomenOfficer,
+    riceTokenTotalSupply,
+    riceTokenBal,
+  } = props;
   return (
     <List sx={{ width: '100%', marginTop: 3 }} disablePadding>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -63,7 +64,7 @@ export default function InfoTab(props: InfoTabProps) {
         <ListItem key={2} disablePadding sx={{ maxWidth: '255px' }}>
           <ListItemText
             primary={<Label label="Ether balance" />}
-            secondary={<Value value={balance} />}
+            secondary={<Value value={etherBal} />}
           />
         </ListItem>
         <Link
@@ -90,112 +91,31 @@ export default function InfoTab(props: InfoTabProps) {
               }
             />
           </ListItem>
-          <ListItem key={4} disablePadding>
-            <ListItemText
-              primary={<Label label="MelakaRice owner at" />}
-              secondary={
-                <Value value={truncateEthAddr(melaka_rice_contract_addr)} />
-              }
-            />
-          </ListItem>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <ListItem key={4} disablePadding sx={{ maxWidth: '215px' }}>
+              <ListItemText
+                primary={<Label label="MelakaRice owner at" />}
+                secondary={
+                  <Value value={truncateEthAddr(melaka_rice_contract_addr)} />
+                }
+              />
+            </ListItem>
+            <ListItem key={'4_1'} disablePadding sx={{ maxWidth: '255px' }}>
+              <ListItemText
+                primary={<Label label="Total supply" />}
+                secondary={<Value value={riceTokenTotalSupply} />}
+              />
+            </ListItem>
+            <ListItem key={'4_2'} disablePadding sx={{ maxWidth: '255px' }}>
+              <ListItemText
+                primary={<Label label="Balance" />}
+                secondary={<Value value={riceTokenBal} />}
+              />
+            </ListItem>
+          </Box>
         </div>
       ) : (
-        <div>
-          <Divider />
-          <Alert sx={{ marginTop: 1 }} severity="warning" icon={false}>
-            <b>WARNING! </b>Ensure that the public key{' '}
-            <b>
-              <code>{truncateEthAddr(publicKey)}</code>
-            </b>{' '}
-            above was the deployer and initial owner of contracts.
-          </Alert>
-          <Alert
-            severity="info"
-            variant="outlined"
-            icon={false}
-            sx={{ marginTop: 1 }}
-          >
-            <AlertTitle sx={{ fontWeight: 'bold' }}>A. Solution</AlertTitle>
-            <Typography component="span" variant="body2" color="primary">
-              <ol>
-                <li>
-                  Ensure the Metamask is connected to an active RPC and this web
-                  page.
-                </li>
-                <li>
-                  On this page, click{' '}
-                  <span style={{ fontFamily: 'Oswald' }}>
-                    <b>Change account</b>
-                  </span>
-                  {'...'}
-                  and try to key other private key.
-                </li>
-                <li>
-                  Reload this page. If still fail, try Solution <b>B</b> below.
-                </li>
-              </ol>
-            </Typography>
-          </Alert>
-          <Alert
-            severity="info"
-            variant="outlined"
-            icon={false}
-            sx={{ marginTop: 1 }}
-          >
-            <AlertTitle sx={{ fontWeight: 'bold' }}>B. Solution</AlertTitle>
-            <Typography component="span" variant="body2" color="primary">
-              <ol>
-                <li>
-                  Ensure the Metamask is connected to an active RPC and this web
-                  page.
-                </li>
-                <li>
-                  Ensure the selected account have some ETH balance and note
-                  down <code>private key</code>.
-                </li>
-                <li>
-                  In the <code>scripts/deploy.ts</code> and edit the{' '}
-                  <code>METAMASK_PRIVATE_KEY</code> value with the{' '}
-                  <code>private key</code> above.
-                </li>
-                <li>
-                  Then run deploy script: <br />
-                  <code>
-                    npx hardhat run --network localhost scripts/deploy.ts
-                  </code>
-                </li>
-                <li>
-                  Note down the contract addresses. For example:
-                  <br />
-                  <code>
-                    MelakaRice deployed to :
-                    0x850EC3780CeDfdb116E38B009d0bf7a1ef1b8b38
-                  </code>
-                  <br />
-                  <code>
-                    MelakaResident deployed to :
-                    0x1ACcBD355245AbA93CE46D33ab1D0152CE33Fd00
-                  </code>
-                </li>
-                <li>
-                  Edit the <code>frontend/.env</code> file as the followings:
-                  <br />
-                  <code>
-                    VITE_APP_ADDR_MLK_RICE=0x850EC3780CeDfdb116E38B009d0bf7a1ef1b8b38
-                  </code>
-                  <br />
-                  <code>
-                    VITE_APP_ADDR_MLK_RESIDENT=0x1ACcBD355245AbA93CE46D33ab1D0152CE33Fd00
-                  </code>
-                </li>
-                <li>
-                  Re-build the frontend: <code>npm run build</code>
-                </li>
-                <li>Reload this page.</li>
-              </ol>
-            </Typography>
-          </Alert>
-        </div>
+        <NonOwnerAlert publicKey={publicKey} />
       )}
     </List>
   );

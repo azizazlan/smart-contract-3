@@ -14,8 +14,12 @@ describe("MelakaResident and MelakaRice", function () {
   async function deployContracts() {
     const [resident1, resident2, officer1, officer2] =
       await ethers.getSigners();
+
+    // Set the initial supply you want to assign
+    const initialSupply = ethers.utils.parseEther("1000000"); // For example, 1,000,000 tokens
+
     const MelakaRice = await ethers.getContractFactory("MelakaRice");
-    const melakaRice = await MelakaRice.connect(officer1).deploy();
+    const melakaRice = await MelakaRice.connect(officer1).deploy(initialSupply);
     const MelakaResident = await ethers.getContractFactory("MelakaResident");
     const melakaResident = await MelakaResident.connect(officer1).deploy(
       melakaRice.address
@@ -31,6 +35,14 @@ describe("MelakaResident and MelakaRice", function () {
       officer2,
     };
   }
+
+  describe("MelakaRice deployment", function () {
+    it("Should have initial total supply", async function () {
+      const initialSupply = ethers.utils.parseEther("1000000"); // For example, 1,000,000 tokens
+      const { melakaRice } = await loadFixture(deployContracts);
+      expect(await melakaRice.totalSupply()).equal(initialSupply);
+    });
+  });
 
   describe("MelakaResident deploy stage", function () {
     it("Should have correct name", async function () {

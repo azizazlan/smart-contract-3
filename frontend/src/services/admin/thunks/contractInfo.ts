@@ -11,6 +11,8 @@ const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
+const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
+
 type ContractInfoProps = {
   privateKey: string;
 };
@@ -27,12 +29,12 @@ const contractInfo = createAsyncThunk(
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const metaMaskWallet = new Wallet(privateKey, web3Provider);
 
-    const contract = new ethers.Contract(
+    const contractMelakaResident = new ethers.Contract(
       MELAKA_RESIDENT_CONTRACT_ADDR,
       contractABI.abi,
       web3Provider
     );
-    const isGomenOfficer = await contract.hasRole(
+    const isGomenOfficer = await contractMelakaResident.hasRole(
       GOVERNMENT_OFFICER_ROLE,
       metaMaskWallet.address
     );
@@ -40,9 +42,31 @@ const contractInfo = createAsyncThunk(
     console.log(`Metamask address ${metaMaskWallet.address}`);
     console.log(isGomenOfficer);
 
+    const contractMelakaRice = new ethers.Contract(
+      MELAKA_RICE_CONTRACT_ADDR,
+      contractABI.abi,
+      web3Provider
+    );
+
+    const nRiceTokenBal = await contractMelakaRice.balanceOf(
+      metaMaskWallet.address
+    );
+    const riceTokenBal = ethers.utils.formatUnits(nRiceTokenBal, 18);
+
+    const nRiceTokenTotalSupply = await contractMelakaRice.totalSupply();
+    const riceTokenTotalSupply = ethers.utils.formatUnits(
+      nRiceTokenTotalSupply,
+      18
+    );
+
+    const message = 'Successfully get contract info';
+    console.log(message);
+
     return {
       isGomenOfficer,
-      message: 'Successfully get contract info',
+      riceTokenBal,
+      riceTokenTotalSupply,
+      message,
     };
   }
 );

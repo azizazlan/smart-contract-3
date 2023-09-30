@@ -15,8 +15,6 @@ import initialize from '../../../services/resident/thunks/initialize';
 import QrDialog from '../../../layouts/resident/QrDialog';
 
 export default function Info() {
-  const [openQrCode, setOpenQrCode] = React.useState(false);
-
   const dispatch = useResidentDispatch();
   const {
     publicKey,
@@ -28,10 +26,7 @@ export default function Info() {
     qrcode,
   } = useResidentSelector((state: ResidentState) => state.resident);
 
-  if (!publicKey && !seedPhrase) {
-    window.location.reload();
-    return <Navigate to="/" />;
-  }
+  const [openQrCode, setOpenQrCode] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(initialize());
@@ -72,6 +67,10 @@ export default function Info() {
   };
 
   const handleReloadWhitelistStat = () => {};
+
+  if (!publicKey && !seedPhrase) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Box sx={{ ...styles.container, marginTop: 3 }}>

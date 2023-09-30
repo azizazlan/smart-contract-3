@@ -17,6 +17,8 @@ interface AdminState {
   submissionMsg: string | null;
   networkId: string;
   etherBal: string;
+  riceTokenTotalSupply: string; // MelakaRice (ERC20) token total supply
+  riceTokenBal: string; // Admin's balance of MelakaRice (ERC20) token
   publicKey: string | null;
   privateKey: string | null;
   isClaimantResident: boolean;
@@ -31,6 +33,8 @@ const initialState: AdminState = {
   submissionMsg: null,
   networkId: '-1',
   etherBal: '0.0',
+  riceTokenBal: '0',
+  riceTokenTotalSupply: '0',
   publicKey: null,
   privateKey: null,
   isClaimantResident: false,
@@ -76,6 +80,7 @@ export const adminSlice = createSlice({
     builder.addCase(contractInfo.rejected, (state, action) => {
       state.submissionState = 'FAILED';
       let msg = action.error?.message || 'An error occurred';
+      console.log(msg);
       msg = msg.substring(0, msg.length / 3);
       state.submissionMsg = msg;
     });
@@ -87,6 +92,8 @@ export const adminSlice = createSlice({
       }
       state.isGomenOfficer = payload?.isGomenOfficer;
       state.submissionMsg = payload?.message;
+      state.riceTokenTotalSupply = payload.riceTokenTotalSupply;
+      state.riceTokenBal = payload.riceTokenBal;
       state.submissionState = 'OK';
     });
     builder.addCase(awardResident.pending, (state, {}) => {
