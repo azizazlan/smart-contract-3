@@ -106,12 +106,24 @@ export default function InfoTab(props: InfoTabProps) {
                 secondary={<Value value={riceTokenTotalSupply} />}
               />
             </ListItem>
-            <ListItem key={'4_2'} disablePadding sx={{ maxWidth: '255px' }}>
+            <ListItem key={'4_2'} disablePadding sx={{ maxWidth: '175px' }}>
               <ListItemText
                 primary={<Label label="Balance" />}
                 secondary={<Value value={riceTokenBal} />}
               />
             </ListItem>
+            <Link
+              to="/admin/transfer_token"
+              style={{
+                fontFamily: 'Oswald',
+                textDecoration: 'none',
+                fontSize: '10pt',
+                color: 'navy',
+                paddingTop: 7,
+              }}
+            >
+              Transfer ...
+            </Link>
           </Box>
         </div>
       ) : (
