@@ -16,6 +16,7 @@ type ResultStatusProps = {
   isResident: boolean;
   isOfficer: boolean;
   isWhitelisted: boolean;
+  allowances: number;
 };
 
 export default function ResultStatus(props: ResultStatusProps) {
@@ -58,12 +59,22 @@ export default function ResultStatus(props: ResultStatusProps) {
           <Typography gutterBottom>
             {props.isResident ? 'Resident ✅' : 'Non-resident ✖'}
           </Typography>
-          <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-            Official role
-          </Typography>
-          <Typography gutterBottom>
-            {props.isOfficer ? 'Officer ✅' : 'Non-officer ✖'}
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box>
+              <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                Official role
+              </Typography>
+              <Typography gutterBottom>
+                {props.isOfficer ? 'Officer ✅' : 'Non-officer ✖'}
+              </Typography>
+            </Box>
+            <Box sx={{ marginLeft: 3 }}>
+              <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                MelakaRice token allowances
+              </Typography>
+              <Typography gutterBottom>{props.allowances} tokens</Typography>
+            </Box>
+          </Box>
           <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
             Whitelisting
           </Typography>

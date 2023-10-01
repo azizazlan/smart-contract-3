@@ -87,12 +87,6 @@ export default function BasicTabs() {
             aria-label="basic tabs example"
           >
             <Tab label="Admin info" {...a11yProps(0)} />
-            <Tab
-              label="Verify"
-              icon={<SensorOccupiedIcon />}
-              iconPosition="start"
-              {...a11yProps(1)}
-            />
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
@@ -104,9 +98,6 @@ export default function BasicTabs() {
             riceTokenBal={riceTokenBal || '0'}
             riceTokenTotalSupply={riceTokenTotalSupply || '0'}
           />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <VerifyTab />
         </CustomTabPanel>
       </Box>
     );
@@ -128,7 +119,7 @@ export default function BasicTabs() {
         >
           <Tab label="Admin info" {...a11yProps(0)} />
           <Tab label="Residency" {...a11yProps(1)} />
-          <Tab label="Role" {...a11yProps(2)} />
+          <Tab label="Role & allowances" {...a11yProps(2)} />
           <Tab
             label="Verify"
             icon={<SensorOccupiedIcon />}

@@ -11,6 +11,7 @@ import applyPrivateKey from './thunks/applyPrivateKey';
 import revokeResidency from './thunks/revokeResidency';
 import revokeRole from './thunks/revokeRole';
 import checkStatus from './thunks/checkStatus';
+import approveAllowance from './thunks/approveAllowance';
 
 interface AdminState {
   submissionState: SubmissionStates;
@@ -25,6 +26,7 @@ interface AdminState {
   isClaimantOfficer: boolean;
   isClaimantWhitelisted: boolean;
   claimantPublicKey: string | null;
+  claimantAllowances: number; // no of allow tokens claimant want to apply
   isGomenOfficer: boolean;
 }
 
@@ -41,6 +43,7 @@ const initialState: AdminState = {
   isClaimantOfficer: false,
   isClaimantWhitelisted: false,
   claimantPublicKey: null,
+  claimantAllowances: 0,
   isGomenOfficer: false,
 };
 
@@ -182,9 +185,24 @@ export const adminSlice = createSlice({
         return;
       }
       state.submissionMsg = payload.message;
-      state.claimantPublicKey = payload.publicKey;
+      state.claimantPublicKey = payload.officerPublicKey;
+      state.claimantAllowances = payload.allowances;
       state.submissionState = 'OK';
     });
+    builder.addCase(approveAllowance.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+    });
+    builder.addCase(approveAllowance.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.submissionMsg = 'Error approving allowance';
+        state.submissionState = 'FAILED';
+        return;
+      }
+      state.submissionMsg = payload?.message;
+      state.submissionState = 'OK';
+    });
+
     builder.addCase(revokeRole.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
@@ -230,17 +248,27 @@ export const adminSlice = createSlice({
       state.isClaimantResident = false;
       state.isClaimantOfficer = false;
       state.isClaimantWhitelisted = false;
+      state.claimantAllowances = 0;
+    });
+    builder.addCase(checkStatus.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      console.log(action);
+      let msg = action.error?.message || 'An error occurred';
+      msg = msg.substring(0, msg.length / 3);
+      state.submissionMsg = msg;
     });
     builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
       if (!payload) {
         state.submissionMsg = 'Error message';
         state.submissionState = 'FAILED';
+        state.claimantAllowances = 0;
         return;
       }
       state.submissionMsg = payload?.message;
       state.isClaimantResident = payload.isResident;
       state.isClaimantOfficer = payload.isOfficer;
       state.isClaimantWhitelisted = payload.isWhitelisted;
+      state.claimantAllowances = payload.allowances;
       state.submissionState = 'OK';
     });
   },

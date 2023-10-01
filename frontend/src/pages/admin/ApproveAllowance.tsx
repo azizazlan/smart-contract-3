@@ -9,6 +9,24 @@ export default function ApproveAllowance() {
     (state: AdminState) => state.admin
   );
 
+  // if (submissionState === 'FAILED' && submissionMsg) {
+  //   return (
+  //     <Result
+  //       error={true}
+  //       message={submissionMsg || 'Some message after approve allowances'}
+  //     />
+  //   );
+  // }
+
+  // if (submissionState === 'OK' && submissionMsg) {
+  //   return (
+  //     <Result
+  //       error={false}
+  //       message={submissionMsg || 'Some message after approve allowances'}
+  //     />
+  //   );
+  // }
+
   return (
     <Box sx={{ marginTop: 0 }}>
       <BackdropLoader submissionState={submissionState} />

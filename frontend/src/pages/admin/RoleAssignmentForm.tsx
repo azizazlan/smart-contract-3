@@ -6,6 +6,9 @@ import {
   Divider,
   FormControl,
   FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,10 +18,12 @@ import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
 import assignRole from '../../services/admin/thunks/assignRole';
 import revokeRole from '../../services/admin/thunks/revokeRole';
+import styles from './styles';
 
 const schema = Yup.object().shape({
-  publicKey: Yup.string()
-    .required('Please key the resident public key')
+  allowances: Yup.number().required(),
+  officerPublicKey: Yup.string()
+    .required('Please key the officer public key')
     .matches(
       /^(0x)?[0-9a-fA-F]{40}$/u,
       'Invalid Ethereum public key or address'
@@ -26,7 +31,8 @@ const schema = Yup.object().shape({
 });
 
 type AssignRoleFields = {
-  publicKey: string;
+  officerPublicKey: string;
+  allowances: number;
 };
 
 export default function RoleAssignmentForm() {
@@ -42,21 +48,22 @@ export default function RoleAssignmentForm() {
   } = useForm<AssignRoleFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      publicKey: '',
+      officerPublicKey: '',
+      allowances: 1000,
     },
   });
 
   const onSubmit: SubmitHandler<AssignRoleFields> = (data) => {
-    const { publicKey } = data;
+    const { officerPublicKey, allowances } = data;
     if (!privateKey) {
       console.log('Could not dispatch because privateKey is null');
       return;
     }
     if (checkRevoke) {
-      dispatch(revokeRole({ publicKey, privateKey }));
+      dispatch(revokeRole({ publicKey: officerPublicKey, privateKey }));
       return;
     }
-    dispatch(assignRole({ publicKey, privateKey }));
+    dispatch(assignRole({ officerPublicKey, privateKey, allowances }));
   };
 
   const handleReset = () => {
@@ -66,29 +73,62 @@ export default function RoleAssignmentForm() {
   };
 
   return (
-    <div>
+    <Box sx={{ ...styles.container, marginTop: 3 }}>
       <form id="assign_revoke_role_form" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal">
           <Controller
-            name="publicKey"
+            name="officerPublicKey"
             defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
                 InputLabelProps={{ shrink: true }}
-                id="publicKey"
+                id="officerPublicKey"
                 label="Public key"
                 variant="outlined"
                 {...field}
               />
             )}
           />
-          {errors.publicKey ? (
-            <FormHelperText error>{errors.publicKey.message}</FormHelperText>
+          {errors.officerPublicKey ? (
+            <FormHelperText error>
+              {errors.officerPublicKey.message}
+            </FormHelperText>
           ) : (
             <FormHelperText>
               Resident public key. Eg:
               0xd4C94252d9a182FBEd2b0576F07778470F2h2835
+            </FormHelperText>
+          )}
+        </FormControl>
+        <FormControl fullWidth margin="dense">
+          <InputLabel id="allowance-label">
+            Number of allowance tokens
+          </InputLabel>
+          <Controller
+            name="allowances"
+            control={control}
+            render={({ field }) => (
+              <Select
+                fullWidth
+                labelId="allowance-label"
+                id="allowance"
+                label="Number of allowance tokens"
+                {...field}
+              >
+                <MenuItem value={1000} selected>
+                  1,000
+                </MenuItem>
+                <MenuItem value={10000}>10,000</MenuItem>
+                <MenuItem value={100000}>100,000</MenuItem>
+              </Select>
+            )}
+          />
+          {errors.allowances ? (
+            <FormHelperText error>{errors.allowances?.message}</FormHelperText>
+          ) : (
+            <FormHelperText>
+              Number of allowance token to approve
             </FormHelperText>
           )}
         </FormControl>
@@ -116,9 +156,9 @@ export default function RoleAssignmentForm() {
           color="primary"
           onClick={() => setCheckRevoke(false)}
         >
-          approve & assign
+          assign
         </Button>
       </Box>
-    </div>
+    </Box>
   );
 }

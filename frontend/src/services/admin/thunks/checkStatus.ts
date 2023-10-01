@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { ethers } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import melakaRiceJSON from '../../../assets/artifacts/contracts/MelakaRice.sol/MelakaRice.json';
 
 const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
   ethers.utils.toUtf8Bytes('GOVERNMENT_OFFICER_ROLE')
@@ -11,27 +12,37 @@ const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
 
+const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
+
 type CheckStatusFields = {
   nric: string;
   publicKey: string;
+  privateKey: string;
 };
 
 const checkStatus = createAsyncThunk(
   'admin_check_status',
   async (props: CheckStatusFields) => {
-    const { nric, publicKey } = props;
+    const { nric, publicKey, privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
       return;
     }
     const web3Provider = new ethers.providers.Web3Provider(provider);
+    const metaMaskWallet = new Wallet(privateKey, web3Provider);
 
     const contract = new ethers.Contract(
       MELAKA_RESIDENT_CONTRACT_ADDR,
       contractABI.abi,
       web3Provider
     );
+    const melakaRice = new ethers.Contract(
+      MELAKA_RICE_CONTRACT_ADDR,
+      melakaRiceJSON.abi,
+      web3Provider
+    );
+
     const isOfficer = await contract.hasRole(
       GOVERNMENT_OFFICER_ROLE,
       publicKey
@@ -44,6 +55,12 @@ const checkStatus = createAsyncThunk(
 
     const isWhitelisted = await contract.isResidentWhitelisted(publicKey);
 
+    const bnallowances = await melakaRice.allowance(
+      metaMaskWallet.address,
+      publicKey
+    );
+    const allowances = bnallowances.toNumber();
+
     const message = `Resident status: ${
       isResident ? 'Resident' : 'Non-resident'
     } Official role: ${isOfficer ? 'Officer' : 'Non-officer'} Whitelisting: ${
@@ -54,6 +71,7 @@ const checkStatus = createAsyncThunk(
       isResident,
       isOfficer,
       isWhitelisted,
+      allowances,
       message,
     };
   }

@@ -64,6 +64,7 @@ export default function TransferTokenForm() {
   const onSubmit: SubmitHandler<TransferTokenFormFields> = (data) => {
     const { recipientPublicKey } = data;
     // dispatch(applyPrivateKey({ privateKey }));
+    console.log(recipientPublicKey);
   };
 
   const handleReset = () => {

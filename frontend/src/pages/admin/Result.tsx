@@ -10,12 +10,16 @@ import { useAdminDispatch } from '../../services/hook';
 import { resetSubmission } from '../../services/admin/reducer';
 
 type ResultProps = {
+  title?: string;
   message: string;
   error: boolean;
+  handleClickApprove?: () => void;
 };
 
 export default function Result(props: ResultProps) {
   const dispatch = useAdminDispatch();
+
+  const { title, error, message, handleClickApprove } = props;
 
   const handleClose = () => {
     dispatch(resetSubmission());
@@ -25,17 +29,22 @@ export default function Result(props: ResultProps) {
     <Box sx={{ margin: 2 }}>
       <Card sx={{ minWidth: 275, backgroundColor: '#f5f6fa' }}>
         <CardHeader
-          title="Award residency"
-          sx={{ color: `${props.error ? 'red' : '#273c75'}` }}
+          title={title ? title : 'Award residency'}
+          sx={{ color: `${error ? 'red' : '#273c75'}` }}
         />
-        {!props.error ? (
-          <CardContent>{props.message}</CardContent>
+        {!error ? (
+          <CardContent>{message}</CardContent>
         ) : (
           <CardContent sx={{ color: 'red' }}>{props.message}</CardContent>
         )}
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flexGrow: 1 }} />
           <Button onClick={handleClose}>close</Button>
+          {handleClickApprove ? (
+            <Button variant="contained" onClick={handleClickApprove}>
+              approve
+            </Button>
+          ) : null}
         </CardActions>
       </Card>
     </Box>

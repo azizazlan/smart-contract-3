@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Footer from '../Footer';
 import DrawerMenu from './DrawerMenu';
-import QrCodeDlg from '../resident/QrDialog';
 import ClearCacheDlg from '../../dialogs/ClearCacheDlg';
 import { useOfficialDispatch, useResidentDispatch } from '../../services/hook';
 import { default as clearResidentLocalSto } from '../../services/resident/thunks/clearLocalSto';
@@ -20,15 +19,10 @@ function Appbar() {
   const pathName = useLocation().pathname;
 
   const [openDrawer, setOpenDrawer] = React.useState(false);
-  const [openQrCode, setOpenQrCode] = React.useState(false);
   const [openClearCache, setOpenClearCache] = React.useState(false);
 
   const toggleDrawer = () => {
     setOpenDrawer((o) => !o);
-  };
-
-  const toggleQrCode = () => {
-    setOpenQrCode((o) => !o);
   };
 
   const toggleClearCache = () => {
@@ -46,7 +40,6 @@ function Appbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <QrCodeDlg open={openQrCode} handleClose={toggleQrCode} />
       <ClearCacheDlg
         open={openClearCache}
         handleClose={toggleClearCache}
@@ -76,7 +69,6 @@ function Appbar() {
       <DrawerMenu
         openDrawer={openDrawer}
         toggleDrawer={toggleDrawer}
-        toggleQrCode={toggleQrCode}
         toggleClearCache={toggleClearCache}
       />
     </Box>

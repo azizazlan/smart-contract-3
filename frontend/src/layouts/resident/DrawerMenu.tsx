@@ -5,7 +5,6 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
 import QrCodeIcon from '@mui/icons-material/QrCode';

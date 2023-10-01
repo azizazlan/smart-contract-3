@@ -206,6 +206,7 @@ describe("MelakaResident and MelakaRice", function () {
       await melakaResident.addResidentWhitelist(resident1.address, nric1);
       const oneToken = BigNumber.from("1");
       await melakaRice.approve(officer1.address, oneToken);
+
       await melakaRice
         .connect(officer1)
         .transferFrom(officer1.address, resident1.address, oneToken);

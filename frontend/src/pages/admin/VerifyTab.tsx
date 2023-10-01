@@ -13,6 +13,7 @@ export default function VerifyTab() {
     isClaimantOfficer,
     isClaimantResident,
     isClaimantWhitelisted,
+    claimantAllowances,
   } = useAdminSelector((state: AdminState) => state.admin);
 
   if (submissionState === 'FAILED' && submissionMsg) {
@@ -24,6 +25,7 @@ export default function VerifyTab() {
       <ResultStatus
         isResident={isClaimantResident}
         isOfficer={isClaimantOfficer}
+        allowances={claimantAllowances}
         isWhitelisted={isClaimantWhitelisted}
         error={false}
         message={submissionMsg}

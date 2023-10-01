@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BigNumber, ethers, Wallet } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 import mlkResidentContractJSON from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
 import mlkRiceContractJSON from '../../../assets/artifacts/contracts/MelakaRice.sol/MelakaRice.json';

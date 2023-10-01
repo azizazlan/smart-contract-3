@@ -1,9 +1,6 @@
-import React from 'react';
 import {
   Box,
-  TextField,
   Button,
-  Divider,
   FormControl,
   FormHelperText,
   InputLabel,
@@ -15,93 +12,65 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
-import { resetSubmission } from '../../services/admin/reducer';
-import assignRole from '../../services/admin/thunks/assignRole';
-import revokeRole from '../../services/admin/thunks/revokeRole';
 import approveAllowance from '../../services/admin/thunks/approveAllowance';
+import styles from './styles';
 
 const schema = Yup.object().shape({
-  // publicKey: Yup.string()
-  //   .required('Please key the resident public key')
-  //   .matches(
-  //     /^(0x)?[0-9a-fA-F]{40}$/u,
-  //     'Invalid Ethereum public key or address'
-  //   ),
-  seedPhrase: Yup.string().required('Please key in officer seed phrase'),
-  allowance: Yup.number() // Specify that it should be a number
+  allowances: Yup.number() // Specify that it should be a number
     .required('Please set the total allowance tokens')
     .integer('Allowance must be an integer') // Optionally, you can enforce it to be an integer
     .min(0, 'Allowance must be greater than or equal to 0'), // Optionally, set a minimum value
 });
 
 type AllowanceFields = {
-  seedPhrase: string;
-  allowance: number;
+  allowances: number;
 };
 
 export default function ApproveAllowanceForm() {
   const dispatch = useAdminDispatch();
-  const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
+  const { privateKey, claimantPublicKey } = useAdminSelector(
+    (state: AdminState) => state.admin
+  );
 
   const {
-    reset,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<AllowanceFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      allowance: 1000,
+      allowances: 1000,
     },
   });
 
   const onSubmit: SubmitHandler<AllowanceFields> = (data) => {
-    const { seedPhrase, allowance } = data;
-    if (!privateKey) {
-      console.log(`privateKey is null`);
+    const { allowances } = data;
+    if (!privateKey || !claimantPublicKey) {
+      console.log(`privateKey or claimantPublicKey is null`);
       return;
     }
-    dispatch(approveAllowance({ seedPhrase, allowance, privateKey }));
-  };
-
-  const handleReset = () => {
-    reset();
-    dispatch(resetSubmission());
+    dispatch(
+      approveAllowance({
+        officerPublicKey: claimantPublicKey,
+        allowances,
+        privateKey,
+      })
+    );
   };
 
   return (
-    <div>
+    <Box sx={{ ...styles.container, marginTop: 3 }}>
       <form id="approve_allowance_form" onSubmit={handleSubmit(onSubmit)}>
-        <FormControl fullWidth margin="normal" sx={{ flexGrow: 1 }}>
-          <Controller
-            name="seedPhrase"
-            defaultValue=""
-            control={control}
-            render={({ field }) => (
-              <TextField
-                InputLabelProps={{ shrink: true }}
-                id="seedPhrase"
-                label="Officer seed phrase"
-                variant="outlined"
-                {...field}
-              />
-            )}
-          />
-          {errors.seedPhrase ? (
-            <FormHelperText error>{errors.seedPhrase.message}</FormHelperText>
-          ) : (
-            <FormHelperText>Office seed phrase</FormHelperText>
-          )}
-        </FormControl>
         <FormControl fullWidth margin="dense">
           <InputLabel id="allowance-label">
             Number of allowance tokens
           </InputLabel>
           <Controller
-            name="allowance"
+            name="allowances"
             control={control}
             render={({ field }) => (
               <Select
+                fullWidth
                 labelId="allowance-label"
                 id="allowance"
                 label="Number of allowance tokens"
@@ -113,8 +82,8 @@ export default function ApproveAllowanceForm() {
               </Select>
             )}
           />
-          {errors.allowance ? (
-            <FormHelperText error>{errors.allowance?.message}</FormHelperText>
+          {errors.allowances ? (
+            <FormHelperText error>{errors.allowances?.message}</FormHelperText>
           ) : (
             <FormHelperText>
               Number of allowance token to approve
@@ -124,10 +93,6 @@ export default function ApproveAllowanceForm() {
       </form>
       <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: 3 }}>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant="outlined" color="secondary" onClick={handleReset}>
-          reset
-        </Button>
-        <Divider sx={{ minWidth: 7 }} />
         <Button
           type="submit"
           form="approve_allowance_form"
@@ -137,6 +102,6 @@ export default function ApproveAllowanceForm() {
           approve
         </Button>
       </Box>
-    </div>
+    </Box>
   );
 }

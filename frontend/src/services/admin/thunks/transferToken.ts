@@ -4,16 +4,9 @@ import { ethers, Wallet, BigNumber } from 'ethers';
 
 import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
-import { TodayOutlined } from '@mui/icons-material';
-
-const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes('GOVERNMENT_OFFICER_ROLE')
-);
 
 const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENT;
-
-const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
 
 type TransferTokenFields = {
   recipientPublicKey: string;

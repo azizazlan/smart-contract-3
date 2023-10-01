@@ -9,7 +9,6 @@ import LinkIcon from '@mui/icons-material/Link';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import QrCodeIcon from '@mui/icons-material/QrCode';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { Typography } from '@mui/material';
@@ -19,13 +18,11 @@ type DrawerMenuProps = {
   openDrawer: boolean;
   toggleDrawer: () => void;
   toggleClearCache: () => void;
-  toggleQrCode: () => void;
 };
 
 export default function DrawerMenu({
   openDrawer,
   toggleDrawer,
-  toggleQrCode,
   toggleClearCache,
 }: DrawerMenuProps) {
   const list = () => (
@@ -45,20 +42,6 @@ export default function DrawerMenu({
               primary={
                 <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
                   Account
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="QrCodeDlg" disablePadding>
-          <ListItemButton onClick={toggleQrCode}>
-            <ListItemIcon>
-              <QrCodeIcon sx={{ color: 'grey' }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-                  QR code
                 </Typography>
               }
             />
