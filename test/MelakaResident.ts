@@ -157,39 +157,25 @@ describe("MelakaResident and MelakaRice", function () {
     });
   });
 
-  describe("Transfer FT MelakaRice to officer", function () {
-    it("Should revert when resident has yet in whitelist", async function () {
-      const { melakaResident, resident1 } = await loadFixture(deployContracts);
-      await expect(melakaResident.transferFTToResident(resident1.address)).to.be
-        .reverted;
-      await expect(
-        melakaResident.transferFTToResident(resident1.address)
-      ).to.be.rejectedWith("Resident not in whitelist");
-    });
-    it("Should fail when attempt to transfer more than total supply", async function () {
-      const { melakaResident, melakaRice, officer1, officer2 } =
-        await loadFixture(deployContracts);
-
-      const exceedTokens = BigNumber.from("1000001");
-      await melakaResident.grantRole(GOVERNMENT_OFFICER_ROLE, officer2.address);
-      await expect(
-        melakaResident
-          .connect(officer1)
-          .transferFTToOfficer(officer2.address, exceedTokens)
-      ).to.be.reverted;
-    });
-    it("Officer should receive FT", async function () {
-      const { melakaResident, melakaRice, officer1, officer2 } =
-        await loadFixture(deployContracts);
-
-      const oneToken = BigNumber.from("1");
-      await melakaRice.approve(melakaResident.address, oneToken);
-      await melakaResident.grantRole(GOVERNMENT_OFFICER_ROLE, officer2.address);
-      await melakaResident
-        .connect(officer1)
-        .transferFTToOfficer(officer2.address, oneToken);
-    });
-  });
+  // describe("Transfer FT MelakaRice to officer", function () {
+  //   it("Should revert when resident has yet in whitelist", async function () {
+  //     const { melakaResident, resident1 } = await loadFixture(deployContracts);
+  //     await expect(melakaResident.transferFTToResident(resident1.address)).to.be
+  //       .reverted;
+  //     await expect(
+  //       melakaResident.transferFTToResident(resident1.address)
+  //     ).to.be.rejectedWith("Resident not in whitelist");
+  //   });
+  //   it("Officer should receive FT", async function () {
+  //     const { melakaResident, melakaRice, officer1, officer2 } =
+  //       await loadFixture(deployContracts);
+  //     const oneToken = BigNumber.from("1001");
+  //     await melakaRice.approve(melakaResident.address, oneToken);
+  //     await melakaResident.connect(officer1).awardAsOfficer(officer2.address);
+  //     const allowance = await melakaRice.balanceOf(officer2.address);
+  //     await expect(allowance).equals(1000);
+  //   });
+  // });
 
   describe("Transfer FT MelakaRice to resident", function () {
     it("Non-resident fail to receive FT from authorised officer", async function () {
@@ -198,32 +184,34 @@ describe("MelakaResident and MelakaRice", function () {
 
       const oneToken = BigNumber.from("1");
       await melakaRice.approve(melakaResident.address, oneToken);
-      await expect(
-        melakaResident.connect(officer1).transferFTToResident(resident1.address)
-      ).to.be.revertedWith("Resident not in whitelist");
     });
     it("Resident fail to receive FT from non officer", async function () {
       const { melakaResident, melakaRice, officer2, resident1 } =
         await loadFixture(deployContracts);
+      const nric1 = ethers.utils.formatBytes32String("760119097876");
+      await melakaResident.addResidentWhitelist(resident1.address, nric1);
 
       const oneToken = BigNumber.from("1");
-      await melakaRice.approve(melakaResident.address, oneToken);
       await expect(
-        melakaResident.connect(officer2).transferFTToResident(resident1.address)
+        melakaRice
+          .connect(officer2)
+          .transferFrom(officer2.address, resident1.address, oneToken)
       ).to.be.reverted;
     });
 
-    it("Resident should to receive FT from  officer", async function () {
+    it("Resident should receive FT from officer1", async function () {
       const { melakaResident, melakaRice, officer1, officer2, resident1 } =
         await loadFixture(deployContracts);
       const nric1 = ethers.utils.formatBytes32String("760119097876");
       await melakaResident.addResidentWhitelist(resident1.address, nric1);
       const oneToken = BigNumber.from("1");
-      await melakaRice.approve(melakaResident.address, oneToken);
-      await melakaResident
+      await melakaRice.approve(officer1.address, oneToken);
+      await melakaRice
         .connect(officer1)
-        .transferFTToResident(resident1.address);
-      await expect(await melakaRice.balanceOf(resident1.address)).equals(1);
+        .transferFrom(officer1.address, resident1.address, oneToken);
+      await expect(await melakaRice.balanceOf(resident1.address)).equals(
+        oneToken
+      );
     });
 
     it("Resident should receive FT from another officer2", async function () {
@@ -231,37 +219,25 @@ describe("MelakaResident and MelakaRice", function () {
         await loadFixture(deployContracts);
       const nric1 = ethers.utils.formatBytes32String("760119097876");
       await melakaResident.addResidentWhitelist(resident1.address, nric1);
-      const oneToken = BigNumber.from("1000000000000000000");
 
-      // grant roles
-      await melakaResident
-        .connect(officer1)
-        .grantRole(MINTER_ROLE, officer2.address);
-      await melakaResident
-        .connect(officer1)
-        .grantRole(GOVERNMENT_OFFICER_ROLE, officer2.address);
-
-      // 2 layer approve !!!
+      const allowedTokens = BigNumber.from("10000");
       await melakaRice
         .connect(officer1)
-        .approve(melakaResident.address, oneToken);
+        .approve(officer2.address, allowedTokens);
+
+      const allowances = await melakaRice.allowance(
+        officer1.address,
+        officer2.address
+      );
+      // console.log(allowances);
+
+      const oneToken = BigNumber.from("1");
       await melakaRice
         .connect(officer2)
-        .approve(melakaResident.address, oneToken);
+        .transferFrom(officer1.address, resident1.address, oneToken);
 
-      // Transfer token to the new officer
-      await melakaResident
-        .connect(officer1)
-        .transferFTToOfficer(officer2.address, oneToken);
-
-      // Transfer  to resident
-      await melakaResident
-        .connect(officer2)
-        .transferFTToResident(resident1.address);
-
-      // Now check the balance of resident1
-      const resident1Balance = await melakaRice.balanceOf(resident1.address);
-      expect(resident1Balance).to.equal(1);
+      const resBal = await melakaRice.balanceOf(resident1.address);
+      await expect(resBal).equals(oneToken);
     });
   });
 

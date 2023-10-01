@@ -121,28 +121,6 @@ contract MelakaResident is ERC721, ERC721Enumerable, AccessControl {
             whitelistedResidentNrics[residentNric];
     }
 
-    function transferFTToResident(address to) external onlyRole(MINTER_ROLE) {
-        require(isResidentWhitelisted(to), "Resident not in whitelist");
-
-        // Transfer an FT from this contract to the specified address
-        MelakaRice nftContract = MelakaRice(ftContractAddress);
-        nftContract.transferFrom(msg.sender, to, 1);
-    }
-
-    function transferFTToOfficer(
-        address to,
-        uint256 units
-    ) external onlyRole(MINTER_ROLE) {
-        require(
-            hasRole(GOVERNMENT_OFFICER_ROLE, to),
-            "Recipient is not an officer"
-        );
-
-        // Transfer an FT from this contract to the specified address
-        MelakaRice nftContract = MelakaRice(ftContractAddress);
-        nftContract.transferFrom(msg.sender, to, units);
-    }
-
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(
