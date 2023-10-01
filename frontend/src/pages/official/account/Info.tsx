@@ -13,12 +13,20 @@ import Balance from './Balance';
 import Status from './Status';
 import ethBal from '../../../services/official/thunks/ethBal';
 import initialize from '../../../services/official/thunks/initialize';
+import allowanceTokens from '../../../services/official/thunks/allowanceTokens';
 
 // Official info page
 export default function Info() {
   const dispatch = useOfficialDispatch();
-  const { publicKey, seedPhrase, nric, etherBal, isResident, isOfficer } =
-    useOfficialSelector((state: OfficialState) => state.official);
+  const {
+    publicKey,
+    seedPhrase,
+    nric,
+    etherBal,
+    isResident,
+    isOfficer,
+    allowTokens,
+  } = useOfficialSelector((state: OfficialState) => state.official);
 
   React.useEffect(() => {
     dispatch(initialize());
@@ -54,6 +62,18 @@ export default function Info() {
     );
   };
 
+  const handleAllowsBal = () => {
+    if (!publicKey) {
+      console.log('Could not dispatch because publicKey is null');
+      return;
+    }
+    dispatch(
+      allowanceTokens({
+        publicKey,
+      })
+    );
+  };
+
   return (
     <Box sx={styles.container}>
       <Box sx={{ marginTop: 3 }}>
@@ -68,6 +88,8 @@ export default function Info() {
           publicKey={publicKey || 'NA'}
           etherBal={etherBal}
           handleReloadBal={handleReloadBal}
+          allowTokens={allowTokens}
+          handleAllowsBal={handleAllowsBal}
         />
       </Box>
     </Box>

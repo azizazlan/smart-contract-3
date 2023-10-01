@@ -13,10 +13,14 @@ export default function Balance({
   etherBal,
   publicKey,
   handleReloadBal,
+  allowTokens,
+  handleAllowsBal,
 }: {
   etherBal: string;
   publicKey: string;
+  allowTokens: string;
   handleReloadBal: () => void;
+  handleAllowsBal: () => void;
 }) {
   const [isCopied, setIsCopied] = React.useState(false);
 
@@ -116,9 +120,9 @@ export default function Balance({
               fontSize: '16pt',
             }}
           >
-            0
+            {allowTokens}
           </Typography>
-          <IconButton onClick={handleReloadBal}>
+          <IconButton onClick={handleAllowsBal}>
             <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
           </IconButton>
         </Box>

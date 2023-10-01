@@ -12,6 +12,7 @@ import revokeResidency from './thunks/revokeResidency';
 import removeWhitelist from './thunks/removeWhitelist';
 import restore from './thunks/restore';
 import clearLocalSto from './thunks/clearLocalSto';
+import allowanceTokens from './thunks/allowanceTokens';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -26,6 +27,7 @@ interface OfficialState {
   isOfficer: boolean;
   isClaimResident: boolean;
   isClaimWhitelisted: boolean;
+  allowTokens: string;
 }
 
 const initialState: OfficialState = {
@@ -41,6 +43,7 @@ const initialState: OfficialState = {
   isResident: false,
   isClaimResident: false,
   isClaimWhitelisted: false,
+  allowTokens: '0',
 };
 
 export const officialSlice = createSlice({
@@ -194,6 +197,16 @@ export const officialSlice = createSlice({
       state.publicKey = null;
       state.seedPhrase = null;
       state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(allowanceTokens.pending, (state, {}) => {
+      state.allowTokens = '...';
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(allowanceTokens.fulfilled, (state, { payload }) => {
+      state.submissionMsg = payload.message;
+      state.allowTokens = payload.allowances;
       state.submissionState = 'OK';
     });
   },
