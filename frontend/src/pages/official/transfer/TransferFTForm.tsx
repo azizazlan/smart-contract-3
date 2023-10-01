@@ -6,9 +6,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { isMobile } from 'react-device-detect';
 
 import styles from './styles';
 import InsufficientEthAlert from '../../../commons/InsufficientEthAlert';
@@ -16,6 +18,12 @@ import { useOfficialSelector } from '../../../services/hook';
 import { OfficialState } from '../../../services/store';
 
 const schema = Yup.object().shape({
+  nric: Yup.string()
+    .required('Please key in your NRIC')
+    .test('valid-nric', 'NRIC must be at least 12 digits numbers', (value) => {
+      if (!value) return false; // Skip validation if the value is empty or undefined
+      return /^[0-9]{12,}$/.test(value);
+    }),
   publicKey: Yup.string()
     .required('Please key the resident public key')
     .matches(
@@ -25,6 +33,7 @@ const schema = Yup.object().shape({
 });
 
 type TransferFTFields = {
+  nric: string;
   publicKey: string;
 };
 
@@ -38,6 +47,7 @@ export default function TransferFTForm() {
   } = useForm<TransferFTFields>({
     resolver: yupResolver(schema),
     defaultValues: {
+      nric: '',
       publicKey: '',
     },
   });
@@ -48,7 +58,7 @@ export default function TransferFTForm() {
   );
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
-    const { publicKey } = data;
+    const { nric, publicKey } = data;
     console.log(publicKey);
   };
 
@@ -63,6 +73,30 @@ export default function TransferFTForm() {
         Transfer rice token
       </Typography>
       <form id="official_transfer_ft" onSubmit={handleSubmit(onSubmit)}>
+        <FormControl fullWidth margin="normal" variant="outlined">
+          <Controller
+            name="nric"
+            defaultValue=""
+            control={control}
+            render={({ field }) => (
+              <TextField
+                type="number"
+                placeholder="845678910112"
+                InputLabelProps={{ shrink: true }}
+                label="NRIC"
+                id="nric"
+                {...field}
+              />
+            )}
+          />
+          {errors.nric ? (
+            <FormHelperText error>{errors.nric.message}</FormHelperText>
+          ) : (
+            <FormHelperText>
+              * 12 digits without hyphens or any symbol.
+            </FormHelperText>
+          )}
+        </FormControl>
         <FormControl fullWidth margin="normal">
           <Controller
             name="publicKey"
@@ -91,23 +125,31 @@ export default function TransferFTForm() {
           </Box>
         </FormControl>
       </form>
-      <Box sx={styles.formButtons}>
+      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
         <Button
-          type="submit"
-          form="official_transfer_ft"
-          fullWidth
-          variant="contained"
+          endIcon={<CameraIcon />}
+          fullWidth={isMobile ? true : false}
+          variant="outlined"
         >
-          transfer
+          scan
         </Button>
-        <Box sx={{ height: 12 }} />
+        <Box sx={{ flexGrow: 1 }} />
         <Button
-          fullWidth
+          fullWidth={isMobile ? true : false}
           variant="outlined"
           color="secondary"
           onClick={handleReset}
         >
           reset
+        </Button>
+        <Box sx={{ height: 12, width: 12 }} />
+        <Button
+          type="submit"
+          form="official_transfer_ft"
+          fullWidth={isMobile ? true : false}
+          variant="contained"
+        >
+          transfer
         </Button>
       </Box>
     </Box>

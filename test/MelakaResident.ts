@@ -218,8 +218,8 @@ describe("MelakaResident and MelakaRice", function () {
     it("Resident should receive FT from another officer2", async function () {
       const { melakaResident, melakaRice, officer1, officer2, resident1 } =
         await loadFixture(deployContracts);
-      const nric1 = ethers.utils.formatBytes32String("760119097876");
-      await melakaResident.addResidentWhitelist(resident1.address, nric1);
+      // const nric1 = ethers.utils.formatBytes32String("760119097876");
+      // await melakaResident.addResidentWhitelist(resident1.address, nric1);
 
       const allowedTokens = BigNumber.from("10000");
       await melakaRice
