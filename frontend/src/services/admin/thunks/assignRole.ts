@@ -15,13 +15,12 @@ const RESIDENTID_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
 type AssignRoleFields = {
   officerPublicKey: string;
   privateKey: string;
-  allowances: number;
 };
 
 const assignRole = createAsyncThunk(
   'admin_assign_role',
   async (props: AssignRoleFields) => {
-    const { officerPublicKey, privateKey, allowances } = props;
+    const { officerPublicKey, privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
@@ -42,7 +41,6 @@ const assignRole = createAsyncThunk(
 
     return {
       officerPublicKey,
-      allowances,
       message: `Successfully assigned role as goverment officer to ${truncateEthAddr(
         officerPublicKey
       )}. This will take effect in about 15 seconds!`,

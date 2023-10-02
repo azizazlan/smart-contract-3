@@ -12,6 +12,7 @@ import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
 import contractInfo from '../../services/admin/thunks/contractInfo';
 import { resetSubmission } from '../../services/admin/reducer';
 import VerifyTab from './VerifyTab';
+import AllowanceTab from './AllowanceTab';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -119,12 +120,13 @@ export default function BasicTabs() {
         >
           <Tab label="Admin info" {...a11yProps(0)} />
           <Tab label="Resident ID" {...a11yProps(1)} />
-          <Tab label="Role & allowances" {...a11yProps(2)} />
+          <Tab label="Role" {...a11yProps(2)} />
+          <Tab label="Allowance" {...a11yProps(3)} />
           <Tab
             label="Verify"
             icon={<SensorOccupiedIcon />}
             iconPosition="start"
-            {...a11yProps(3)}
+            {...a11yProps(4)}
           />
         </Tabs>
       </Box>
@@ -145,6 +147,9 @@ export default function BasicTabs() {
         <RoleAssignmentTab />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
+        <AllowanceTab />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={4}>
         <VerifyTab />
       </CustomTabPanel>
     </Box>

@@ -15,3 +15,36 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+        <FormControl fullWidth margin="dense">
+          <InputLabel id="allowance-label">
+            Number of allowance tokens
+          </InputLabel>
+          <Controller
+            name="allowances"
+            control={control}
+            render={({ field }) => (
+              <Select
+                fullWidth
+                labelId="allowance-label"
+                id="allowance"
+                label="Number of allowance tokens"
+                {...field}
+              >
+                <MenuItem value={1000} selected>
+                  1,000
+                </MenuItem>
+                <MenuItem value={10000}>10,000</MenuItem>
+                <MenuItem value={100000}>100,000</MenuItem>
+              </Select>
+            )}
+          />
+          {errors.allowances ? (
+            <FormHelperText error>{errors.allowances?.message}</FormHelperText>
+          ) : (
+            <FormHelperText>
+              Number of allowance MelakaSubsidy rice and wheat flour tokens to
+              approve
+            </FormHelperText>
+          )}
+        </FormControl>

@@ -19,7 +19,6 @@ import assignRole from '../../services/admin/thunks/assignRole';
 import styles from './styles';
 
 const schema = Yup.object().shape({
-  allowances: Yup.number().required(),
   officerPublicKey: Yup.string()
     .required('Please key the officer public key')
     .matches(
@@ -30,7 +29,6 @@ const schema = Yup.object().shape({
 
 type AssignRoleFields = {
   officerPublicKey: string;
-  allowances: number;
 };
 
 export default function RoleAssignmentForm() {
@@ -46,17 +44,16 @@ export default function RoleAssignmentForm() {
     resolver: yupResolver(schema),
     defaultValues: {
       officerPublicKey: '',
-      allowances: 1000,
     },
   });
 
   const onSubmit: SubmitHandler<AssignRoleFields> = (data) => {
-    const { officerPublicKey, allowances } = data;
+    const { officerPublicKey } = data;
     if (!privateKey) {
       console.log('Could not dispatch because privateKey is null');
       return;
     }
-    dispatch(assignRole({ officerPublicKey, privateKey, allowances }));
+    dispatch(assignRole({ officerPublicKey, privateKey }));
   };
 
   const handleReset = () => {
@@ -93,38 +90,6 @@ export default function RoleAssignmentForm() {
             </FormHelperText>
           )}
         </FormControl>
-        <FormControl fullWidth margin="dense">
-          <InputLabel id="allowance-label">
-            Number of allowance tokens
-          </InputLabel>
-          <Controller
-            name="allowances"
-            control={control}
-            render={({ field }) => (
-              <Select
-                fullWidth
-                labelId="allowance-label"
-                id="allowance"
-                label="Number of allowance tokens"
-                {...field}
-              >
-                <MenuItem value={1000} selected>
-                  1,000
-                </MenuItem>
-                <MenuItem value={10000}>10,000</MenuItem>
-                <MenuItem value={100000}>100,000</MenuItem>
-              </Select>
-            )}
-          />
-          {errors.allowances ? (
-            <FormHelperText error>{errors.allowances?.message}</FormHelperText>
-          ) : (
-            <FormHelperText>
-              Number of allowance MelakaSubsidy rice and wheat flour tokens to
-              approve
-            </FormHelperText>
-          )}
-        </FormControl>
       </form>
       <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: 3 }}>
         <Box sx={{ flexGrow: 1 }} />
@@ -138,7 +103,7 @@ export default function RoleAssignmentForm() {
           variant="contained"
           color="primary"
         >
-          approve
+          assign
         </Button>
       </Box>
     </Box>
