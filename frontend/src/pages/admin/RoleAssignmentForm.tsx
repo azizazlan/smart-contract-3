@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   TextField,
@@ -17,7 +16,6 @@ import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
 import assignRole from '../../services/admin/thunks/assignRole';
-import revokeRole from '../../services/admin/thunks/revokeRole';
 import styles from './styles';
 
 const schema = Yup.object().shape({
@@ -36,7 +34,6 @@ type AssignRoleFields = {
 };
 
 export default function RoleAssignmentForm() {
-  const [checkRevoke, setCheckRevoke] = React.useState(false);
   const dispatch = useAdminDispatch();
   const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
 
@@ -59,17 +56,12 @@ export default function RoleAssignmentForm() {
       console.log('Could not dispatch because privateKey is null');
       return;
     }
-    if (checkRevoke) {
-      dispatch(revokeRole({ publicKey: officerPublicKey, privateKey }));
-      return;
-    }
     dispatch(assignRole({ officerPublicKey, privateKey, allowances }));
   };
 
   const handleReset = () => {
     reset();
     dispatch(resetSubmission());
-    setCheckRevoke(false);
   };
 
   return (
@@ -128,7 +120,8 @@ export default function RoleAssignmentForm() {
             <FormHelperText error>{errors.allowances?.message}</FormHelperText>
           ) : (
             <FormHelperText>
-              Number of allowance token to approve
+              Number of allowance MelakaSubsidy rice and wheat flour tokens to
+              approve
             </FormHelperText>
           )}
         </FormControl>
@@ -143,20 +136,9 @@ export default function RoleAssignmentForm() {
           type="submit"
           form="assign_revoke_role_form"
           variant="contained"
-          color="secondary"
-          onClick={() => setCheckRevoke(true)}
-        >
-          revoke
-        </Button>
-        <Divider sx={{ minWidth: 7 }} />
-        <Button
-          type="submit"
-          form="assign_revoke_role_form"
-          variant="contained"
           color="primary"
-          onClick={() => setCheckRevoke(false)}
         >
-          assign
+          approve
         </Button>
       </Box>
     </Box>

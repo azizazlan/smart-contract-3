@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   TextField,
@@ -11,18 +10,14 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAdminDispatch, useAdminSelector } from '../../services/hook';
-import awardResident from '../../services/admin/thunks/awardResident';
+import awardResidentId from '../../services/admin/thunks/awardResidentId';
 import { AdminState } from '../../services/store';
 import { resetSubmission } from '../../services/admin/reducer';
-import revokeResidency from '../../services/admin/thunks/revokeResidency';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
     .required('Please key in the resident NRIC')
-    .test('valid-nric', 'NRIC must be at least 12 digits numbers', (value) => {
-      if (!value) return false; // Skip validation if the value is empty or undefined
-      return /^[0-9]{12,}$/.test(value);
-    }),
+    .matches(/^\d{12,14}$/, 'NRIC must be between 12 and 14 digits'),
   publicKey: Yup.string()
     .required('Please key the resident public key')
     .matches(
@@ -36,8 +31,7 @@ type ResidentAwardFields = {
   publicKey: string;
 };
 
-export default function ResidentForm() {
-  const [toRevoke, setToRevoke] = React.useState(false);
+export default function ResidentIdForm() {
   const dispatch = useAdminDispatch();
   const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
   const {
@@ -64,11 +58,9 @@ export default function ResidentForm() {
       console.log('One of the param is null');
       return;
     }
-    if (toRevoke) {
-      dispatch(revokeResidency({ publicKey, privateKey, nric }));
-      return;
-    }
-    dispatch(awardResident({ publicKey, privateKey, nric }));
+    dispatch(
+      awardResidentId({ nric: parseInt(nric, 10), publicKey, privateKey })
+    );
   };
 
   return (
@@ -128,18 +120,6 @@ export default function ResidentForm() {
         </Button>
         <Divider sx={{ minWidth: 7 }} />
         <Button
-          color="secondary"
-          onClick={() => setToRevoke(true)}
-          type="submit"
-          form="award_resident_form"
-          variant="contained"
-          aria-label="status"
-        >
-          revoke
-        </Button>
-        <Divider sx={{ minWidth: 7 }} />
-        <Button
-          onClick={() => setToRevoke(false)}
           type="submit"
           form="award_resident_form"
           variant="contained"

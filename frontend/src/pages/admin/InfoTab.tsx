@@ -8,14 +8,14 @@ import truncateEthAddr from '../../utils/truncateEthAddr';
 import NonOwnerAlert from './NonOwnerAlert';
 
 const melaka_resident_contract_addr = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
-const melaka_rice_contract_addr = import.meta.env.VITE_APP_ADDR_MLK_RICE;
+  .VITE_APP_ADDR_MLK_RESIDENTID;
+const melaka_rice_contract_addr = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type InfoTabProps = {
   chainId: string;
   publicKey: string;
   etherBal: string;
-  isGomenOfficer: boolean;
+  hasRole: boolean;
   riceTokenBal: string;
   riceTokenTotalSupply: string;
 };
@@ -42,13 +42,8 @@ function Value(props: { value: string }) {
 }
 
 export default function InfoTab(props: InfoTabProps) {
-  const {
-    publicKey,
-    etherBal,
-    isGomenOfficer,
-    riceTokenTotalSupply,
-    riceTokenBal,
-  } = props;
+  const { publicKey, etherBal, hasRole, riceTokenTotalSupply, riceTokenBal } =
+    props;
   return (
     <List sx={{ width: '100%', marginTop: 3 }} disablePadding>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -81,11 +76,11 @@ export default function InfoTab(props: InfoTabProps) {
         </Link>
       </Box>
       <Box sx={{ height: '17px' }} />
-      {isGomenOfficer ? (
+      {hasRole ? (
         <div>
           <ListItem key={3} disablePadding>
             <ListItemText
-              primary={<Label label="MelakaResident owner at" />}
+              primary={<Label label="MelakaResidentId" />}
               secondary={
                 <Value value={truncateEthAddr(melaka_resident_contract_addr)} />
               }
@@ -94,36 +89,18 @@ export default function InfoTab(props: InfoTabProps) {
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <ListItem key={4} disablePadding sx={{ maxWidth: '215px' }}>
               <ListItemText
-                primary={<Label label="MelakaRice owner at" />}
+                primary={<Label label="MelakaSubsidy" />}
                 secondary={
                   <Value value={truncateEthAddr(melaka_rice_contract_addr)} />
                 }
               />
             </ListItem>
-            <ListItem key={'4_1'} disablePadding sx={{ maxWidth: '255px' }}>
-              <ListItemText
-                primary={<Label label="Total supply" />}
-                secondary={<Value value={riceTokenTotalSupply} />}
-              />
-            </ListItem>
             <ListItem key={'4_2'} disablePadding sx={{ maxWidth: '175px' }}>
               <ListItemText
-                primary={<Label label="Balance" />}
+                primary={<Label label="Allowance" />}
                 secondary={<Value value={riceTokenBal} />}
               />
             </ListItem>
-            <Link
-              to="/admin/transfer_token"
-              style={{
-                fontFamily: 'Oswald',
-                textDecoration: 'none',
-                fontSize: '10pt',
-                color: 'navy',
-                paddingTop: 7,
-              }}
-            >
-              Transfer ...
-            </Link>
           </Box>
         </div>
       ) : (

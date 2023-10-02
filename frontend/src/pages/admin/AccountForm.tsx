@@ -30,7 +30,7 @@ type AdminAccountFprmFields = {
 
 export default function AccountForm() {
   const dispatch = useAdminDispatch();
-  const { privateKey, isGomenOfficer } = useAdminSelector(
+  const { privateKey, hasRole } = useAdminSelector(
     (state: AdminState) => state.admin
   );
 
@@ -91,7 +91,7 @@ export default function AccountForm() {
           <Typography sx={{ marginLeft: 1 }}>
             {publicKey ? truncateEthAddr(publicKey) : '...'}
           </Typography>
-          {isGomenOfficer ? (
+          {hasRole ? (
             <Typography
               sx={{
                 marginLeft: 1,
@@ -101,7 +101,7 @@ export default function AccountForm() {
                 color: 'navy',
               }}
             >
-              ✓ Smart contracts owner
+              ✓ has a role over smart contracts
             </Typography>
           ) : (
             <Typography
@@ -113,7 +113,7 @@ export default function AccountForm() {
                 color: 'navy',
               }}
             >
-              <span style={{ color: 'red' }}>✖</span> Not smart contract owner
+              <span style={{ color: 'red' }}>✖</span> does not have a role :(
             </Typography>
           )}
         </Box>

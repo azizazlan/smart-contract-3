@@ -2,13 +2,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import metamaskInfo from './thunks/metamaskInfo';
-import awardResident from './thunks/awardResident';
+import awardResidentId from './thunks/awardResidentId';
 import checkResident from './thunks/checkResidency';
 import checkRole from './thunks/checkRole';
 import assignRole from './thunks/assignRole';
 import contractInfo from './thunks/contractInfo';
 import applyPrivateKey from './thunks/applyPrivateKey';
-import revokeResidency from './thunks/revokeResidency';
 import revokeRole from './thunks/revokeRole';
 import checkStatus from './thunks/checkStatus';
 import approveAllowance from './thunks/approveAllowance';
@@ -22,12 +21,12 @@ interface AdminState {
   riceTokenBal: string; // Admin's balance of MelakaRice (ERC20) token
   publicKey: string | null;
   privateKey: string | null;
-  isClaimantResident: boolean;
+  isClaimantHasIdentity: boolean;
   isClaimantOfficer: boolean;
   isClaimantWhitelisted: boolean;
   claimantPublicKey: string | null;
   claimantAllowances: number; // no of allow tokens claimant want to apply
-  isGomenOfficer: boolean;
+  hasRole: boolean; // has role over the contracts
 }
 
 const initialState: AdminState = {
@@ -39,12 +38,12 @@ const initialState: AdminState = {
   riceTokenTotalSupply: '0',
   publicKey: null,
   privateKey: null,
-  isClaimantResident: false,
+  isClaimantHasIdentity: false,
   isClaimantOfficer: false,
   isClaimantWhitelisted: false,
   claimantPublicKey: null,
   claimantAllowances: 0,
-  isGomenOfficer: false,
+  hasRole: false,
 };
 
 export const adminSlice = createSlice({
@@ -54,7 +53,7 @@ export const adminSlice = createSlice({
     reset: () => initialState,
     resetSubmission: (state) => {
       state.submissionMsg = null;
-      state.isClaimantResident = false;
+      state.isClaimantHasIdentity = false;
       state.claimantPublicKey = null;
       state.submissionState = 'IDLE';
     },
@@ -93,58 +92,38 @@ export const adminSlice = createSlice({
         state.submissionMsg = 'Error get contract info';
         return;
       }
-      state.isGomenOfficer = payload?.isGomenOfficer;
+      state.hasRole = payload?.isGomenOfficer;
       state.submissionMsg = payload?.message;
       state.riceTokenTotalSupply = payload.riceTokenTotalSupply;
       state.riceTokenBal = payload.riceTokenBal;
       state.submissionState = 'OK';
     });
-    builder.addCase(awardResident.pending, (state, {}) => {
+    builder.addCase(awardResidentId.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
     });
-    builder.addCase(awardResident.rejected, (state, action) => {
+    builder.addCase(awardResidentId.rejected, (state, action) => {
       state.submissionState = 'FAILED';
       let msg = action.error?.message || 'An error occurred';
       msg = msg.substring(0, msg.length / 3);
       state.submissionMsg = msg;
     });
-    builder.addCase(awardResident.fulfilled, (state, { payload }) => {
+    builder.addCase(awardResidentId.fulfilled, (state, { payload }) => {
       if (!payload) {
         state.submissionState = 'FAILED';
         state.submissionMsg = 'Error award resident';
         return;
       }
-      state.isClaimantResident = payload?.isResident;
+      // state.isClaimantHasIdentity = payload?.hasIdentity;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
-
-    builder.addCase(revokeResidency.pending, (state, {}) => {
-      state.submissionState = 'PENDING';
-      state.submissionMsg = null;
-    });
-    builder.addCase(revokeResidency.rejected, (state, action) => {
-      state.submissionState = 'FAILED';
-      let msg = action.error?.message || 'An error occurred';
-      msg = msg.substring(0, msg.length / 3);
-      state.submissionMsg = msg;
-    });
-    builder.addCase(revokeResidency.fulfilled, (state, { payload }) => {
-      if (!payload) {
-        state.submissionState = 'FAILED';
-        return;
-      }
-      state.submissionMsg = payload?.message;
-      state.submissionState = 'OK';
-    });
-
     builder.addCase(checkResident.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
     });
     builder.addCase(checkResident.fulfilled, (state, { payload }) => {
-      state.isClaimantResident = payload?.isResident;
+      state.isClaimantHasIdentity = payload?.isResident;
       state.submissionState = 'OK';
     });
     builder.addCase(checkRole.pending, (state, {}) => {
@@ -240,12 +219,12 @@ export const adminSlice = createSlice({
       state.submissionMsg = payload?.message;
       state.publicKey = payload?.publicKey;
       state.privateKey = payload?.privateKey;
-      state.isGomenOfficer = payload.isOwner;
+      state.hasRole = payload.hasRole;
     });
     builder.addCase(checkStatus.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
-      state.isClaimantResident = false;
+      state.isClaimantHasIdentity = false;
       state.isClaimantOfficer = false;
       state.isClaimantWhitelisted = false;
       state.claimantAllowances = 0;
@@ -265,7 +244,7 @@ export const adminSlice = createSlice({
         return;
       }
       state.submissionMsg = payload?.message;
-      state.isClaimantResident = payload.isResident;
+      state.isClaimantHasIdentity = payload.isResident;
       state.isClaimantOfficer = payload.isOfficer;
       state.isClaimantWhitelisted = payload.isWhitelisted;
       state.claimantAllowances = payload.allowances;

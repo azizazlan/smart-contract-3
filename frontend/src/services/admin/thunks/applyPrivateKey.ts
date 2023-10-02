@@ -2,12 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Wallet } from 'ethers';
 
-import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import MelakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
-const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes('GOVERNMENT_OFFICER_ROLE')
+const MELAKA_RESIDENTID_CONTRACT_ADDR = import.meta.env
+  .VITE_APP_ADDR_MLK_RESIDENTID;
+const MINTER_ROLE: string = ethers.utils.keccak256(
+  ethers.utils.toUtf8Bytes('MINTER_ROLE')
 );
 
 type ApplyPrivateKeyFields = {
@@ -31,15 +31,15 @@ const applyPrivateKey = createAsyncThunk(
     const provider2 = new ethers.providers.JsonRpcProvider(RPC_URL);
 
     const contract = new ethers.Contract(
-      MELAKA_RESIDENT_CONTRACT_ADDR,
-      contractABI.abi,
+      MELAKA_RESIDENTID_CONTRACT_ADDR,
+      MelakaResidentIdJSON.abi,
       provider2
     );
 
-    const isOwner = await contract.hasRole(GOVERNMENT_OFFICER_ROLE, publicKey);
+    const hasRole = await contract.hasRole(MINTER_ROLE, publicKey);
 
     return {
-      isOwner,
+      hasRole,
       privateKey,
       publicKey,
       message: 'Successfully applied private key',

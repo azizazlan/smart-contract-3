@@ -59,6 +59,7 @@ describe("MelakaSubsidy", function () {
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);
       // Ensure the user has an identity
       const hasIdentity = await melakaId.nationalIdToAddress(nric);
+      console.log(hasIdentity);
       expect(hasIdentity).to.equal(resident1.address);
       await melakaSubsidy.connect(officer2).setWhitelisted(nric, true);
 
@@ -91,6 +92,10 @@ describe("MelakaSubsidy", function () {
       await melakaSubsidy
         .connect(officer1)
         .mint(officer2.address, BAG_070KG_RICE, oneToken, metadataBytes);
+
+      // Get the metadata back
+      const uri = await melakaSubsidy.uri(BAG_070KG_RICE);
+      console.log(uri);
 
       const nric = 123456789012;
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);

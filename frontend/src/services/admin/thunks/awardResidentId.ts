@@ -2,20 +2,19 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Wallet } from 'ethers';
 
-import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
+const MELAKA_RESIDENTID_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
 
 type AwardResidentFields = {
-  nric: string;
+  nric: number;
   publicKey: string;
   privateKey: string;
 };
 
-const awardResident = createAsyncThunk(
-  'admin_award_resident',
+const awardResidentId = createAsyncThunk(
+  'admin_award_resident_id',
   async (props: AwardResidentFields) => {
     const { publicKey, privateKey, nric } = props;
     const provider = await detectEthereumProvider({ silent: true });
@@ -26,25 +25,22 @@ const awardResident = createAsyncThunk(
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const metaMaskWallet = new Wallet(privateKey, web3Provider);
 
-    const contract = new ethers.Contract(
-      MELAKA_RESIDENT_CONTRACT_ADDR,
-      contractABI.abi,
+    const melakaResidentId = new ethers.Contract(
+      MELAKA_RESIDENTID_ADDR,
+      melakaResidentIdJSON.abi,
       web3Provider
     );
-    const bytesNric = ethers.utils.formatBytes32String(nric);
 
-    await contract
+    await melakaResidentId
       .connect(metaMaskWallet)
-      .awardResidentialStatus(publicKey, bytesNric);
-
-    const isResident = await contract.verifyResident(publicKey, bytesNric);
+      .mintIdentity(publicKey, nric);
 
     return {
-      isResident,
-      message: `Successfully award resident to public key ${truncateEthAddr(
+      // hasIdentity,
+      message: `Successfully award Resident ID to public key ${truncateEthAddr(
         publicKey
       )} and NRIC ${nric}. This will take effect in about 15 seconds!`,
     };
   }
 );
-export default awardResident;
+export default awardResidentId;

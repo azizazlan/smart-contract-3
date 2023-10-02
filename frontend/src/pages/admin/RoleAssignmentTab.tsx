@@ -59,8 +59,8 @@ export default function RoleAssignmentTab() {
         color="primary"
         sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
       >
-        This page allows you to assign officer role and approve token allowances
-        to a public key.
+        This page allows you to assign officer/minter role and approve token
+        allowances to a public key.
       </Typography>
       <RoleAssignmentForm />
     </Box>

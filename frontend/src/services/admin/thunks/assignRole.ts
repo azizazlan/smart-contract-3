@@ -2,16 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Wallet } from 'ethers';
 
-import melakaResidentJSON from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
-const GOVERNMENT_OFFICER_ROLE: string = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes('GOVERNMENT_OFFICER_ROLE')
+const MINTER_ROLE: string = ethers.utils.keccak256(
+  ethers.utils.toUtf8Bytes('MINTER_ROLE')
 );
 
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
+const RESIDENTID_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
 
 type AssignRoleFields = {
   officerPublicKey: string;
@@ -32,14 +31,14 @@ const assignRole = createAsyncThunk(
     const metaMaskWallet = new Wallet(privateKey, web3Provider);
 
     const melakaResident = new ethers.Contract(
-      MELAKA_RESIDENT_CONTRACT_ADDR,
-      melakaResidentJSON.abi,
+      RESIDENTID_CONTRACT_ADDR,
+      melakaResidentIdJSON.abi,
       web3Provider
     );
 
     await melakaResident
       .connect(metaMaskWallet)
-      .grantRole(GOVERNMENT_OFFICER_ROLE, officerPublicKey);
+      .grantRole(MINTER_ROLE, officerPublicKey);
 
     return {
       officerPublicKey,

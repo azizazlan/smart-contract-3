@@ -2,10 +2,10 @@ import { Box, Typography } from '@mui/material';
 import BackdropLoader from '../../commons/BackdropLoader';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
-import ResidentForm from './ResidentForm';
+import ResidentForm from './ResidentIdForm';
 import Result from './Result';
 
-export default function ResidentTab() {
+export default function ResidentIdTab() {
   const { submissionState, submissionMsg } = useAdminSelector(
     (state: AdminState) => state.admin
   );
@@ -13,6 +13,7 @@ export default function ResidentTab() {
   if (submissionState === 'FAILED' && submissionMsg) {
     return (
       <Result
+        title="Award Resident ID"
         error={true}
         message={submissionMsg || 'Some message after award residency'}
       />
@@ -22,6 +23,7 @@ export default function ResidentTab() {
   if (submissionState === 'OK' && submissionMsg) {
     return (
       <Result
+        title="Award Resident ID"
         error={false}
         message={submissionMsg || 'Some message after award residency'}
       />
@@ -36,7 +38,7 @@ export default function ResidentTab() {
         color="primary"
         sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
       >
-        This page allows you to award resident status to public key.
+        This page allows you to award Resident ID to public key.
       </Typography>
       <ResidentForm />
     </Box>

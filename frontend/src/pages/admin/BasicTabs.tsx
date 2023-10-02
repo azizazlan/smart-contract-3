@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import InfoTab from './InfoTab';
-import ResidentTab from './ResidentTab';
+import ResidentTab from './ResidentIdTab';
 import RoleAssignmentTab from './RoleAssignmentTab';
 import { useAdminDispatch, useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
@@ -50,7 +50,7 @@ export default function BasicTabs() {
     publicKey,
     privateKey,
     etherBal,
-    isGomenOfficer,
+    hasRole,
     riceTokenBal,
     riceTokenTotalSupply,
   } = useAdminSelector((state: AdminState) => state.admin);
@@ -71,7 +71,7 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
-  if (!isGomenOfficer) {
+  if (!hasRole) {
     return (
       <Box sx={{ width: '100%' }}>
         <Box
@@ -94,7 +94,7 @@ export default function BasicTabs() {
             chainId={networkId || ''}
             publicKey={publicKey || ''}
             etherBal={etherBal || ''}
-            isGomenOfficer={isGomenOfficer}
+            hasRole={hasRole}
             riceTokenBal={riceTokenBal || '0'}
             riceTokenTotalSupply={riceTokenTotalSupply || '0'}
           />
@@ -118,7 +118,7 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Admin info" {...a11yProps(0)} />
-          <Tab label="Residency" {...a11yProps(1)} />
+          <Tab label="Resident ID" {...a11yProps(1)} />
           <Tab label="Role & allowances" {...a11yProps(2)} />
           <Tab
             label="Verify"
@@ -133,7 +133,7 @@ export default function BasicTabs() {
           chainId={networkId || ''}
           publicKey={publicKey || ''}
           etherBal={etherBal || ''}
-          isGomenOfficer={isGomenOfficer}
+          hasRole={hasRole}
           riceTokenBal={riceTokenBal || '0'}
           riceTokenTotalSupply={riceTokenTotalSupply || '0'}
         />

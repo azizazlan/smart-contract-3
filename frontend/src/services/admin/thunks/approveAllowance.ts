@@ -2,11 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { BigNumber, ethers, Wallet } from 'ethers';
 
-import melakaRiceJSON from '../../../assets/artifacts/contracts/MelakaRice.sol/MelakaRice.json';
+import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
 
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
-const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
+const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type AssignRoleFields = {
   allowances: number;
@@ -14,9 +14,14 @@ type AssignRoleFields = {
   privateKey: string;
 };
 
+const BAG_070KG_RICE = 0;
+const BAG_001KG_WHEATFLOUR = 1;
+
 const approveAllowance = createAsyncThunk(
   'admin_approve_allowance',
   async (props: AssignRoleFields) => {
+    console.log(SUBSIDY_CONTRACT_ADDR);
+
     const { officerPublicKey, allowances, privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
@@ -25,26 +30,28 @@ const approveAllowance = createAsyncThunk(
     }
     const web3Provider = new ethers.providers.Web3Provider(provider);
     const metaMaskWallet = new Wallet(privateKey, web3Provider);
-
-    const melakaRice = new ethers.Contract(
-      MELAKA_RICE_CONTRACT_ADDR,
-      melakaRiceJSON.abi,
+    const melakaSubsidy = new ethers.Contract(
+      SUBSIDY_CONTRACT_ADDR,
+      melakaSubsidyJSON.abi,
       web3Provider
     );
-
     await new Promise((resolve) => setTimeout(resolve, 15000));
 
-    const bnAllowance = BigNumber.from(`${allowances.toString()}`);
-
-    await melakaRice
+    const tokens = BigNumber.from('1000');
+    const metadataBytes = ethers.utils.toUtf8Bytes('metadata');
+    await melakaSubsidy
       .connect(metaMaskWallet)
-      .approve(officerPublicKey, bnAllowance);
+      .approve(officerPublicKey, tokens);
 
-    const allow = await melakaRice.allowance(
-      metaMaskWallet.address,
-      officerPublicKey
-    );
-    console.log(allow);
+    await new Promise((resolve) => setTimeout(resolve, 20000));
+
+    await melakaSubsidy
+      .connect(metaMaskWallet)
+      .mint(officerPublicKey, BAG_070KG_RICE, tokens, metadataBytes);
+
+    // await melakaSubsidy
+    //   .connect(metaMaskWallet)
+    //   .mint(officerPublicKey, BAG_001KG_WHEATFLOUR, tokens, metadataBytes);
 
     return {
       officerPublicKey,
