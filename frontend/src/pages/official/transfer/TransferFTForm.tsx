@@ -37,8 +37,13 @@ type TransferFTFields = {
   publicKey: string;
 };
 
+type TransferFTFormProps = {
+  toggleCamera: () => void;
+};
+
 // Transfer FT page
-export default function TransferFTForm() {
+export default function TransferFTForm(props: TransferFTFormProps) {
+  const { toggleCamera } = props;
   const {
     reset,
     control,
@@ -130,6 +135,7 @@ export default function TransferFTForm() {
           endIcon={<CameraIcon />}
           fullWidth={isMobile ? true : false}
           variant="outlined"
+          onClick={toggleCamera}
         >
           scan
         </Button>
