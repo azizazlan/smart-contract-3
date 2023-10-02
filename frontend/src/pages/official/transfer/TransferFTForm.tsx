@@ -52,7 +52,6 @@ export default function TransferFTForm(props: TransferFTFormProps) {
   const { publicKey, claimantNric, claimantPublicKey } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
-  console.log(claimantNric);
   const { toggleCamera } = props;
   const {
     reset,
@@ -73,6 +72,7 @@ export default function TransferFTForm(props: TransferFTFormProps) {
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
     const { nric, publicKey } = data;
+    console.log('Submit transfer FT to resident!');
     console.log(publicKey);
     console.log(nric);
   };
