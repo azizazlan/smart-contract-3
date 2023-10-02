@@ -28,6 +28,8 @@ interface OfficialState {
   isClaimResident: boolean;
   isClaimWhitelisted: boolean;
   allowTokens: string;
+  claimantNric: string;
+  claimantPublicKey: string;
 }
 
 const initialState: OfficialState = {
@@ -44,6 +46,8 @@ const initialState: OfficialState = {
   isClaimResident: false,
   isClaimWhitelisted: false,
   allowTokens: '0',
+  claimantNric: '',
+  claimantPublicKey: '',
 };
 
 export const officialSlice = createSlice({
@@ -52,6 +56,8 @@ export const officialSlice = createSlice({
   reducers: {
     reset: () => initialState,
     resetSubmissionState: (state) => {
+      state.claimantNric = '';
+      state.claimantPublicKey = '';
       state.submissionMsg = null;
       state.submissionState = 'IDLE';
     },
@@ -68,6 +74,10 @@ export const officialSlice = createSlice({
     resetWhitelistSubmission: (state) => {
       state.submissionMsg = null;
       state.submissionState = 'IDLE';
+    },
+    setClaimantNricPublicKey: (state, { payload }) => {
+      state.claimantNric = payload.nric;
+      state.claimantPublicKey = payload.publicKey;
     },
   },
   extraReducers: (builder) => {
@@ -218,5 +228,6 @@ export const {
   resetVerifySubmission,
   resetResidencySubmission,
   resetWhitelistSubmission,
+  setClaimantNricPublicKey,
 } = officialSlice.actions;
 export default officialSlice.reducer;

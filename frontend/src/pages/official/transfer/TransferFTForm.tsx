@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   Button,
@@ -13,9 +14,13 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { isMobile } from 'react-device-detect';
 
 import styles from './styles';
-import InsufficientEthAlert from '../../../commons/InsufficientEthAlert';
-import { useOfficialSelector } from '../../../services/hook';
+import {
+  useOfficialDispatch,
+  useOfficialSelector,
+} from '../../../services/hook';
 import { OfficialState } from '../../../services/store';
+import { resetSubmissionState } from '../../../services/official/reducer';
+import initialize from '../../../services/official/thunks/initialize';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -43,6 +48,11 @@ type TransferFTFormProps = {
 
 // Transfer FT page
 export default function TransferFTForm(props: TransferFTFormProps) {
+  const dispatch = useOfficialDispatch();
+  const { publicKey, claimantNric, claimantPublicKey } = useOfficialSelector(
+    (state: OfficialState) => state.official
+  );
+  console.log(claimantNric);
   const { toggleCamera } = props;
   const {
     reset,
@@ -52,28 +62,27 @@ export default function TransferFTForm(props: TransferFTFormProps) {
   } = useForm<TransferFTFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      nric: '',
-      publicKey: '',
+      nric: claimantNric,
+      publicKey: claimantPublicKey,
     },
   });
 
-  // const dispatch = useOfficialDispatch();
-  const { nEtherBal } = useOfficialSelector(
-    (state: OfficialState) => state.official
-  );
+  React.useEffect(() => {
+    dispatch(initialize());
+  }, []);
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
     const { nric, publicKey } = data;
     console.log(publicKey);
+    console.log(nric);
   };
 
   const handleReset = () => {
-    reset();
+    reset({ nric: '', publicKey: '' });
   };
 
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
-      {nEtherBal === 0 ? <InsufficientEthAlert /> : null}
       <Typography variant="h5" color="primary">
         Transfer rice token
       </Typography>
@@ -81,7 +90,6 @@ export default function TransferFTForm(props: TransferFTFormProps) {
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
-            defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
@@ -105,7 +113,6 @@ export default function TransferFTForm(props: TransferFTFormProps) {
         <FormControl fullWidth margin="normal">
           <Controller
             name="publicKey"
-            defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
