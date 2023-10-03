@@ -99,14 +99,14 @@ export default function AllowanceForm() {
                     src={bag_rice}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  70kg bag of rice = 1 token
+                  70kg bag of rice ≡ 1 token
                 </MenuItem>
                 <MenuItem value={1}>
                   <img
                     src={bag_wheatflour}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  1kg bag of wheat flour = 1 token
+                  1kg bag of wheat flour ≡ 1 token
                 </MenuItem>
               </Select>
             )}

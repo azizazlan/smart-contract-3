@@ -42,7 +42,9 @@ export default function ErrResult(props: { message: string }) {
         </CardContent>
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flexGrow: 1 }} />
-          <Button onClick={handleClose}>close</Button>
+          <Button variant="outlined" onClick={handleClose}>
+            close
+          </Button>
         </CardActions>
       </Card>
     </Box>

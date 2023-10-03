@@ -114,14 +114,14 @@ export default function TransferFTForm(props: TransferFTFormProps) {
                     src={bag_rice}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  70kg bag of rice = 1 token
+                  70kg bag of rice ≡ 1 token
                 </MenuItem>
                 <MenuItem value={1}>
                   <img
                     src={bag_wheatflour}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  1kg bag of wheat flour = 1 token
+                  1kg bag of wheat flour ≡ 1 token
                 </MenuItem>
               </Select>
             )}
@@ -130,7 +130,8 @@ export default function TransferFTForm(props: TransferFTFormProps) {
             <FormHelperText error>{errors.tokenId?.message}</FormHelperText>
           ) : (
             <FormHelperText>
-              Each token represent 70kg bag of rice or 1kg bag of wheat flour
+              Each token is equivalent to 70kg bag of rice or 1kg bag of wheat
+              flour
             </FormHelperText>
           )}
         </FormControl>
