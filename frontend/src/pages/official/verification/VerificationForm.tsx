@@ -15,7 +15,6 @@ import {
   useOfficialDispatch,
   useOfficialSelector,
 } from '../../../services/hook';
-import { resetVerifySubmission } from '../../../services/official/reducer';
 import verifyResident from '../../../services/official/thunks/verifyResident';
 import { OfficialState } from '../../../services/store';
 

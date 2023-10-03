@@ -6,6 +6,7 @@ import {
   FormHelperText,
   TextField,
 } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -39,8 +40,17 @@ type WhitelistingFields = {
   publicKey: string;
 };
 
-export default function WhitelistingForm() {
+type WhitelistingFormProps = {
+  toggleCamera: () => void;
+};
+
+export default function WhitelistingForm(props: WhitelistingFormProps) {
+  const { toggleCamera } = props;
   const [toRemove, setToRemove] = React.useState(false);
+  const dispatch = useOfficialDispatch();
+  const { seedPhrase, claimantNric, claimantPublicKey } = useOfficialSelector(
+    (state: OfficialState) => state.official
+  );
   const {
     reset,
     control,
@@ -49,15 +59,10 @@ export default function WhitelistingForm() {
   } = useForm<WhitelistingFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      nric: '',
-      publicKey: '',
+      nric: claimantNric,
+      publicKey: claimantPublicKey,
     },
   });
-
-  const dispatch = useOfficialDispatch();
-  const { seedPhrase } = useOfficialSelector(
-    (state: OfficialState) => state.official
-  );
 
   const onSubmit: SubmitHandler<WhitelistingFields> = (data) => {
     const { nric, publicKey } = data;
@@ -67,7 +72,11 @@ export default function WhitelistingForm() {
     }
     if (toRemove) {
       dispatch(
-        removeWhitelist({ nric, publicKey, officialSeedphrase: seedPhrase })
+        removeWhitelist({
+          nric: parseInt(nric, 10),
+          publicKey,
+          officialSeedphrase: seedPhrase,
+        })
       );
       return;
     }
@@ -82,7 +91,7 @@ export default function WhitelistingForm() {
 
   const handleReset = () => {
     setToRemove(false);
-    reset();
+    reset({ nric: '', publicKey: '' });
   };
 
   return (
@@ -138,6 +147,14 @@ export default function WhitelistingForm() {
         </FormControl>
       </form>
       <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
+        <Button
+          endIcon={<CameraIcon />}
+          fullWidth={isMobile ? true : false}
+          variant="outlined"
+          onClick={toggleCamera}
+        >
+          scan
+        </Button>
         <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
         <Button
           fullWidth={isMobile ? true : false}

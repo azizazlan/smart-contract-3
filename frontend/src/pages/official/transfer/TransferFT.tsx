@@ -1,12 +1,11 @@
 import React from 'react';
 import TransferFTForm from './TransferFTForm';
-import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
-import { QrScanner } from '@yudiel/react-qr-scanner';
-import { isMobile } from 'react-device-detect';
 import ScanError from '../../../commons/ScanError';
 import { useOfficialDispatch } from '../../../services/hook';
-import { setClaimantNricPublicKey } from '../../../services/official/reducer';
+import {
+  resetSubmissionState,
+  setClaimantNricPublicKey,
+} from '../../../services/official/reducer';
 import QrReader from '../../../commons/QrReader';
 
 // Transfer FT page
@@ -14,6 +13,10 @@ export default function TransferFT() {
   const dispatch = useOfficialDispatch();
   const [camera, setCamera] = React.useState(false);
   const [error, setError] = React.useState(false);
+
+  React.useEffect(() => {
+    dispatch(resetSubmissionState());
+  }, []);
 
   const handleOnDecode = (result: string) => {
     console.log(result);
