@@ -1,8 +1,6 @@
 import React from 'react';
-import { Box, Button } from '@mui/material';
-import { QrScanner } from '@yudiel/react-qr-scanner';
-import { isMobile } from 'react-device-detect';
-import styles from '../residency/styles';
+import { Box } from '@mui/material';
+import styles from './styles';
 import {
   useOfficialDispatch,
   useOfficialSelector,
@@ -17,6 +15,7 @@ import {
   setClaimantNricPublicKey,
 } from '../../../services/official/reducer';
 import ScanError from '../../../commons/ScanError';
+import QrReader from '../../../commons/QrReader';
 
 export default function Verification() {
   const [camera, setCamera] = React.useState(false);
@@ -41,6 +40,10 @@ export default function Verification() {
     const publicKey = codes[1];
     dispatch(setClaimantNricPublicKey({ nric, publicKey }));
     handleCancelScan();
+  };
+
+  const handleCloseCamera = () => {
+    setCamera(false);
   };
 
   const handleCancelScan = () => {
@@ -72,46 +75,10 @@ export default function Verification() {
 
   if (camera && !error) {
     return (
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <QrScanner
-          onDecode={(result) => handleOnDecode(result)}
-          onError={(error) => console.log(error?.message)}
-        />
-        {!isMobile ? (
-          <Button
-            variant="outlined"
-            sx={{
-              zIndex: 10,
-              position: 'absolute',
-              bottom: 70,
-              backgroundColor: 'white',
-              color: 'black',
-            }}
-            onClick={() => setCamera((o) => !o)}
-          >
-            close scanner
-          </Button>
-        ) : (
-          <Button
-            variant="outlined"
-            sx={{
-              zIndex: 10,
-              position: 'absolute',
-              bottom: 70,
-            }}
-            onClick={() => setCamera((o) => !o)}
-          >
-            close scanner
-          </Button>
-        )}
-      </Box>
+      <QrReader
+        handleOnDecode={handleOnDecode}
+        handleClose={handleCloseCamera}
+      />
     );
   }
 

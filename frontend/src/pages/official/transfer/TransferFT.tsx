@@ -7,6 +7,7 @@ import { isMobile } from 'react-device-detect';
 import ScanError from '../../../commons/ScanError';
 import { useOfficialDispatch } from '../../../services/hook';
 import { setClaimantNricPublicKey } from '../../../services/official/reducer';
+import QrReader from '../../../commons/QrReader';
 
 // Transfer FT page
 export default function TransferFT() {
@@ -25,6 +26,10 @@ export default function TransferFT() {
     const publicKey = codes[1];
     dispatch(setClaimantNricPublicKey({ nric, publicKey }));
     handleCancelScan();
+  };
+
+  const handleCloseCamera = () => {
+    setCamera(false);
   };
 
   const handleScanAgain = () => {
@@ -52,46 +57,10 @@ export default function TransferFT() {
 
   if (camera && !error) {
     return (
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <QrScanner
-          onDecode={(result) => handleOnDecode(result)}
-          onError={(error) => console.log(error?.message)}
-        />
-        {!isMobile ? (
-          <Button
-            variant="outlined"
-            sx={{
-              zIndex: 10,
-              position: 'absolute',
-              bottom: 70,
-              backgroundColor: 'white',
-              color: 'black',
-            }}
-            onClick={() => setCamera((o) => !o)}
-          >
-            close scanner
-          </Button>
-        ) : (
-          <Button
-            variant="outlined"
-            sx={{
-              zIndex: 10,
-              position: 'absolute',
-              bottom: 70,
-            }}
-            onClick={() => setCamera((o) => !o)}
-          >
-            close scanner
-          </Button>
-        )}
-      </Box>
+      <QrReader
+        handleOnDecode={handleOnDecode}
+        handleClose={handleCloseCamera}
+      />
     );
   }
 

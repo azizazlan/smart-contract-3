@@ -5,6 +5,7 @@ import {
   FormHelperText,
   TextField,
 } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -37,9 +38,14 @@ type ResidentAwardFields = {
   publicKey: string;
 };
 
-export default function ResidencyForm() {
+type ResidencyFormProps = {
+  toggleCamera: () => void;
+};
+
+export default function ResidencyForm(props: ResidencyFormProps) {
+  const { toggleCamera } = props;
   const dispatch = useOfficialDispatch();
-  const { seedPhrase } = useOfficialSelector(
+  const { seedPhrase, claimantNric, claimantPublicKey } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
 
@@ -51,8 +57,8 @@ export default function ResidencyForm() {
   } = useForm<ResidentAwardFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      nric: '',
-      publicKey: '',
+      nric: claimantNric,
+      publicKey: claimantPublicKey,
     },
   });
 
@@ -72,7 +78,7 @@ export default function ResidencyForm() {
   };
 
   const handleReset = () => {
-    reset();
+    reset({ nric: '', publicKey: '' });
   };
 
   return (
@@ -131,6 +137,14 @@ export default function ResidencyForm() {
         </FormControl>
       </form>
       <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
+        <Button
+          endIcon={<CameraIcon />}
+          fullWidth={isMobile ? true : false}
+          variant="outlined"
+          onClick={toggleCamera}
+        >
+          scan
+        </Button>
         <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
         <Button
           fullWidth={isMobile ? true : false}
