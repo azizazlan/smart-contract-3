@@ -7,8 +7,19 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   formButtons: {
     display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'right',
+    width: '100%',
+    marginTop: '7px',
+  },
+  mobileFormButtons: {
+    display: 'flex',
     flexDirection: 'column',
-    marginTop: '12px',
+    alignItems: 'flex-end',
+    justifyContent: 'right',
+    width: '100%',
+    marginTop: '7px',
   },
 };
 export default styles;

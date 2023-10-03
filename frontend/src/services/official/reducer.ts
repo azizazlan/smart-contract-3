@@ -145,6 +145,7 @@ export const officialSlice = createSlice({
       state.submissionMsg = msg;
     });
     builder.addCase(addWhitelist.fulfilled, (state, { payload }) => {
+      state.isClaimWhitelisted = payload.isWhitelisted;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
@@ -190,7 +191,8 @@ export const officialSlice = createSlice({
       state.submissionState = 'PENDING';
     });
     builder.addCase(verifyResident.fulfilled, (state, { payload }) => {
-      console.log(payload);
+      state.isClaimHasResidentId = payload.hasResidentId;
+      state.isClaimWhitelisted = payload.isWhitelisted;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

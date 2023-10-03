@@ -33,6 +33,8 @@ const verifyResident = createAsyncThunk(
     );
 
     const addressNric = await melakaResidentId.nationalIdToAddress(nric);
+    console.log(`addressNric: ${addressNric}`);
+    console.log(`publicKey  : ${publicKey}`);
     const hasResidentId = addressNric === publicKey;
 
     const allowanceRiceTokens: BigNumber = await melakaSubsidy.balanceOf(

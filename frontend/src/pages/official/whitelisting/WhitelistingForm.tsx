@@ -9,6 +9,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { isMobile } from 'react-device-detect';
 import {
   useOfficialDispatch,
   useOfficialSelector,
@@ -70,7 +71,13 @@ export default function WhitelistingForm() {
       );
       return;
     }
-    dispatch(addWhitelist({ nric, publicKey, officialSeedphrase: seedPhrase }));
+    dispatch(
+      addWhitelist({
+        nric: parseInt(nric, 10),
+        publicKey,
+        officialSeedphrase: seedPhrase,
+      })
+    );
   };
 
   const handleReset = () => {
@@ -79,7 +86,7 @@ export default function WhitelistingForm() {
   };
 
   return (
-    <div>
+    <Box sx={{ ...styles.container, margin: 0 }}>
       <form id="official_whitelisting" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
@@ -125,46 +132,44 @@ export default function WhitelistingForm() {
             {errors.publicKey ? (
               <FormHelperText error>{errors.publicKey.message}</FormHelperText>
             ) : (
-              <FormHelperText>
-                Resident address. Example:
-                0xd4C94252d9a182FBEd2b0576F07778470F2h2835
-              </FormHelperText>
+              <FormHelperText>Resident public key.</FormHelperText>
             )}
           </Box>
         </FormControl>
       </form>
-      <Box sx={styles.formButtons}>
+      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
+        <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
         <Button
-          color="primary"
-          type="submit"
-          form="official_whitelisting"
-          fullWidth
-          variant="contained"
-          onClick={() => setToRemove(false)}
-        >
-          add
-        </Button>
-        <Box sx={{ height: 9 }} />
-        <Button
-          color="secondary"
-          type="submit"
-          form="official_whitelisting"
-          fullWidth
-          variant="contained"
-          onClick={() => setToRemove(true)}
-        >
-          remove
-        </Button>
-        <Box sx={{ height: 12 }} />
-        <Button
-          fullWidth
+          fullWidth={isMobile ? true : false}
           variant="outlined"
           color="secondary"
           onClick={handleReset}
         >
           reset
         </Button>
+        <Box sx={{ flexGrow: 0, height: 12, width: 12 }} />
+        <Button
+          color="secondary"
+          type="submit"
+          form="official_whitelisting"
+          fullWidth={isMobile ? true : false}
+          variant="contained"
+          onClick={() => setToRemove(true)}
+        >
+          remove
+        </Button>
+        <Box sx={{ flexGrow: 0, height: 12, width: 12 }} />
+        <Button
+          color="primary"
+          type="submit"
+          form="official_whitelisting"
+          fullWidth={isMobile ? true : false}
+          variant="contained"
+          onClick={() => setToRemove(false)}
+        >
+          add
+        </Button>
       </Box>
-    </div>
+    </Box>
   );
 }

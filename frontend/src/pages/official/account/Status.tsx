@@ -50,7 +50,7 @@ export default function Status({
           marginTop: '4px',
         }}
       >
-        Has resident id
+        Resident id
       </Typography>
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
@@ -60,14 +60,14 @@ export default function Status({
             color="primary"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            With resident id
+            Resident
           </Typography>
         ) : (
           <Typography
             color="error"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            No resident id
+            Without resident id
           </Typography>
         )}
         <IconButton onClick={handleReloadStatus}>
