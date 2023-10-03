@@ -31,7 +31,6 @@ const addWhitelist = createAsyncThunk(
     await melakaSubsidy.connect(officerWallet).setWhitelisted(nric, true);
 
     const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
-    console.log(`isWhitelisted : ${isWhitelisted}`);
 
     const message = `Successfully added to whitelist: ${truncateEthAddr(
       publicKey

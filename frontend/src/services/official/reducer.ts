@@ -159,6 +159,7 @@ export const officialSlice = createSlice({
       state.submissionMsg = msg;
     });
     builder.addCase(removeWhitelist.fulfilled, (state, { payload }) => {
+      state.isClaimWhitelisted = payload.isWhitelisted;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

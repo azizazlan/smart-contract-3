@@ -1,15 +1,14 @@
 import { Wallet, ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
-import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
+import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
+
+const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type RemoveWhitelistFields = {
-  nric: string;
+  nric: number;
   publicKey: string;
   officialSeedphrase: string;
 };
@@ -20,29 +19,30 @@ const removeWhitelist = createAsyncThunk(
     const { nric, publicKey, officialSeedphrase } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-    const wallet = Wallet.fromMnemonic(officialSeedphrase).connect(provider);
+    const officerWallet =
+      Wallet.fromMnemonic(officialSeedphrase).connect(provider);
 
-    const contract = new ethers.Contract(
-      MELAKA_RESIDENT_CONTRACT_ADDR,
-      contractABI.abi,
-      wallet
+    const melakaSubsidy = new ethers.Contract(
+      SUBSIDY_CONTRACT_ADDR,
+      melakaSubsidyJSON.abi,
+      provider
     );
 
-    const bytesNric = ethers.utils.formatBytes32String(nric);
-    await contract.removeResidentWhitelist(publicKey, bytesNric);
+    await melakaSubsidy.connect(officerWallet).setWhitelisted(nric, false);
 
-    const message = `Successfully remove resident from whitelist: ${truncateEthAddr(
+    const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
+
+    const message = `Successfully added to whitelist: ${truncateEthAddr(
       publicKey
     )} with NRIC# ${nric}`;
 
-    // throw new Error(
-    //   'Simulated rejection. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old'
-    // ); // simulate rejected
+    // throw new Error('Simulated rejection'); // simulate rejected
 
     return {
-      message,
+      isWhitelisted,
       nric,
       publicKey,
+      message,
     };
   }
 );

@@ -52,7 +52,6 @@ export default function VerificationForm() {
 
   const onSubmit: SubmitHandler<VerifyResidencyFields> = (data) => {
     const { nric, publicKey } = data;
-    console.log(`${nric} ${publicKey}`);
     dispatch(
       verifyResident({
         nric: parseInt(nric, 10),
