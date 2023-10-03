@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Button,
@@ -9,14 +8,14 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import awardResidency from '../../../services/official/thunks/awardResidency';
+import { isMobile } from 'react-device-detect';
 import {
   useOfficialDispatch,
   useOfficialSelector,
 } from '../../../services/hook';
 import { OfficialState } from '../../../services/store';
 import styles from './styles';
-import revokeResidency from '../../../services/official/thunks/revokeResidency';
+import awardResidentId from '../../../services/official/thunks/awardResidentId';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -44,7 +43,6 @@ export default function ResidencyForm() {
     (state: OfficialState) => state.official
   );
 
-  const [toRevoke, setToRevoke] = React.useState(false);
   const {
     reset,
     control,
@@ -64,25 +62,22 @@ export default function ResidencyForm() {
       console.log('seedPhrase is null');
       return;
     }
-    if (toRevoke) {
-      dispatch(
-        revokeResidency({ nric, publicKey, officialSeedphrase: seedPhrase })
-      );
-      return;
-    }
     dispatch(
-      awardResidency({ nric, publicKey, officialSeedphrase: seedPhrase })
+      awardResidentId({
+        nric: parseInt(nric, 10),
+        publicKey,
+        officialSeedphrase: seedPhrase,
+      })
     );
   };
 
   const handleReset = () => {
-    setToRevoke(false);
     reset();
   };
 
   return (
     <div>
-      <form id="official_residency_status" onSubmit={handleSubmit(onSubmit)}>
+      <form id="official_award_residentid" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
             name="nric"
@@ -135,36 +130,25 @@ export default function ResidencyForm() {
           </Box>
         </FormControl>
       </form>
-      <Box sx={styles.formButtons}>
+      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
+        <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
         <Button
-          type="submit"
-          form="official_residency_status"
-          fullWidth
-          variant="contained"
-          color="primary"
-          onClick={() => setToRevoke(false)}
-        >
-          award
-        </Button>
-        <Box sx={{ height: 9 }} />
-        <Button
-          type="submit"
-          form="official_residency_status"
-          fullWidth
-          variant="contained"
-          color="secondary"
-          onClick={() => setToRevoke(true)}
-        >
-          revoke
-        </Button>
-        <Box sx={{ height: 12 }} />
-        <Button
-          fullWidth
+          fullWidth={isMobile ? true : false}
           variant="outlined"
           color="secondary"
           onClick={handleReset}
         >
           reset
+        </Button>
+        <Box sx={{ flexGrow: 0, height: 12, width: 12 }} />
+        <Button
+          type="submit"
+          form="official_award_residentid"
+          fullWidth={isMobile ? true : false}
+          variant="contained"
+          color="primary"
+        >
+          award
         </Button>
       </Box>
     </div>

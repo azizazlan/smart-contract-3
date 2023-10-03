@@ -36,7 +36,7 @@ export default function Residency() {
     <Box sx={{ ...styles.container, margin: 3 }}>
       <BackdropLoader submissionState={submissionState} />
       {nEtherBal === 0 ? <InsufficientEthAlert /> : null}
-      <FormHeader title="Residency" />
+      <FormHeader title="Resident Id" />
       <ResidencyForm />
     </Box>
   );

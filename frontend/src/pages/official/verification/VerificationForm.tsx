@@ -5,13 +5,15 @@ import {
   Box,
   Button,
 } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { isMobile } from 'react-device-detect';
 import styles from './styles';
-import checkStatus from '../../../services/official/thunks/checkStatus';
 import { useOfficialDispatch } from '../../../services/hook';
 import { resetVerifySubmission } from '../../../services/official/reducer';
+import verifyResident from '../../../services/official/thunks/verifyResident';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -52,9 +54,8 @@ export default function VerificationForm() {
     const { nric, publicKey } = data;
     console.log(`${nric} ${publicKey}`);
     dispatch(
-      checkStatus({
-        checkOfficer: false,
-        nric,
+      verifyResident({
+        nric: parseInt(nric, 10),
         publicKey,
       })
     );
@@ -66,7 +67,7 @@ export default function VerificationForm() {
   };
 
   return (
-    <div>
+    <Box sx={{ ...styles.container, margin: 0 }}>
       <form id="official_verify_residency" onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
@@ -117,26 +118,35 @@ export default function VerificationForm() {
           )}
         </FormControl>
       </form>
-      <Box sx={styles.formButtons}>
+      <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>
         <Button
-          type="submit"
-          form="official_verify_residency"
-          fullWidth
-          variant="contained"
-          color="primary"
+          endIcon={<CameraIcon />}
+          fullWidth={isMobile ? true : false}
+          variant="outlined"
+          onClick={() => console.log('camera!!!')}
         >
-          verify
+          scan
         </Button>
-        <Box sx={{ height: 7 }} />
+        <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
         <Button
-          fullWidth
+          fullWidth={isMobile ? true : false}
           variant="outlined"
           color="secondary"
           onClick={handleReset}
         >
           reset
         </Button>
+        <Box sx={{ flexGrow: 0, height: 12, width: 12 }} />
+        <Button
+          type="submit"
+          form="official_verify_residency"
+          fullWidth={isMobile ? true : false}
+          variant="contained"
+          color="primary"
+        >
+          verify
+        </Button>
       </Box>
-    </div>
+    </Box>
   );
 }

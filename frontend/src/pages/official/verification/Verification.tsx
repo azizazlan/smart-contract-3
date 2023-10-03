@@ -29,7 +29,7 @@ export default function Verification() {
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
       <BackdropLoader submissionState={submissionState} />
-      <FormHeader title="Residency and whitelisting status" />
+      <FormHeader title="Verify resident" />
       <VerificationForm />
     </Box>
   );

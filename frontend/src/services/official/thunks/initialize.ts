@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import ethBal from './ethBal';
-import hasRole from './hasRole';
 import checkStatus from './checkStatus';
 
 const initialize = createAsyncThunk(
@@ -19,7 +18,6 @@ const initialize = createAsyncThunk(
     const isOfficer = !!localStorage.getItem('thuleen.mfs.official.isOfficer');
 
     if (publicKey && nric) {
-      thunkAPI.dispatch(hasRole({ publicKey }));
       thunkAPI.dispatch(checkStatus({ checkOfficer: true, nric, publicKey }));
       thunkAPI.dispatch(ethBal({ publicKey }));
     }

@@ -4,6 +4,9 @@ import {
   Button,
   FormControl,
   FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from '@mui/material';
@@ -19,17 +22,21 @@ import {
   useOfficialSelector,
 } from '../../../services/hook';
 import { OfficialState } from '../../../services/store';
-import { resetSubmissionState } from '../../../services/official/reducer';
 import initialize from '../../../services/official/thunks/initialize';
+import bag_rice from '../../../assets/bag-rice.png';
+import bag_wheatflour from '../../../assets/bag-wheatflour.png';
 
 const schema = Yup.object().shape({
-  nric: Yup.string()
+  tokenId: Yup.number()
+    .typeError('Token ID must be a number')
+    .required('Token ID is required'),
+  recipientNric: Yup.string()
     .required('Please key in your NRIC')
     .test('valid-nric', 'NRIC must be at least 12 digits numbers', (value) => {
       if (!value) return false; // Skip validation if the value is empty or undefined
       return /^[0-9]{12,}$/.test(value);
     }),
-  publicKey: Yup.string()
+  recipientPublicKey: Yup.string()
     .required('Please key the resident public key')
     .matches(
       /^(0x)?[0-9a-fA-F]{40}$/u,
@@ -38,8 +45,9 @@ const schema = Yup.object().shape({
 });
 
 type TransferFTFields = {
-  nric: string;
-  publicKey: string;
+  tokenId: number;
+  recipientNric: string;
+  recipientPublicKey: string;
 };
 
 type TransferFTFormProps = {
@@ -49,7 +57,7 @@ type TransferFTFormProps = {
 // Transfer FT page
 export default function TransferFTForm(props: TransferFTFormProps) {
   const dispatch = useOfficialDispatch();
-  const { publicKey, claimantNric, claimantPublicKey } = useOfficialSelector(
+  const { claimantNric, claimantPublicKey } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
   const { toggleCamera } = props;
@@ -61,8 +69,9 @@ export default function TransferFTForm(props: TransferFTFormProps) {
   } = useForm<TransferFTFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      nric: claimantNric,
-      publicKey: claimantPublicKey,
+      tokenId: 0,
+      recipientNric: claimantNric,
+      recipientPublicKey: claimantPublicKey,
     },
   });
 
@@ -71,25 +80,63 @@ export default function TransferFTForm(props: TransferFTFormProps) {
   }, []);
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
-    const { nric, publicKey } = data;
+    const { recipientNric, recipientPublicKey } = data;
     console.log('Submit transfer FT to resident!');
-    console.log(publicKey);
-    console.log(nric);
+    console.log(recipientPublicKey);
+    console.log(recipientNric);
   };
 
   const handleReset = () => {
-    reset({ nric: '', publicKey: '' });
+    reset({ recipientNric: '', recipientPublicKey: '' });
   };
 
   return (
     <Box sx={{ ...styles.container, margin: 3 }}>
       <Typography variant="h5" color="primary">
-        Transfer rice token
+        Transfer subsidy token
       </Typography>
       <form id="official_transfer_ft" onSubmit={handleSubmit(onSubmit)}>
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="allowance-label">Select subsidy token</InputLabel>
+          <Controller
+            name="tokenId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                fullWidth
+                labelId="tokenId-label"
+                id="tokenId"
+                label="Select subsidy item"
+                {...field}
+              >
+                <MenuItem value={0} selected>
+                  <img
+                    src={bag_rice}
+                    style={{ width: '16px', marginRight: 7 }}
+                  />
+                  70kg bag of rice = 1 token
+                </MenuItem>
+                <MenuItem value={1}>
+                  <img
+                    src={bag_wheatflour}
+                    style={{ width: '16px', marginRight: 7 }}
+                  />
+                  1kg bag of wheat flour = 1 token
+                </MenuItem>
+              </Select>
+            )}
+          />
+          {errors.tokenId ? (
+            <FormHelperText error>{errors.tokenId?.message}</FormHelperText>
+          ) : (
+            <FormHelperText>
+              Each token represent 70kg bag of rice or 1kg bag of wheat flour
+            </FormHelperText>
+          )}
+        </FormControl>
         <FormControl fullWidth margin="normal" variant="outlined">
           <Controller
-            name="nric"
+            name="recipientNric"
             control={control}
             render={({ field }) => (
               <TextField
@@ -97,13 +144,15 @@ export default function TransferFTForm(props: TransferFTFormProps) {
                 placeholder="845678910112"
                 InputLabelProps={{ shrink: true }}
                 label="NRIC"
-                id="nric"
+                id="recipientNric"
                 {...field}
               />
             )}
           />
-          {errors.nric ? (
-            <FormHelperText error>{errors.nric.message}</FormHelperText>
+          {errors.recipientNric ? (
+            <FormHelperText error>
+              {errors.recipientNric.message}
+            </FormHelperText>
           ) : (
             <FormHelperText>
               * 12 digits without hyphens or any symbol.
@@ -112,13 +161,13 @@ export default function TransferFTForm(props: TransferFTFormProps) {
         </FormControl>
         <FormControl fullWidth margin="normal">
           <Controller
-            name="publicKey"
+            name="recipientPublicKey"
             control={control}
             render={({ field }) => (
               <TextField
                 placeholder="0xd4C94252d9a182FBEd2b0576F07778470F2h2835"
                 InputLabelProps={{ shrink: true }}
-                id="publicKey"
+                id="recipientPublicKey"
                 label="Resident public key"
                 variant="outlined"
                 {...field}
@@ -126,13 +175,12 @@ export default function TransferFTForm(props: TransferFTFormProps) {
             )}
           />
           <Box sx={{ minHeight: 46 }}>
-            {errors.publicKey ? (
-              <FormHelperText error>{errors.publicKey.message}</FormHelperText>
-            ) : (
-              <FormHelperText>
-                Recipient address. Example:
-                0xd4C94252d9a182FBEd2b0576F07778470F2h2835
+            {errors.recipientPublicKey ? (
+              <FormHelperText error>
+                {errors.recipientPublicKey.message}
               </FormHelperText>
+            ) : (
+              <FormHelperText>Recipient address public key.</FormHelperText>
             )}
           </Box>
         </FormControl>
@@ -146,7 +194,7 @@ export default function TransferFTForm(props: TransferFTFormProps) {
         >
           scan
         </Button>
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
         <Button
           fullWidth={isMobile ? true : false}
           variant="outlined"

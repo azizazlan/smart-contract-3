@@ -8,12 +8,10 @@ import {
   useOfficialSelector,
 } from '../../../services/hook';
 import checkStatus from '../../../services/official/thunks/checkStatus';
-import hasRole from '../../../services/official/thunks/hasRole';
 import Balance from './Balance';
 import Status from './Status';
 import ethBal from '../../../services/official/thunks/ethBal';
 import initialize from '../../../services/official/thunks/initialize';
-import allowanceTokens from '../../../services/official/thunks/allowanceTokens';
 
 // Official info page
 export default function Info() {
@@ -23,9 +21,9 @@ export default function Info() {
     seedPhrase,
     nric,
     etherBal,
-    isResident,
-    isOfficer,
-    allowTokens,
+    hasResidentId,
+    hasMinterRole,
+    tokenAllowances,
   } = useOfficialSelector((state: OfficialState) => state.official);
 
   React.useEffect(() => {
@@ -36,20 +34,12 @@ export default function Info() {
     return <Navigate to="/official" />;
   }
 
-  const handleReloadResidentStat = () => {
+  const handleReloadStatus = () => {
     dispatch(
       checkStatus({
         checkOfficer: true,
         publicKey: publicKey as string,
         nric: nric as string,
-      })
-    );
-  };
-
-  const handleReloadRole = () => {
-    dispatch(
-      hasRole({
-        publicKey: publicKey as string,
       })
     );
   };
@@ -62,34 +52,20 @@ export default function Info() {
     );
   };
 
-  const handleAllowsBal = () => {
-    if (!publicKey) {
-      console.log('Could not dispatch because publicKey is null');
-      return;
-    }
-    dispatch(
-      allowanceTokens({
-        publicKey,
-      })
-    );
-  };
-
   return (
     <Box sx={styles.container}>
       <Box sx={{ marginTop: 3 }}>
         <Status
           nric={nric || 'NA'}
-          isResident={isResident}
-          handleReloadResidentStat={handleReloadResidentStat}
-          isOfficer={isOfficer}
-          handleReloadRole={handleReloadRole}
+          hasResidentId={hasResidentId}
+          hasMinterRole={hasMinterRole}
+          handleReloadStatus={handleReloadStatus}
         />
         <Balance
           publicKey={publicKey || 'NA'}
           etherBal={etherBal}
+          tokenAllowances={tokenAllowances}
           handleReloadBal={handleReloadBal}
-          allowTokens={allowTokens}
-          handleAllowsBal={handleAllowsBal}
         />
       </Box>
     </Box>

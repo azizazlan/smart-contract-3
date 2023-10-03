@@ -19,7 +19,7 @@ import { resetVerifySubmission } from '../../../services/official/reducer';
 export default function Result() {
   const dispatch = useOfficialDispatch();
 
-  const { isClaimResident, isClaimWhitelisted } = useOfficialSelector(
+  const { isClaimHasResidentId, isClaimWhitelisted } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
 
@@ -31,8 +31,8 @@ export default function Result() {
     <Box sx={{ margin: 3 }}>
       <Card sx={{ minWidth: 275, backgroundColor: '#f5f6fa' }}>
         <CardHeader
-          title="Result"
-          subheader="Residency & whitelisting status"
+          title="Verification result"
+          subheader="Resident Id & whitelisting status"
         />
         <CardContent>
           <Typography
@@ -40,21 +40,19 @@ export default function Result() {
             variant="body1"
             sx={{ fontFamily: 'Oswald' }}
           >
-            Residency
+            Resident Id
           </Typography>
-          <Typography variant="body2" gutterBottom>
-            {isClaimResident ? (
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography>Resident</Typography>
-                <CheckIcon color="primary" />
-              </Box>
-            ) : (
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography>Non-resident</Typography>
-                <CloseIcon color="primary" />
-              </Box>
-            )}
-          </Typography>
+          {isClaimHasResidentId ? (
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Typography>Resident</Typography>
+              <CheckIcon color="primary" />
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Typography>Non-resident</Typography>
+              <CloseIcon color="primary" />
+            </Box>
+          )}
           <Typography
             color="primary"
             variant="body1"
@@ -62,19 +60,17 @@ export default function Result() {
           >
             Whitelisting
           </Typography>
-          <Typography variant="body2">
-            {isClaimWhitelisted ? (
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography>Whitelisted</Typography>
-                <CheckIcon color="primary" />
-              </Box>
-            ) : (
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography>Not in the whitelist</Typography>
-                <CloseIcon color="primary" />
-              </Box>
-            )}
-          </Typography>
+          {isClaimWhitelisted ? (
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Typography>Whitelisted</Typography>
+              <CheckIcon color="primary" />
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Typography>Not in the whitelist</Typography>
+              <CloseIcon color="primary" />
+            </Box>
+          )}
         </CardContent>
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flexGrow: 1 }} />

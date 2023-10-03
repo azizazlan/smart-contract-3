@@ -76,18 +76,6 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-        <ListItem key="revoke_residency" disablePadding>
-          <ListItemButton component={Link} to="/signedofficial/residency">
-            <ListItemIcon />
-            <ListItemText
-              primary={
-                <Typography color="secondary" sx={{ fontFamily: 'Oswald' }}>
-                  Revoke residency
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
         <Divider />
         <ListItem key="add_whitelisting" disablePadding>
           <ListItemButton component={Link} to="/signedofficial/whitelisting">

@@ -9,18 +9,14 @@ const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const RESIDENTID_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
 const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
-const MINTER_ROLE: string = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes('MINTER_ROLE')
-);
-
-type CheckStatusFields = {
-  nric: string;
+type VerifyResidentFields = {
+  nric: number;
   publicKey: string;
 };
 
-const checkStatus = createAsyncThunk(
-  'official_check_status',
-  async (props: CheckStatusFields) => {
+const verifyResident = createAsyncThunk(
+  'official_verify_resident',
+  async (props: VerifyResidentFields) => {
     const { nric, publicKey } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
@@ -36,16 +32,6 @@ const checkStatus = createAsyncThunk(
       provider
     );
 
-    const isMinterForId = await melakaResidentId.hasRole(
-      MINTER_ROLE,
-      publicKey
-    );
-    const isMinterForSubsidy = await melakaSubsidy.hasRole(
-      MINTER_ROLE,
-      publicKey
-    );
-    const hasMinterRole = isMinterForId && isMinterForSubsidy;
-
     const addressNric = await melakaResidentId.nationalIdToAddress(nric);
     const hasResidentId = addressNric === publicKey;
 
@@ -58,23 +44,21 @@ const checkStatus = createAsyncThunk(
       1
     );
 
-    const allowances = [
+    const balances = [
       allowanceRiceTokens.toNumber(),
       allowanceWheatFlourTokens.toNumber(),
     ];
 
     const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
-    console.log(`isWhitelisted : ${isWhitelisted}`);
 
-    const message = `Successfully check status`;
+    const message = `Successfully verify resident`;
 
     return {
-      hasMinterRole,
       hasResidentId,
       isWhitelisted,
-      allowances,
+      balances,
       message,
     };
   }
 );
-export default checkStatus;
+export default verifyResident;

@@ -9,10 +9,9 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useAdminDispatch, useAdminSelector } from '../../services/hook';
+import { useAdminDispatch } from '../../services/hook';
 import { resetSubmission } from '../../services/admin/reducer';
 import checkStatus from '../../services/admin/thunks/checkStatus';
-import { AdminState } from '../../services/store';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -49,8 +48,6 @@ export default function CheckForm() {
     },
   });
 
-  const { privateKey } = useAdminSelector((state: AdminState) => state.admin);
-
   const handleReset = () => {
     reset();
     dispatch(resetSubmission());
@@ -58,11 +55,11 @@ export default function CheckForm() {
 
   const onSubmit: SubmitHandler<CheckFormFields> = (data) => {
     const { nric, publicKey } = data;
-    if (!publicKey || !nric || !privateKey) {
+    if (!publicKey || !nric) {
       console.log('One of the param is null');
       return;
     }
-    dispatch(checkStatus({ nric, publicKey, privateKey }));
+    dispatch(checkStatus({ nric, publicKey }));
   };
 
   return (

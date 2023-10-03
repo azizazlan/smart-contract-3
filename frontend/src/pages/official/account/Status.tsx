@@ -3,16 +3,14 @@ import ReplayIcon from '@mui/icons-material/Replay';
 
 export default function Status({
   nric,
-  isResident,
-  handleReloadResidentStat,
-  isOfficer,
-  handleReloadRole,
+  hasResidentId,
+  hasMinterRole,
+  handleReloadStatus,
 }: {
   nric: string;
-  isResident: boolean;
-  handleReloadResidentStat: () => void;
-  isOfficer: boolean;
-  handleReloadRole: () => void;
+  hasResidentId: boolean;
+  hasMinterRole: boolean;
+  handleReloadStatus: () => void;
 }) {
   return (
     <Box
@@ -52,27 +50,27 @@ export default function Status({
           marginTop: '4px',
         }}
       >
-        Status
+        Has resident id
       </Typography>
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        {isResident ? (
+        {hasResidentId ? (
           <Typography
             color="primary"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            Resident
+            With resident id
           </Typography>
         ) : (
           <Typography
             color="error"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            Non-resident
+            No resident id
           </Typography>
         )}
-        <IconButton onClick={handleReloadResidentStat}>
+        <IconButton onClick={handleReloadStatus}>
           <ReplayIcon
             color="secondary"
             fontSize="small"
@@ -80,7 +78,6 @@ export default function Status({
           />
         </IconButton>
       </Box>
-
       <Typography
         style={{
           fontFamily: 'Oswald',
@@ -95,28 +92,21 @@ export default function Status({
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        {isOfficer ? (
+        {hasMinterRole ? (
           <Typography
             color="primary"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            Officer
+            Minter
           </Typography>
         ) : (
           <Typography
             color="error"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
           >
-            NA
+            Not a minter
           </Typography>
         )}
-        <IconButton onClick={handleReloadRole}>
-          <ReplayIcon
-            color="primary"
-            fontSize="small"
-            sx={{ color: 'silver' }}
-          />
-        </IconButton>
       </Box>
     </Box>
   );

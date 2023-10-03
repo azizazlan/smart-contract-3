@@ -4,15 +4,13 @@ import { SubmissionStates } from '../submissionState';
 import signupOfficial from './thunks/signup';
 import initialize from './thunks/initialize';
 import checkStatus from './thunks/checkStatus';
-import hasRole from './thunks/hasRole';
 import ethBal from './thunks/ethBal';
-import awardResidency from './thunks/awardResidency';
+import awardResidentId from './thunks/awardResidentId';
 import addWhitelist from './thunks/addWhitelist';
-import revokeResidency from './thunks/revokeResidency';
 import removeWhitelist from './thunks/removeWhitelist';
 import restore from './thunks/restore';
 import clearLocalSto from './thunks/clearLocalSto';
-import allowanceTokens from './thunks/allowanceTokens';
+import verifyResident from './thunks/verifyResident';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -23,13 +21,14 @@ interface OfficialState {
   seedPhrase: string | null;
   etherBal: string;
   nEtherBal: number;
-  isResident: boolean;
-  isOfficer: boolean;
-  isClaimResident: boolean;
-  isClaimWhitelisted: boolean;
-  allowTokens: string;
+  hasResidentId: boolean;
+  hasMinterRole: boolean;
+  tokenAllowances: number[];
   claimantNric: string;
   claimantPublicKey: string;
+  isClaimHasResidentId: boolean;
+  isClaimWhitelisted: boolean;
+  claimantTokenBals: number[];
 }
 
 const initialState: OfficialState = {
@@ -41,13 +40,14 @@ const initialState: OfficialState = {
   seedPhrase: null,
   etherBal: '0.0',
   nEtherBal: 0,
-  isOfficer: false,
-  isResident: false,
-  isClaimResident: false,
-  isClaimWhitelisted: false,
-  allowTokens: '0',
+  hasResidentId: false,
+  hasMinterRole: false,
+  tokenAllowances: [0, 0],
   claimantNric: '',
   claimantPublicKey: '',
+  isClaimHasResidentId: false,
+  isClaimWhitelisted: false,
+  claimantTokenBals: [0, 0],
 };
 
 export const officialSlice = createSlice({
@@ -63,7 +63,7 @@ export const officialSlice = createSlice({
     },
     resetVerifySubmission: (state) => {
       state.submissionMsg = null;
-      state.isClaimResident = false;
+      state.isClaimHasResidentId = false;
       state.isClaimWhitelisted = false;
       state.submissionState = 'IDLE';
     },
@@ -88,8 +88,8 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
-      state.isOfficer = payload.isOfficer;
-      state.isResident = payload.isResident;
+      state.hasMinterRole = payload.isOfficer;
+      state.hasResidentId = payload.isResident;
       state.submissionState = 'OK';
     });
     builder.addCase(signupOfficial.pending, (state, {}) => {
@@ -106,20 +106,10 @@ export const officialSlice = createSlice({
       state.submissionMsg = null;
     });
     builder.addCase(checkStatus.fulfilled, (state, { payload }) => {
-      if (payload.checkOfficer) {
-        state.isResident = payload.isResident;
-      } else {
-        state.isClaimResident = payload.isResident;
-        state.isClaimWhitelisted = payload.isWhitelisted;
-      }
+      state.hasResidentId = payload.hasResidentId;
+      state.hasMinterRole = payload.hasMinterRole;
+      state.tokenAllowances = payload.allowances;
       state.submissionMsg = payload.message;
-      state.submissionState = 'OK';
-    });
-    builder.addCase(hasRole.pending, (state, {}) => {
-      state.submissionState = 'PENDING';
-    });
-    builder.addCase(hasRole.fulfilled, (state, { payload }) => {
-      state.isOfficer = payload.hasRole;
       state.submissionState = 'OK';
     });
     builder.addCase(ethBal.pending, (state, {}) => {
@@ -130,33 +120,19 @@ export const officialSlice = createSlice({
       state.nEtherBal = payload.nEthBal;
       state.submissionState = 'OK';
     });
-    builder.addCase(awardResidency.pending, (state, {}) => {
+    builder.addCase(awardResidentId.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
     });
-    builder.addCase(awardResidency.rejected, (state, action) => {
+    builder.addCase(awardResidentId.rejected, (state, action) => {
       state.submissionState = 'FAILED';
       let msg = action.error?.message || 'An error occurred';
       msg = msg.substring(0, msg.length / 3);
       state.submissionMsg = msg;
     });
-    builder.addCase(awardResidency.fulfilled, (state, { payload }) => {
+    builder.addCase(awardResidentId.fulfilled, (state, { payload }) => {
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
-    });
-    builder.addCase(revokeResidency.pending, (state, {}) => {
-      state.submissionState = 'PENDING';
-      state.submissionMsg = null;
-    });
-    builder.addCase(revokeResidency.rejected, (state, action) => {
-      state.submissionState = 'FAILED';
-      let msg = action.error?.message || 'An error occurred';
-      msg = msg.substring(0, msg.length / 3);
-      state.submissionMsg = msg;
-    });
-    builder.addCase(revokeResidency.fulfilled, (state, { payload }) => {
-      state.submissionState = 'OK';
-      state.submissionMsg = payload.message;
     });
     builder.addCase(addWhitelist.pending, (state, {}) => {
       state.submissionState = 'PENDING';
@@ -209,14 +185,13 @@ export const officialSlice = createSlice({
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
-    builder.addCase(allowanceTokens.pending, (state, {}) => {
-      state.allowTokens = '...';
+    builder.addCase(verifyResident.pending, (state, {}) => {
       state.submissionMsg = null;
       state.submissionState = 'PENDING';
     });
-    builder.addCase(allowanceTokens.fulfilled, (state, { payload }) => {
+    builder.addCase(verifyResident.fulfilled, (state, { payload }) => {
+      console.log(payload);
       state.submissionMsg = payload.message;
-      state.allowTokens = payload.allowances;
       state.submissionState = 'OK';
     });
   },

@@ -2,25 +2,23 @@ import React from 'react';
 import { Alert, Box, IconButton, Snackbar, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import truncateEthAddr from '../../../utils/truncateEthAddr';
-import { Link } from 'react-router-dom';
+import { TOKEN_NAMES, TOKEN_SHORTNAMES } from '../../../services/subsidyType';
+import TokenIcon from '../../../commons/TokenIcon';
 
 export default function Balance({
   etherBal,
   publicKey,
+  tokenAllowances,
   handleReloadBal,
-  allowTokens,
-  handleAllowsBal,
 }: {
   etherBal: string;
   publicKey: string;
-  allowTokens: string;
+  tokenAllowances: number[];
   handleReloadBal: () => void;
-  handleAllowsBal: () => void;
 }) {
   const [isCopied, setIsCopied] = React.useState(false);
 
@@ -102,30 +100,36 @@ export default function Balance({
             fontSize: '12pt',
             color: 'silver',
             marginRight: '3px',
-            marginTop: 21,
+            marginTop: '4px',
           }}
         >
-          Rice tokens allowance
+          Allowances
         </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <IconButton component={Link} to="transfer">
-            <FileUploadIcon color="secondary" fontSize="small" />
-          </IconButton>
-          <Typography
-            color="primary"
-            style={{
-              marginLeft: 7,
-              marginRight: 7,
-              fontFamily: 'Oswald',
-              fontSize: '16pt',
+        {tokenAllowances.map((allowance, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 1,
             }}
           >
-            {allowTokens}
-          </Typography>
-          <IconButton onClick={handleAllowsBal}>
-            <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
-          </IconButton>
-        </Box>
+            <TokenIcon index={index} />
+            <Typography
+              color="primary"
+              style={{
+                fontFamily: 'Oswald',
+                fontSize: '16pt',
+                marginLeft: 7,
+              }}
+              key={index}
+              variant="body1"
+            >
+              {allowance} {TOKEN_SHORTNAMES[index]} tokens
+            </Typography>
+          </Box>
+        ))}
       </Box>
     </Box>
   );

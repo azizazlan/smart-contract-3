@@ -1,16 +1,11 @@
 import { ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import mlkResidentContractJSON from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
-import mlkRiceContractJSON from '../../../assets/artifacts/contracts/MelakaRice.sol/MelakaRice.json';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
-const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
-// const ADMIN_PUBLIC_KEY = import.meta.env.VITE_APP_ADMIN_PUBLIC_KEY;
 
 type TransferTokensFields = {
+  tokenId: number;
   residentNric: string;
   residentPublicKey: string;
 };
@@ -18,14 +13,8 @@ type TransferTokensFields = {
 const transferTokens = createAsyncThunk(
   'official_transfer_tokens',
   async (props: TransferTokensFields) => {
-    const { residentNric, residentPublicKey } = props;
+    const { tokenId, residentNric, residentPublicKey } = props;
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-
-    const melakaRice = new ethers.Contract(
-      MELAKA_RICE_CONTRACT_ADDR,
-      mlkRiceContractJSON.abi,
-      provider
-    );
 
     // 1. Check if officer have enough allowance tokens
 
@@ -39,7 +28,7 @@ const transferTokens = createAsyncThunk(
 
     // 3. If all pass, the transfer the tokens - for now we transfer one token
 
-    const message = `Successfully transfer melaka rice tokens to ${truncateEthAddr(
+    const message = `Successfully transfer tokens to ${truncateEthAddr(
       residentPublicKey
     )}`;
 
