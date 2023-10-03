@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import { isMobile } from 'react-device-detect';
-import styles from './styles';
+import styles from '../pages/official/transfer/styles';
 
 type ScanErrorProps = {
   handleCancel: () => void;

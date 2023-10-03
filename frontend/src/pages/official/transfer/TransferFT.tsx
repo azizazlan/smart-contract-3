@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isMobile } from 'react-device-detect';
-import ScanError from './ScanError';
+import ScanError from '../../../commons/ScanError';
 import { useOfficialDispatch } from '../../../services/hook';
 import { setClaimantNricPublicKey } from '../../../services/official/reducer';
 

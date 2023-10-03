@@ -11,9 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { isMobile } from 'react-device-detect';
 import styles from './styles';
-import { useOfficialDispatch } from '../../../services/hook';
+import {
+  useOfficialDispatch,
+  useOfficialSelector,
+} from '../../../services/hook';
 import { resetVerifySubmission } from '../../../services/official/reducer';
 import verifyResident from '../../../services/official/thunks/verifyResident';
+import { OfficialState } from '../../../services/store';
 
 const schema = Yup.object().shape({
   nric: Yup.string()
@@ -35,7 +39,15 @@ type VerifyResidencyFields = {
   publicKey: string;
 };
 
-export default function VerificationForm() {
+type VerificationFormProps = {
+  toggleCamera: () => void;
+};
+
+export default function VerificationForm(props: VerificationFormProps) {
+  const { toggleCamera } = props;
+  const { claimantNric, claimantPublicKey } = useOfficialSelector(
+    (state: OfficialState) => state.official
+  );
   const dispatch = useOfficialDispatch();
   const {
     reset,
@@ -45,8 +57,8 @@ export default function VerificationForm() {
   } = useForm<VerifyResidencyFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      nric: '',
-      publicKey: '',
+      nric: claimantNric,
+      publicKey: claimantPublicKey,
     },
   });
 
@@ -61,8 +73,7 @@ export default function VerificationForm() {
   };
 
   const handleReset = () => {
-    reset();
-    dispatch(resetVerifySubmission());
+    reset({ nric: '', publicKey: '' });
   };
 
   return (
@@ -122,7 +133,7 @@ export default function VerificationForm() {
           endIcon={<CameraIcon />}
           fullWidth={isMobile ? true : false}
           variant="outlined"
-          onClick={() => console.log('camera!!!')}
+          onClick={toggleCamera}
         >
           scan
         </Button>
