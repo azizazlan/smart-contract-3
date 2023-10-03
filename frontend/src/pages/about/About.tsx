@@ -4,10 +4,8 @@ import { Alert, Typography } from '@mui/material';
 import flag from '../../assets/malacca-flag.png';
 import truncateEthAddr from '../../utils/truncateEthAddr';
 
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
-
-const MELAKA_RICE_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RICE;
+const RESIDENTID_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
+const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 export default function About() {
   return (
@@ -37,17 +35,17 @@ export default function About() {
       </Typography>
       <br />
       <Typography variant="body2" gutterBottom>
-        Smart contract MelakaResident ERC721:
+        Smart contract MelakaResidentId ERC721:
       </Typography>
       <Typography style={{ fontFamily: 'Abel', fontSize: '12.5pt' }}>
-        {truncateEthAddr(MELAKA_RESIDENT_CONTRACT_ADDR)}
+        {truncateEthAddr(RESIDENTID_CONTRACT_ADDR)}
       </Typography>
       <br />
       <Typography variant="body2" gutterBottom>
-        Smart contract MelakaRice ERC20:
+        Smart contract MelakaRice ERC1155:
       </Typography>
       <Typography style={{ fontFamily: 'Abel', fontSize: '12.5pt' }}>
-        {truncateEthAddr(MELAKA_RICE_CONTRACT_ADDR)}
+        {truncateEthAddr(SUBSIDY_CONTRACT_ADDR)}
       </Typography>
       <br />
       <Typography variant="body2" gutterBottom>
