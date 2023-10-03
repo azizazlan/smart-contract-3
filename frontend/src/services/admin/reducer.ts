@@ -165,7 +165,6 @@ export const adminSlice = createSlice({
       }
       state.submissionMsg = payload.message;
       state.claimantPublicKey = payload.officerPublicKey;
-      state.claimantAllowances = payload.allowances;
       state.submissionState = 'OK';
     });
     builder.addCase(approveAllowance.pending, (state, {}) => {

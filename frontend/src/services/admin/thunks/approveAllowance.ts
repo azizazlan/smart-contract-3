@@ -3,26 +3,21 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import { BigNumber, ethers, Wallet } from 'ethers';
 
 import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
-
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type AssignRoleFields = {
+  tokenId: number;
   allowances: number;
   officerPublicKey: string;
   privateKey: string;
 };
 
-const BAG_070KG_RICE = 0;
-const BAG_001KG_WHEATFLOUR = 1;
-
 const approveAllowance = createAsyncThunk(
   'admin_approve_allowance',
   async (props: AssignRoleFields) => {
-    console.log(SUBSIDY_CONTRACT_ADDR);
-
-    const { officerPublicKey, allowances, privateKey } = props;
+    const { officerPublicKey, allowances, tokenId, privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });
     if (!provider) {
       console.log('Provider is null');
@@ -37,7 +32,7 @@ const approveAllowance = createAsyncThunk(
     );
     await new Promise((resolve) => setTimeout(resolve, 15000));
 
-    const tokens = BigNumber.from('1000');
+    const tokens = BigNumber.from(allowances);
     const metadataBytes = ethers.utils.toUtf8Bytes('metadata');
     await melakaSubsidy
       .connect(metaMaskWallet)
@@ -47,17 +42,16 @@ const approveAllowance = createAsyncThunk(
 
     await melakaSubsidy
       .connect(metaMaskWallet)
-      .mint(officerPublicKey, BAG_070KG_RICE, tokens, metadataBytes);
+      .mint(officerPublicKey, tokenId, tokens, metadataBytes);
 
-    // await melakaSubsidy
-    //   .connect(metaMaskWallet)
-    //   .mint(officerPublicKey, BAG_001KG_WHEATFLOUR, tokens, metadataBytes);
+    let tokenName = 'Bag 70kg of rice';
+    if (tokenId === 1) tokenName = 'Bag 1kg of Whear flour';
 
     return {
       officerPublicKey,
       message: `Successfully approved allowance to ${truncateEthAddr(
         officerPublicKey
-      )} with ${allowances.toString()} tokens`,
+      )} with ${allowances.toString()} ${tokenName} tokens`,
     };
   }
 );

@@ -20,7 +20,10 @@ export default function AllowanceTab() {
 
   return (
     <Box sx={{ marginTop: 0 }}>
-      <BackdropLoader submissionState={submissionState} />
+      <BackdropLoader
+        message="Approving allowance will take a minutes or so..."
+        submissionState={submissionState}
+      />
       <Typography
         variant="body2"
         color="primary"
