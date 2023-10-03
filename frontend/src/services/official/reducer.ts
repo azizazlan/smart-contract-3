@@ -194,6 +194,7 @@ export const officialSlice = createSlice({
     builder.addCase(verifyResident.fulfilled, (state, { payload }) => {
       state.isClaimHasResidentId = payload.hasResidentId;
       state.isClaimWhitelisted = payload.isWhitelisted;
+      state.claimantTokenBals = payload.tokenBalances;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

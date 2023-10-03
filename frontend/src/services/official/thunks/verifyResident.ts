@@ -44,7 +44,7 @@ const verifyResident = createAsyncThunk(
       1
     );
 
-    const balances = [
+    const tokenBalances = [
       allowanceRiceTokens.toNumber(),
       allowanceWheatFlourTokens.toNumber(),
     ];
@@ -54,9 +54,11 @@ const verifyResident = createAsyncThunk(
     const message = `Successfully verify resident`;
 
     return {
+      nric,
+      publicKey,
       hasResidentId,
       isWhitelisted,
-      balances,
+      tokenBalances,
       message,
     };
   }

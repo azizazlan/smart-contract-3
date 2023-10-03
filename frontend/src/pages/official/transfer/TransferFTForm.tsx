@@ -25,6 +25,7 @@ import { OfficialState } from '../../../services/store';
 import initialize from '../../../services/official/thunks/initialize';
 import bag_rice from '../../../assets/bag-rice.png';
 import bag_wheatflour from '../../../assets/bag-wheatflour.png';
+import transferTokens from '../../../services/official/thunks/transferTokens';
 
 const schema = Yup.object().shape({
   tokenId: Yup.number()
@@ -57,7 +58,7 @@ type TransferFTFormProps = {
 // Transfer FT page
 export default function TransferFTForm(props: TransferFTFormProps) {
   const dispatch = useOfficialDispatch();
-  const { claimantNric, claimantPublicKey } = useOfficialSelector(
+  const { claimantNric, claimantPublicKey, seedPhrase } = useOfficialSelector(
     (state: OfficialState) => state.official
   );
   const { toggleCamera } = props;
@@ -80,10 +81,22 @@ export default function TransferFTForm(props: TransferFTFormProps) {
   }, []);
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
-    const { recipientNric, recipientPublicKey } = data;
-    console.log('Submit transfer FT to resident!');
-    console.log(recipientPublicKey);
-    console.log(recipientNric);
+    const { tokenId, recipientNric, recipientPublicKey } = data;
+    // console.log('Submit transfer FT to resident!');
+    // console.log(recipientPublicKey);
+    // console.log(recipientNric);
+    if (!seedPhrase) {
+      console.log(`seedPhrase is null!`);
+      return;
+    }
+    dispatch(
+      transferTokens({
+        tokenId,
+        residentNric: recipientNric,
+        residentPublicKey: recipientPublicKey,
+        officialSeedphrase: seedPhrase,
+      })
+    );
   };
 
   const handleReset = () => {

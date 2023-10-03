@@ -15,13 +15,14 @@ import {
   CardHeader,
 } from '@mui/material';
 import { resetVerifySubmission } from '../../../services/official/reducer';
+import { TOKEN_NAMES } from '../../../services/subsidyType';
+import TokenIcon from '../../../commons/TokenIcon';
 
 export default function Result() {
   const dispatch = useOfficialDispatch();
 
-  const { isClaimHasResidentId, isClaimWhitelisted } = useOfficialSelector(
-    (state: OfficialState) => state.official
-  );
+  const { isClaimHasResidentId, isClaimWhitelisted, claimantTokenBals } =
+    useOfficialSelector((state: OfficialState) => state.official);
 
   const handleClose = () => {
     dispatch(resetVerifySubmission());
@@ -56,7 +57,7 @@ export default function Result() {
           <Typography
             color="primary"
             variant="body1"
-            sx={{ fontFamily: 'Oswald' }}
+            sx={{ fontFamily: 'Oswald', marginTop: 1 }}
           >
             Whitelisting
           </Typography>
@@ -71,6 +72,28 @@ export default function Result() {
               <CloseIcon color="primary" />
             </Box>
           )}
+          <Typography
+            color="primary"
+            variant="body1"
+            sx={{ fontFamily: 'Oswald', marginTop: 1 }}
+          >
+            Tokens
+          </Typography>
+          {claimantTokenBals.map((balance, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <TokenIcon index={index} />
+              <Typography key={index} variant="body1" sx={{ marginLeft: 1 }}>
+                {TOKEN_NAMES[index]}: {balance} tokens
+              </Typography>
+            </Box>
+          ))}
         </CardContent>
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flexGrow: 1 }} />

@@ -17,7 +17,6 @@ interface ResidentState {
   seedPhrase: string | null;
   isResident: boolean;
   isWhitelisted: boolean;
-  ftRiceBalance: number;
 }
 
 const initialState: ResidentState = {
@@ -30,7 +29,6 @@ const initialState: ResidentState = {
   seedPhrase: null,
   isResident: false,
   isWhitelisted: false,
-  ftRiceBalance: 0,
 };
 
 export const residentSlice = createSlice({
