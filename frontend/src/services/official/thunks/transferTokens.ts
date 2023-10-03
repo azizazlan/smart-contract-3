@@ -17,7 +17,7 @@ type TransferTokensFields = {
 // in this transfer token we will only transfer one (1) token
 const transferTokens = createAsyncThunk(
   'official_transfer_tokens',
-  async (props: TransferTokensFields) => {
+  async (props: TransferTokensFields, { rejectWithValue }) => {
     const { tokenId, residentNric, residentPublicKey, officialSeedphrase } =
       props;
 
@@ -25,17 +25,14 @@ const transferTokens = createAsyncThunk(
     const officialWallet =
       Wallet.fromMnemonic(officialSeedphrase).connect(provider);
 
-    // 1. Check if officer have enough allowance tokens
+    // Check is the publicKey (resident) has resident id and whitelisted
+    return rejectWithValue(
+      `Resident with public key ${truncateEthAddr(
+        residentPublicKey
+      )} and NRIC ${residentNric} is not whitelisted.`
+    );
 
-    // const bnallowances = await melakaRice.allowance(
-    //   ADMIN_PUBLIC_KEY,
-    //   publicKey
-    // );
-    // const allowances = bnallowances.toNumber().toString();
-
-    // 2. Check is the publicKey (resident) has resident status
-
-    // 3. If all pass, the transfer the tokens - for now we transfer one token
+    // If all pass, the transfer the tokens - for now we transfer one token
     const melakaSubsidy = new ethers.Contract(
       SUBSIDY_CONTRACT_ADDR,
       melakaSubsidyJSON.abi,

@@ -11,6 +11,7 @@ import removeWhitelist from './thunks/removeWhitelist';
 import restore from './thunks/restore';
 import clearLocalSto from './thunks/clearLocalSto';
 import verifyResident from './thunks/verifyResident';
+import transferTokens from './thunks/transferTokens';
 
 interface OfficialState {
   submissionState: SubmissionStates;
@@ -197,6 +198,15 @@ export const officialSlice = createSlice({
       state.claimantTokenBals = payload.tokenBalances;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
+    });
+    builder.addCase(transferTokens.pending, (state, {}) => {
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
+    });
+    builder.addCase(transferTokens.rejected, (state, action) => {
+      console.log(action);
+      state.submissionMsg = action.payload as string;
+      state.submissionState = 'FAILED';
     });
   },
 });

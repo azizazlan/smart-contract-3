@@ -1,16 +1,24 @@
 import React from 'react';
 import TransferFTForm from './TransferFTForm';
 import ScanError from '../../../commons/ScanError';
-import { useOfficialDispatch } from '../../../services/hook';
+import {
+  useOfficialDispatch,
+  useOfficialSelector,
+} from '../../../services/hook';
 import {
   resetSubmissionState,
   setClaimantNricPublicKey,
 } from '../../../services/official/reducer';
 import QrReader from '../../../commons/QrReader';
+import { OfficialState } from '../../../services/store';
+import ErrResult from './ErrResult';
 
 // Transfer FT page
 export default function TransferFT() {
   const dispatch = useOfficialDispatch();
+  const { submissionState, submissionMsg } = useOfficialSelector(
+    (state: OfficialState) => state.official
+  );
   const [camera, setCamera] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -65,6 +73,10 @@ export default function TransferFT() {
         handleClose={handleCloseCamera}
       />
     );
+  }
+
+  if (submissionState === 'FAILED' && submissionMsg) {
+    return <ErrResult message={submissionMsg} />;
   }
 
   return <TransferFTForm toggleCamera={toggleCamera} />;
