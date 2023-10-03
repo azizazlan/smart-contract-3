@@ -36,10 +36,10 @@ const applyPrivateKey = createAsyncThunk(
       provider2
     );
 
-    const hasRole = await contract.hasRole(MINTER_ROLE, publicKey);
+    const hasMinterRole = await contract.hasRole(MINTER_ROLE, publicKey);
 
     return {
-      hasRole,
+      hasMinterRole,
       privateKey,
       publicKey,
       message: 'Successfully applied private key',

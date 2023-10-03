@@ -3,8 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import metamaskInfo from './thunks/metamaskInfo';
 import awardResidentId from './thunks/awardResidentId';
-import checkResident from './thunks/checkResidency';
-import checkRole from './thunks/checkRole';
 import assignRole from './thunks/assignRole';
 import contractInfo from './thunks/contractInfo';
 import applyPrivateKey from './thunks/applyPrivateKey';
@@ -21,12 +19,11 @@ interface AdminState {
   riceTokenBal: string; // Admin's balance of MelakaRice (ERC20) token
   publicKey: string | null;
   privateKey: string | null;
-  isClaimantHasIdentity: boolean;
-  isClaimantOfficer: boolean;
-  isClaimantWhitelisted: boolean;
+  hasMinterRole: boolean; // has role over the contracts
   claimantPublicKey: string | null;
-  claimantAllowances: number; // no of allow tokens claimant want to apply
-  hasRole: boolean; // has role over the contracts
+  isClaimantHasIdentity: boolean;
+  isClaimantHasMinterRole: boolean;
+  claimantAllowances: number[]; // no of allow tokens claimant want to apply
 }
 
 const initialState: AdminState = {
@@ -38,12 +35,11 @@ const initialState: AdminState = {
   riceTokenTotalSupply: '0',
   publicKey: null,
   privateKey: null,
-  isClaimantHasIdentity: false,
-  isClaimantOfficer: false,
-  isClaimantWhitelisted: false,
+  hasMinterRole: false,
   claimantPublicKey: null,
-  claimantAllowances: 0,
-  hasRole: false,
+  isClaimantHasIdentity: false,
+  isClaimantHasMinterRole: false,
+  claimantAllowances: [0, 0],
 };
 
 export const adminSlice = createSlice({
@@ -92,7 +88,7 @@ export const adminSlice = createSlice({
         state.submissionMsg = 'Error get contract info';
         return;
       }
-      state.hasRole = payload?.isGomenOfficer;
+      state.hasMinterRole = payload?.isGomenOfficer;
       state.submissionMsg = payload?.message;
       state.riceTokenTotalSupply = payload.riceTokenTotalSupply;
       state.riceTokenBal = payload.riceTokenBal;
@@ -116,32 +112,6 @@ export const adminSlice = createSlice({
       }
       // state.isClaimantHasIdentity = payload?.hasIdentity;
       state.submissionMsg = payload.message;
-      state.submissionState = 'OK';
-    });
-    builder.addCase(checkResident.pending, (state, {}) => {
-      state.submissionState = 'PENDING';
-      state.submissionMsg = null;
-    });
-    builder.addCase(checkResident.fulfilled, (state, { payload }) => {
-      state.isClaimantHasIdentity = payload?.isResident;
-      state.submissionState = 'OK';
-    });
-    builder.addCase(checkRole.pending, (state, {}) => {
-      state.submissionState = 'PENDING';
-      state.submissionMsg = null;
-    });
-    builder.addCase(checkRole.rejected, (state, action) => {
-      state.submissionState = 'FAILED';
-      let msg = action.error?.message || 'An error occurred';
-      msg = msg.substring(0, msg.length / 3);
-      state.submissionMsg = msg;
-    });
-    builder.addCase(checkRole.fulfilled, (state, { payload }) => {
-      if (!payload) {
-        state.isClaimantOfficer = false;
-        return;
-      }
-      state.isClaimantOfficer = payload.isOfficer;
       state.submissionState = 'OK';
     });
     builder.addCase(assignRole.pending, (state, {}) => {
@@ -218,15 +188,14 @@ export const adminSlice = createSlice({
       state.submissionMsg = payload?.message;
       state.publicKey = payload?.publicKey;
       state.privateKey = payload?.privateKey;
-      state.hasRole = payload.hasRole;
+      state.hasMinterRole = payload.hasMinterRole;
     });
     builder.addCase(checkStatus.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;
       state.isClaimantHasIdentity = false;
-      state.isClaimantOfficer = false;
-      state.isClaimantWhitelisted = false;
-      state.claimantAllowances = 0;
+      state.isClaimantHasMinterRole = false;
+      state.claimantAllowances = [0, 0];
     });
     builder.addCase(checkStatus.rejected, (state, action) => {
       state.submissionState = 'FAILED';
@@ -239,13 +208,12 @@ export const adminSlice = createSlice({
       if (!payload) {
         state.submissionMsg = 'Error message';
         state.submissionState = 'FAILED';
-        state.claimantAllowances = 0;
+        state.claimantAllowances = [0, 0];
         return;
       }
       state.submissionMsg = payload?.message;
-      state.isClaimantHasIdentity = payload.isResident;
-      state.isClaimantOfficer = payload.isOfficer;
-      state.isClaimantWhitelisted = payload.isWhitelisted;
+      state.isClaimantHasIdentity = payload.hasResidentId;
+      state.isClaimantHasMinterRole = payload.hasMinterRole;
       state.claimantAllowances = payload.allowances;
       state.submissionState = 'OK';
     });

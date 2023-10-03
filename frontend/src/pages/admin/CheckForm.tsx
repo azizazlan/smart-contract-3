@@ -29,19 +29,19 @@ const schema = Yup.object().shape({
     ),
 });
 
-type VerifyFields = {
+type CheckFormFields = {
   nric: string;
   publicKey: string;
 };
 
-export default function VerifyForm() {
+export default function CheckForm() {
   const dispatch = useAdminDispatch();
   const {
     reset,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<VerifyFields>({
+  } = useForm<CheckFormFields>({
     resolver: yupResolver(schema),
     defaultValues: {
       nric: '',
@@ -56,7 +56,7 @@ export default function VerifyForm() {
     dispatch(resetSubmission());
   };
 
-  const onSubmit: SubmitHandler<VerifyFields> = (data) => {
+  const onSubmit: SubmitHandler<CheckFormFields> = (data) => {
     const { nric, publicKey } = data;
     if (!publicKey || !nric || !privateKey) {
       console.log('One of the param is null');
@@ -127,7 +127,7 @@ export default function VerifyForm() {
           variant="contained"
           aria-label="award"
         >
-          verify
+          check
         </Button>
       </Box>
     </div>

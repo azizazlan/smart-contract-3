@@ -2,7 +2,6 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import InfoTab from './InfoTab';
 import ResidentTab from './ResidentIdTab';
 import RoleAssignmentTab from './RoleAssignmentTab';
@@ -11,7 +10,7 @@ import { AdminState } from '../../services/store';
 import metamaskInfo from '../../services/admin/thunks/metamaskInfo';
 import contractInfo from '../../services/admin/thunks/contractInfo';
 import { resetSubmission } from '../../services/admin/reducer';
-import VerifyTab from './VerifyTab';
+import CheckTab from './CheckTab';
 import AllowanceTab from './AllowanceTab';
 
 interface TabPanelProps {
@@ -46,15 +45,8 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const dispatch = useAdminDispatch();
-  const {
-    networkId,
-    publicKey,
-    privateKey,
-    etherBal,
-    hasRole,
-    riceTokenBal,
-    riceTokenTotalSupply,
-  } = useAdminSelector((state: AdminState) => state.admin);
+  const { networkId, publicKey, privateKey, etherBal, hasMinterRole } =
+    useAdminSelector((state: AdminState) => state.admin);
   const [value, setValue] = React.useState(0);
 
   React.useEffect(() => {
@@ -72,7 +64,7 @@ export default function BasicTabs() {
     setValue(newValue);
   };
 
-  if (!hasRole) {
+  if (!hasMinterRole) {
     return (
       <Box sx={{ width: '100%' }}>
         <Box
@@ -95,9 +87,7 @@ export default function BasicTabs() {
             chainId={networkId || ''}
             publicKey={publicKey || ''}
             etherBal={etherBal || ''}
-            hasRole={hasRole}
-            riceTokenBal={riceTokenBal || '0'}
-            riceTokenTotalSupply={riceTokenTotalSupply || '0'}
+            hasMinterRole={hasMinterRole}
           />
         </CustomTabPanel>
       </Box>
@@ -120,14 +110,9 @@ export default function BasicTabs() {
         >
           <Tab label="Admin info" {...a11yProps(0)} />
           <Tab label="Resident ID" {...a11yProps(1)} />
-          <Tab label="Role" {...a11yProps(2)} />
+          <Tab label="Minter Role" {...a11yProps(2)} />
           <Tab label="Allowance" {...a11yProps(3)} />
-          <Tab
-            label="Verify"
-            icon={<SensorOccupiedIcon />}
-            iconPosition="start"
-            {...a11yProps(4)}
-          />
+          <Tab label="Check" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -135,9 +120,7 @@ export default function BasicTabs() {
           chainId={networkId || ''}
           publicKey={publicKey || ''}
           etherBal={etherBal || ''}
-          hasRole={hasRole}
-          riceTokenBal={riceTokenBal || '0'}
-          riceTokenTotalSupply={riceTokenTotalSupply || '0'}
+          hasMinterRole={hasMinterRole}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
@@ -150,7 +133,7 @@ export default function BasicTabs() {
         <AllowanceTab />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
-        <VerifyTab />
+        <CheckTab />
       </CustomTabPanel>
     </Box>
   );

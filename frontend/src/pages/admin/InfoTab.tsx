@@ -15,9 +15,7 @@ type InfoTabProps = {
   chainId: string;
   publicKey: string;
   etherBal: string;
-  hasRole: boolean;
-  riceTokenBal: string;
-  riceTokenTotalSupply: string;
+  hasMinterRole: boolean;
 };
 
 function Label(props: { label: string }) {
@@ -42,8 +40,7 @@ function Value(props: { value: string }) {
 }
 
 export default function InfoTab(props: InfoTabProps) {
-  const { publicKey, etherBal, hasRole, riceTokenTotalSupply, riceTokenBal } =
-    props;
+  const { publicKey, etherBal, hasMinterRole } = props;
   return (
     <List sx={{ width: '100%', marginTop: 3 }} disablePadding>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -76,7 +73,7 @@ export default function InfoTab(props: InfoTabProps) {
         </Link>
       </Box>
       <Box sx={{ height: '17px' }} />
-      {hasRole ? (
+      {hasMinterRole ? (
         <div>
           <ListItem key={3} disablePadding>
             <ListItemText
@@ -93,12 +90,6 @@ export default function InfoTab(props: InfoTabProps) {
                 secondary={
                   <Value value={truncateEthAddr(melaka_rice_contract_addr)} />
                 }
-              />
-            </ListItem>
-            <ListItem key={'4_2'} disablePadding sx={{ maxWidth: '175px' }}>
-              <ListItemText
-                primary={<Label label="Allowance" />}
-                secondary={<Value value={riceTokenBal} />}
               />
             </ListItem>
           </Box>

@@ -1,18 +1,17 @@
 import { Box, Typography } from '@mui/material';
-import VerifyForm from './VerifyForm';
+import VerifyForm from './CheckForm';
 import { useAdminSelector } from '../../services/hook';
 import { AdminState } from '../../services/store';
 import Result from './Result';
-import ResultStatus from './ResultStatus';
 import BackdropLoader from '../../commons/BackdropLoader';
+import CheckResultStatus from './CheckResultStatus';
 
-export default function VerifyTab() {
+export default function CheckTab() {
   const {
     submissionState,
     submissionMsg,
-    isClaimantOfficer,
-    isClaimantResident,
-    isClaimantWhitelisted,
+    isClaimantHasIdentity,
+    isClaimantHasMinterRole,
     claimantAllowances,
   } = useAdminSelector((state: AdminState) => state.admin);
 
@@ -22,13 +21,12 @@ export default function VerifyTab() {
 
   if (submissionState === 'OK' && submissionMsg) {
     return (
-      <ResultStatus
-        isResident={isClaimantResident}
-        isOfficer={isClaimantOfficer}
-        allowances={claimantAllowances}
-        isWhitelisted={isClaimantWhitelisted}
-        error={false}
+      <CheckResultStatus
         message={submissionMsg}
+        error={false}
+        hasResidentId={isClaimantHasIdentity}
+        hasMinterRole={isClaimantHasMinterRole}
+        allowances={claimantAllowances}
       />
     );
   }
@@ -41,8 +39,7 @@ export default function VerifyTab() {
         color="primary"
         sx={{ fontFamily: 'Oswald', marginTop: 2, marginBottom: 1 }}
       >
-        This page allows you to verify residency, whitelist status and to check
-        if public key has been assigned as officer.
+        This page allows you to check resident id, minter role and allowances.
       </Typography>
       <VerifyForm />
     </Box>

@@ -60,7 +60,6 @@ const contractInfo = createAsyncThunk(
     );
 
     const message = 'Successfully get contract info';
-    console.log(message);
 
     return {
       isGomenOfficer,

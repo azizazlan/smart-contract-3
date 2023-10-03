@@ -13,15 +13,15 @@ import { resetSubmission } from '../../services/admin/reducer';
 type ResultStatusProps = {
   message: string;
   error: boolean;
-  isResident: boolean;
-  isOfficer: boolean;
-  isWhitelisted: boolean;
-  allowances: number;
+  hasResidentId: boolean;
+  hasMinterRole: boolean;
+  allowances: number[];
 };
 
-export default function ResultStatus(props: ResultStatusProps) {
+export default function CheckResultStatus(props: ResultStatusProps) {
   const dispatch = useAdminDispatch();
 
+  const tokenNames = ['Bag 70kg of rice', 'Bag 1kg of wheat flour'];
   const handleClose = () => {
     dispatch(resetSubmission());
   };
@@ -31,7 +31,7 @@ export default function ResultStatus(props: ResultStatusProps) {
       <Box sx={{ margin: 2 }}>
         <Card sx={{ minWidth: 275, backgroundColor: '#f5f6fa' }}>
           <CardHeader
-            title="Verify status"
+            title="Check status"
             sx={{ color: `${props.error ? 'red' : '#273c75'}` }}
           />
           {!props.error ? (
@@ -51,36 +51,30 @@ export default function ResultStatus(props: ResultStatusProps) {
   return (
     <Box sx={{ margin: 2 }}>
       <Card sx={{ minWidth: 275, backgroundColor: '#f5f6fa' }}>
-        <CardHeader title="Verify status" sx={{ color: '#273c75' }} />
+        <CardHeader title="Check status" sx={{ color: '#273c75' }} />
         <CardContent>
           <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
             Residency status
           </Typography>
           <Typography gutterBottom>
-            {props.isResident ? 'Resident ✅' : 'Non-resident ✖'}
+            {props.hasResidentId
+              ? 'Resident Id ✅'
+              : 'Do not have resident id ✖'}
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Box>
-              <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-                Official role
-              </Typography>
-              <Typography gutterBottom>
-                {props.isOfficer ? 'Officer ✅' : 'Non-officer ✖'}
-              </Typography>
-            </Box>
-            <Box sx={{ marginLeft: 3 }}>
-              <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-                MelakaRice token allowances
-              </Typography>
-              <Typography gutterBottom>{props.allowances} tokens</Typography>
-            </Box>
-          </Box>
           <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-            Whitelisting
+            Official role
           </Typography>
           <Typography gutterBottom>
-            {props.isWhitelisted ? 'Whitelisted ✅' : 'No ✖'}
+            {props.hasMinterRole ? 'Minter ✅' : 'Not a minter ✖'}
           </Typography>
+          <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+            Allowances
+          </Typography>
+          {props.allowances.map((allowance, index) => (
+            <Typography key={index} variant="body1">
+              {tokenNames[index]}: {allowance} tokens
+            </Typography>
+          ))}
         </CardContent>
         <CardContent>{props.message}</CardContent>
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>

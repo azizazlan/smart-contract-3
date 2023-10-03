@@ -30,7 +30,7 @@ type AdminAccountFprmFields = {
 
 export default function AccountForm() {
   const dispatch = useAdminDispatch();
-  const { privateKey, hasRole } = useAdminSelector(
+  const { privateKey, hasMinterRole } = useAdminSelector(
     (state: AdminState) => state.admin
   );
 
@@ -91,7 +91,7 @@ export default function AccountForm() {
           <Typography sx={{ marginLeft: 1 }}>
             {publicKey ? truncateEthAddr(publicKey) : '...'}
           </Typography>
-          {hasRole ? (
+          {hasMinterRole ? (
             <Typography
               sx={{
                 marginLeft: 1,
