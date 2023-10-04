@@ -6,6 +6,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a lo
 import rice from '../../../assets/bag-rice.png';
 import flour from '../../../assets/bag-wheatflour.png';
 import blank from '../../../assets/blank.png';
+import { Link } from 'react-router-dom';
 
 export default function Balance() {
   const [isCopied, setIsCopied] = React.useState(false);
@@ -52,11 +53,15 @@ export default function Balance() {
         <Carousel showThumbs={false}>
           <div>
             <img src={rice} style={{ marginTop: 1, width: '75px' }} />
-            <p className="legend">Bag 70kg of Rice</p>
+            <Link to="txhistory">
+              <p className="legend">Bag 70kg of Rice</p>
+            </Link>
           </div>
           <div>
             <img src={flour} style={{ marginTop: 1, width: '75px' }} />
-            <p className="legend">Bag 1kg of Wheat Flour 2</p>
+            <Link to="txhistory">
+              <p className="legend">Bag 1kg of Wheat Flour 2</p>
+            </Link>
           </div>
           <div>
             <img src={blank} style={{ width: '175px' }} />

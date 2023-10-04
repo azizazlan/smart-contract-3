@@ -13,6 +13,7 @@ import Status from './Status';
 // import checkStatus from '../../../services/resident/thunks/checkStatus';
 import initialize from '../../../services/resident/thunks/initialize';
 import QrDialog from '../../../layouts/resident/QrDialog';
+import watchTfrEvents from '../../../services/resident/thunks/watchTfrEvents.ts';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
@@ -23,6 +24,7 @@ export default function Info() {
 
   React.useEffect(() => {
     dispatch(initialize());
+    if (publicKey) dispatch(watchTfrEvents({ publicKey }));
   }, []);
 
   React.useEffect(() => {

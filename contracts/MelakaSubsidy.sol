@@ -17,6 +17,15 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
     // Define an allowance mapping for each address
     mapping(address => uint256) public allowances;
 
+    // Event to log token transfers with date and time
+    event TransferSubsidyEvent(
+        address indexed from,
+        address indexed to,
+        uint256 indexed id,
+        uint256 value,
+        uint256 timestamp
+    );
+
     constructor() ERC1155("") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(URI_SETTER_ROLE, msg.sender);
@@ -46,6 +55,8 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
 
         // Update the allowance
         allowances[from] -= amount;
+
+        emit TransferSubsidyEvent(from, to, id, amount, block.timestamp);
     }
 
     function setURI(string memory newuri) public onlyRole(URI_SETTER_ROLE) {

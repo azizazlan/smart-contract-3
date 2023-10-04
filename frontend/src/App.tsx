@@ -21,6 +21,7 @@ import About from './pages/about/About';
 import Verify from './pages/verify/Verify';
 import { default as OfficialLanding } from './pages/official/landing/Landing';
 import NotFound from './pages/404/NotFound';
+import TxHistory from './pages/resident/txhistory/TxHistory';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route index element={<AccountInfo />} />
         <Route path="about" element={<About />} />
         <Route path="verify" element={<Verify />} />
+        <Route path="txhistory" element={<TxHistory />} />
       </Route>
       <Route path="/official" element={<OfficialLayout />}>
         <Route index element={<OfficialLanding />} />
