@@ -37,7 +37,6 @@ export default function Info() {
   const handleReloadStatus = () => {
     dispatch(
       checkStatus({
-        checkOfficer: true,
         publicKey: publicKey as string,
         nric: nric as string,
       })

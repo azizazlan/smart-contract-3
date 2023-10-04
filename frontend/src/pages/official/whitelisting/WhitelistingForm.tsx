@@ -7,6 +7,8 @@ import {
   TextField,
 } from '@mui/material';
 import CameraIcon from '@mui/icons-material/Camera';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -166,6 +168,7 @@ export default function WhitelistingForm(props: WhitelistingFormProps) {
         </Button>
         <Box sx={{ flexGrow: 0, height: 12, width: 12 }} />
         <Button
+          startIcon={<RemoveIcon />}
           color="secondary"
           type="submit"
           form="official_whitelisting"
@@ -177,6 +180,7 @@ export default function WhitelistingForm(props: WhitelistingFormProps) {
         </Button>
         <Box sx={{ flexGrow: 0, height: 12, width: 12 }} />
         <Button
+          startIcon={<AddIcon />}
           color="primary"
           type="submit"
           form="official_whitelisting"

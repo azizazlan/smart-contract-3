@@ -16,15 +16,8 @@ import QrDialog from '../../../layouts/resident/QrDialog';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
-  const {
-    publicKey,
-    seedPhrase,
-    isResident,
-    isWhitelisted,
-    nric,
-    ftRiceBalance,
-    qrcode,
-  } = useResidentSelector((state: ResidentState) => state.resident);
+  const { publicKey, seedPhrase, isResident, isWhitelisted, nric, qrcode } =
+    useResidentSelector((state: ResidentState) => state.resident);
 
   const [openQrCode, setOpenQrCode] = React.useState(false);
 
@@ -83,11 +76,7 @@ export default function Info() {
         handleReloadWhitelistStat={handleReloadWhitelistStat}
         handleClickAvatar={toggleQrCode}
       />
-      <Balance
-        ftBal={ftRiceBalance.toString()}
-        publicKey={publicKey || ''}
-        handleReloadBal={handleReloadBal}
-      />
+      <Balance publicKey={publicKey || ''} handleReloadBal={handleReloadBal} />
     </Box>
   );
 }

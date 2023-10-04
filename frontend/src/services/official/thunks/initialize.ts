@@ -12,13 +12,9 @@ const initialize = createAsyncThunk(
     const nric = localStorage.getItem('thuleen.mfs.official.nric');
     const publicKey = localStorage.getItem('thuleen.mfs.official.publicKey');
     const seedPhrase = localStorage.getItem('thuleen.mfs.official.seedPhrase');
-    const isResident = !!localStorage.getItem(
-      'thuleen.mfs.official.isResident'
-    );
-    const isOfficer = !!localStorage.getItem('thuleen.mfs.official.isOfficer');
 
     if (publicKey && nric) {
-      thunkAPI.dispatch(checkStatus({ checkOfficer: true, nric, publicKey }));
+      thunkAPI.dispatch(checkStatus({ nric, publicKey }));
       thunkAPI.dispatch(ethBal({ publicKey }));
     }
 
@@ -26,8 +22,6 @@ const initialize = createAsyncThunk(
       nric,
       publicKey,
       seedPhrase,
-      isResident,
-      isOfficer,
     };
   }
 );

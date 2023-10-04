@@ -8,11 +8,9 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 export default function Balance({
-  ftBal,
   publicKey,
   handleReloadBal,
 }: {
-  ftBal: string;
   publicKey: string;
   handleReloadBal: () => void;
 }) {
@@ -96,15 +94,6 @@ export default function Balance({
             justifyContent: 'center',
           }}
         >
-          <Typography
-            color="primary"
-            style={{
-              fontFamily: 'Oswald',
-              fontSize: '16pt',
-            }}
-          >
-            {ftBal}
-          </Typography>
           <IconButton onClick={handleReloadBal}>
             <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
           </IconButton>

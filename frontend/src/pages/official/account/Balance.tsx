@@ -6,7 +6,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import truncateEthAddr from '../../../utils/truncateEthAddr';
-import { TOKEN_NAMES, TOKEN_SHORTNAMES } from '../../../services/subsidyType';
+import { TOKEN_SHORTNAMES } from '../../../services/subsidyType';
 import TokenIcon from '../../../commons/TokenIcon';
 
 export default function Balance({

@@ -6,8 +6,6 @@ const clearLocalSto = createAsyncThunk(
     localStorage.removeItem('thuleen.mfs.official.nric');
     localStorage.removeItem('thuleen.mfs.official.publicKey');
     localStorage.removeItem('thuleen.mfs.official.seedPhrase');
-    localStorage.removeItem('thuleen.mfs.official.isResident');
-    localStorage.removeItem('thuleen.mfs.official.isOfficer');
     const message = 'Successfully clear local storaga for official';
     return {
       message,

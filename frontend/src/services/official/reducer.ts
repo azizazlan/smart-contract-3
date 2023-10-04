@@ -89,8 +89,6 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
-      state.hasMinterRole = payload.isOfficer;
-      state.hasResidentId = payload.isResident;
       state.submissionState = 'OK';
     });
     builder.addCase(signupOfficial.pending, (state, {}) => {
