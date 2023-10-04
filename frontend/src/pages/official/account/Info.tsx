@@ -34,43 +34,37 @@ export default function Info() {
     return <Navigate to="/official" />;
   }
 
-  const handleReloadStatus = () => {
-    if (!nric) {
-      console.log(`nric is null`);
-      return;
-    }
-    dispatch(
-      checkStatus({
-        publicKey: publicKey as string,
-        nric,
-      })
-    );
-  };
+  // const handleReloadStatus = () => {
+  //   if (!nric) {
+  //     console.log(`nric is null`);
+  //     return;
+  //   }
+  //   dispatch(
+  //     checkStatus({
+  //       publicKey: publicKey as string,
+  //       nric,
+  //     })
+  //   );
+  // };
 
-  const handleReloadBal = () => {
-    dispatch(
-      ethBal({
-        publicKey: publicKey as string,
-      })
-    );
-  };
+  // const handleReloadBal = () => {
+  //   dispatch(
+  //     ethBal({
+  //       publicKey: publicKey as string,
+  //     })
+  //   );
+  // };
 
   return (
-    <Box sx={styles.container}>
-      <Box sx={{ marginTop: 3 }}>
-        <Status
-          nric={nric || 0}
-          hasResidentId={hasResidentId}
-          hasMinterRole={hasMinterRole}
-          handleReloadStatus={handleReloadStatus}
-        />
-        <Balance
-          publicKey={publicKey || 'NA'}
-          etherBal={etherBal}
-          tokenAllowances={tokenAllowances}
-          handleReloadBal={handleReloadBal}
-        />
-      </Box>
+    <Box sx={{ ...styles.container, marginTop: 3 }}>
+      <Status
+        publicKey={publicKey || 'NA'}
+        etherBal={etherBal}
+        nric={nric || 0}
+        hasResidentId={hasResidentId}
+        hasMinterRole={hasMinterRole}
+      />
+      <Balance tokenAllowances={tokenAllowances} />
     </Box>
   );
 }

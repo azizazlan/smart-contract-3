@@ -5,6 +5,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { styled } from '@mui/material/styles';
 import residentIcon from '../../../assets/resident.png';
 import nonResidentIcon from '../../../assets/non-resident.png';
+import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
   width: 22,
@@ -31,7 +32,6 @@ export default function Status({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '9px',
       }}
     >
       <Badge
@@ -51,7 +51,9 @@ export default function Status({
             width: '72px',
             height: '72px',
             cursor: 'pointer',
-            backgroundColor: '#f1f2f6',
+            backgroundColor: `${
+              hasResidentId && isWhitelisted ? 'white' : '#f1f2f6'
+            }`,
           }}
         >
           <img
@@ -62,17 +64,16 @@ export default function Status({
           />
         </Avatar>
       </Badge>
-
       <Typography
         style={{
           fontFamily: 'Oswald',
           fontSize: '12pt',
           color: 'silver',
           marginRight: '3px',
-          marginTop: '4px',
+          marginTop: 17,
         }}
       >
-        NRIC
+        NRIC / Public key
       </Typography>
       <Typography
         color="primary"
@@ -81,7 +82,7 @@ export default function Status({
           fontSize: '16pt',
         }}
       >
-        {nric}
+        {nric} ({truncateEthAddr(publicKey)})
       </Typography>
       <Typography
         style={{

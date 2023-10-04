@@ -16,6 +16,7 @@ export default function Balance() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        marginTop: 1,
       }}
     >
       <Snackbar
@@ -33,7 +34,6 @@ export default function Balance() {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          marginTop: '17px',
           alignItems: 'center',
         }}
       >
@@ -48,14 +48,14 @@ export default function Balance() {
           Subsidy tokens
         </Typography>
       </Box>
-      <Box sx={{ marginTop: 2 }}>
+      <Box sx={{ marginTop: 5 }}>
         <Carousel showThumbs={false}>
           <div>
-            <img src={rice} style={{ width: '75px' }} />
+            <img src={rice} style={{ marginTop: 1, width: '75px' }} />
             <p className="legend">Bag 70kg of Rice</p>
           </div>
           <div>
-            <img src={flour} style={{ width: '75px' }} />
+            <img src={flour} style={{ marginTop: 1, width: '75px' }} />
             <p className="legend">Bag 1kg of Wheat Flour 2</p>
           </div>
           <div>

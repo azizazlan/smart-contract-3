@@ -1,16 +1,21 @@
 import { Box, Typography, IconButton } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
+import truncateEthAddr from '../../../utils/truncateEthAddr';
+import minterImg from '../../../assets/minter.png';
+import nonMinterImg from '../../../assets/non-minter.png';
 
 export default function Status({
+  publicKey,
   nric,
+  etherBal,
   hasResidentId,
   hasMinterRole,
-  handleReloadStatus,
 }: {
+  publicKey: string;
   nric: number;
+  etherBal: string;
   hasResidentId: boolean;
   hasMinterRole: boolean;
-  handleReloadStatus: () => void;
 }) {
   return (
     <Box
@@ -18,19 +23,23 @@ export default function Status({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '9px',
       }}
     >
+      {hasResidentId && hasMinterRole ? (
+        <img src={minterImg} alt="minter" style={{ width: '57px' }} />
+      ) : (
+        <img src={nonMinterImg} alt="minter" style={{ width: '85px' }} />
+      )}
       <Typography
         style={{
           fontFamily: 'Oswald',
           fontSize: '12pt',
           color: 'silver',
           marginRight: '3px',
-          marginTop: '4px',
+          marginTop: 17,
         }}
       >
-        NRIC
+        NRIC / Public key
       </Typography>
       <Typography
         color="primary"
@@ -39,7 +48,7 @@ export default function Status({
           fontSize: '16pt',
         }}
       >
-        {nric}
+        {nric} ({truncateEthAddr(publicKey)})
       </Typography>
       <Typography
         style={{
@@ -50,64 +59,18 @@ export default function Status({
           marginTop: '4px',
         }}
       >
-        Resident id
+        Status
       </Typography>
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-      >
-        {hasResidentId ? (
-          <Typography
-            color="primary"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Resident
-          </Typography>
-        ) : (
-          <Typography
-            color="error"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Without resident id
-          </Typography>
-        )}
-        <IconButton onClick={handleReloadStatus}>
-          <ReplayIcon
-            color="secondary"
-            fontSize="small"
-            sx={{ color: 'silver' }}
-          />
-        </IconButton>
-      </Box>
       <Typography
+        color="primary"
         style={{
           fontFamily: 'Oswald',
-          fontSize: '12pt',
-          color: 'silver',
-          marginRight: '3px',
-          marginTop: '4px',
+          fontSize: '16pt',
         }}
       >
-        Role
+        {hasResidentId ? 'Resident' : '✖ Non-resident'} (
+        {hasMinterRole ? 'Minter' : '✖ Non-minter'})
       </Typography>
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-      >
-        {hasMinterRole ? (
-          <Typography
-            color="primary"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Minter
-          </Typography>
-        ) : (
-          <Typography
-            color="error"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Not a minter
-          </Typography>
-        )}
-      </Box>
     </Box>
   );
 }
