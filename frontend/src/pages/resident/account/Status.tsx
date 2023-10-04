@@ -1,21 +1,28 @@
-import { Box, Typography, IconButton } from '@mui/material';
-import ReplayIcon from '@mui/icons-material/Replay';
+import { Box, Typography } from '@mui/material';
+import Badge from '@mui/material/Badge';
+import Avatar from '@mui/material/Avatar';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import { styled } from '@mui/material/styles';
 import residentIcon from '../../../assets/resident.png';
 import nonResidentIcon from '../../../assets/non-resident.png';
 
+const SmallAvatar = styled(Avatar)(({ theme }) => ({
+  width: 22,
+  height: 22,
+  border: `2px solid ${theme.palette.background.paper}`,
+}));
+
 export default function Status({
   nric,
+  publicKey,
   hasResidentId,
-  handleReloadResidentStat,
   isWhitelisted,
-  handleReloadWhitelistStat,
   handleClickAvatar,
 }: {
+  publicKey: string;
   nric: number;
   hasResidentId: boolean;
-  handleReloadResidentStat: () => void;
   isWhitelisted: boolean;
-  handleReloadWhitelistStat: () => void;
   handleClickAvatar: () => void;
 }) {
   return (
@@ -27,12 +34,35 @@ export default function Status({
         marginTop: '9px',
       }}
     >
-      <img
-        src={hasResidentId && isWhitelisted ? residentIcon : nonResidentIcon}
-        alt="resident icon"
-        style={{ width: '65px', cursor: 'pointer' }}
+      <Badge
         onClick={handleClickAvatar}
-      />
+        sx={{ width: '65px', height: '65px' }}
+        overlap="circular"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        badgeContent={
+          <SmallAvatar alt="Jazzicon" sx={{ width: '42px', height: '42px' }}>
+            <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
+          </SmallAvatar>
+        }
+      >
+        <Avatar
+          alt="Travis Howard"
+          sx={{
+            width: '72px',
+            height: '72px',
+            cursor: 'pointer',
+            backgroundColor: '#f1f2f6',
+          }}
+        >
+          <img
+            src={
+              hasResidentId && isWhitelisted ? residentIcon : nonResidentIcon
+            }
+            alt="resident icon"
+          />
+        </Avatar>
+      </Badge>
+
       <Typography
         style={{
           fontFamily: 'Oswald',
@@ -62,70 +92,19 @@ export default function Status({
           marginTop: '4px',
         }}
       >
-        Residency status
+        Status
       </Typography>
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-      >
-        {hasResidentId ? (
-          <Typography
-            color="primary"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Resident
-          </Typography>
-        ) : (
-          <Typography
-            color="error"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Non-resident
-          </Typography>
-        )}
-        <IconButton onClick={handleReloadResidentStat}>
-          <ReplayIcon
-            color="secondary"
-            fontSize="small"
-            sx={{ color: 'silver' }}
-          />
-        </IconButton>
-      </Box>
-      <Typography
-        style={{
-          fontFamily: 'Oswald',
-          fontSize: '12pt',
-          color: 'silver',
-          marginRight: '3px',
-          marginTop: '4px',
-        }}
-      >
-        Whitelist status
-      </Typography>
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-      >
-        {isWhitelisted ? (
-          <Typography
-            color="primary"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            Whitelisted
-          </Typography>
-        ) : (
-          <Typography
-            color="error"
-            sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}
-          >
-            No
-          </Typography>
-        )}
-        <IconButton onClick={handleReloadWhitelistStat}>
-          <ReplayIcon
-            color="secondary"
-            fontSize="small"
-            sx={{ color: 'silver' }}
-          />
-        </IconButton>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Typography
+          color="primary"
+          sx={{
+            fontFamily: 'Oswald',
+            fontSize: '16pt',
+          }}
+        >
+          {hasResidentId ? 'Resident' : 'Non-resident'} (
+          {isWhitelisted ? 'Whitelisted' : 'Not whitelisted'})
+        </Typography>
       </Box>
     </Box>
   );

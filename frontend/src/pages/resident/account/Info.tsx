@@ -10,7 +10,7 @@ import { Navigate } from 'react-router-dom';
 import whitelistStat from '../../../services/resident/thunks/whitelistStat';
 import Balance from './Balance';
 import Status from './Status';
-import checkStatus from '../../../services/resident/thunks/checkStatus';
+// import checkStatus from '../../../services/resident/thunks/checkStatus';
 import initialize from '../../../services/resident/thunks/initialize';
 import QrDialog from '../../../layouts/resident/QrDialog';
 
@@ -50,16 +50,14 @@ export default function Info() {
     setOpenQrCode((o) => !o);
   };
 
-  const handleReloadBal = () => {};
+  // const handleReloadBal = () => {};
 
-  const handleReloadResidentStat = () => {
-    if (!nric || !publicKey) {
-      return;
-    }
-    dispatch(checkStatus({ nric, publicKey }));
-  };
-
-  const handleReloadWhitelistStat = () => {};
+  // const handleReloadResidentStat = () => {
+  //   if (!nric || !publicKey) {
+  //     return;
+  //   }
+  //   dispatch(checkStatus({ nric, publicKey }));
+  // };
 
   if (!publicKey && !seedPhrase) {
     return <Navigate to="/" />;
@@ -69,14 +67,13 @@ export default function Info() {
     <Box sx={{ ...styles.container, marginTop: 3 }}>
       <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
       <Status
+        publicKey={publicKey || ''}
         nric={nric}
         hasResidentId={hasResidentId}
-        handleReloadResidentStat={handleReloadResidentStat}
         isWhitelisted={isWhitelisted}
-        handleReloadWhitelistStat={handleReloadWhitelistStat}
         handleClickAvatar={toggleQrCode}
       />
-      <Balance publicKey={publicKey || ''} handleReloadBal={handleReloadBal} />
+      <Balance />
     </Box>
   );
 }

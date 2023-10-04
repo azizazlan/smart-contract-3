@@ -1,28 +1,14 @@
 import React from 'react';
-import { Alert, Box, IconButton, Snackbar, Typography } from '@mui/material';
-import ReplayIcon from '@mui/icons-material/Replay';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Alert, Box, Snackbar, Typography } from '@mui/material';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 
-import truncateEthAddr from '../../../utils/truncateEthAddr';
+import rice from '../../../assets/bag-rice.png';
+import flour from '../../../assets/bag-wheatflour.png';
+import blank from '../../../assets/blank.png';
 
-export default function Balance({
-  publicKey,
-  handleReloadBal,
-}: {
-  publicKey: string;
-  handleReloadBal: () => void;
-}) {
+export default function Balance() {
   const [isCopied, setIsCopied] = React.useState(false);
-
-  const handleCopy = () => {
-    setIsCopied(true);
-
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 3000);
-  };
 
   return (
     <Box
@@ -30,7 +16,6 @@ export default function Balance({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '25px',
       }}
     >
       <Snackbar
@@ -47,57 +32,37 @@ export default function Balance({
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'row',
           marginTop: '17px',
           alignItems: 'center',
         }}
       >
-        <Jazzicon diameter={55} seed={jsNumberForAddress(publicKey)} />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          <Typography
-            color="primary"
-            style={{
-              fontFamily: 'Oswald',
-              fontSize: '16pt',
-            }}
-          >
-            {truncateEthAddr(publicKey)}
-          </Typography>
-          <CopyToClipboard text={publicKey} onCopy={handleCopy}>
-            <IconButton size="small">
-              <ContentCopyIcon fontSize="small" color="primary" />
-            </IconButton>
-          </CopyToClipboard>
-        </Box>
-
         <Typography
           style={{
             fontFamily: 'Oswald',
             fontSize: '12pt',
             color: 'silver',
-            marginRight: '3px',
-            marginTop: '4px',
+            marginRight: 1,
           }}
         >
-          Rice token balance
+          Subsidy tokens
         </Typography>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}
-        >
-          <IconButton onClick={handleReloadBal}>
-            <ReplayIcon sx={{ color: 'silver' }} fontSize="small" />
-          </IconButton>
-        </Box>
+      </Box>
+      <Box sx={{ marginTop: 2 }}>
+        <Carousel showThumbs={false}>
+          <div>
+            <img src={rice} style={{ width: '75px' }} />
+            <p className="legend">Bag 70kg of Rice</p>
+          </div>
+          <div>
+            <img src={flour} style={{ width: '75px' }} />
+            <p className="legend">Bag 1kg of Wheat Flour 2</p>
+          </div>
+          <div>
+            <img src={blank} style={{ width: '175px' }} />
+            <p className="legend">-intentionally blank-</p>
+          </div>
+        </Carousel>
       </Box>
     </Box>
   );
