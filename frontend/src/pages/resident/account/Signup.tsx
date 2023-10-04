@@ -57,7 +57,7 @@ export default function Signup() {
 
   const onSubmit: SubmitHandler<SignupFields> = (data) => {
     const { nric } = data;
-    dispatch(signupResident({ nric }));
+    dispatch(signupResident({ nric: parseInt(nric, 10) }));
   };
 
   if (submissionState === 'OK' && publicKey && seedPhrase) {

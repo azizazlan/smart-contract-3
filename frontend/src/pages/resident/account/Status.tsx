@@ -5,14 +5,14 @@ import nonResidentIcon from '../../../assets/non-resident.png';
 
 export default function Status({
   nric,
-  isResident,
+  hasResidentId,
   handleReloadResidentStat,
   isWhitelisted,
   handleReloadWhitelistStat,
   handleClickAvatar,
 }: {
-  nric: string;
-  isResident: boolean;
+  nric: number;
+  hasResidentId: boolean;
   handleReloadResidentStat: () => void;
   isWhitelisted: boolean;
   handleReloadWhitelistStat: () => void;
@@ -28,7 +28,7 @@ export default function Status({
       }}
     >
       <img
-        src={isResident && isWhitelisted ? residentIcon : nonResidentIcon}
+        src={hasResidentId && isWhitelisted ? residentIcon : nonResidentIcon}
         alt="resident icon"
         style={{ width: '65px', cursor: 'pointer' }}
         onClick={handleClickAvatar}
@@ -67,7 +67,7 @@ export default function Status({
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
       >
-        {isResident ? (
+        {hasResidentId ? (
           <Typography
             color="primary"
             sx={{ fontFamily: 'Oswald', fontSize: '16pt' }}

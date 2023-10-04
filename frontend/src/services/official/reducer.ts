@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
-import signupOfficial from './thunks/signup';
+import signup from './thunks/signup';
 import initialize from './thunks/initialize';
 import checkStatus from './thunks/checkStatus';
 import ethBal from './thunks/ethBal';
@@ -17,7 +17,7 @@ interface OfficialState {
   submissionState: SubmissionStates;
   submissionMsg: string | null;
   networkId: number;
-  nric: string | null;
+  nric: number;
   publicKey: string | null;
   seedPhrase: string | null;
   etherBal: string;
@@ -36,7 +36,7 @@ const initialState: OfficialState = {
   submissionState: 'IDLE',
   submissionMsg: null,
   networkId: -1,
-  nric: null,
+  nric: 0,
   publicKey: null,
   seedPhrase: null,
   etherBal: '0.0',
@@ -91,10 +91,10 @@ export const officialSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.submissionState = 'OK';
     });
-    builder.addCase(signupOfficial.pending, (state, {}) => {
+    builder.addCase(signup.pending, (state, {}) => {
       state.submissionState = 'PENDING';
     });
-    builder.addCase(signupOfficial.fulfilled, (state, { payload }) => {
+    builder.addCase(signup.fulfilled, (state, { payload }) => {
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
@@ -180,7 +180,7 @@ export const officialSlice = createSlice({
       state.submissionState = 'PENDING';
     });
     builder.addCase(clearLocalSto.fulfilled, (state, { payload }) => {
-      state.nric = null;
+      state.nric = 0;
       state.publicKey = null;
       state.seedPhrase = null;
       state.submissionMsg = payload.message;

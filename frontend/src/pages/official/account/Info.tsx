@@ -35,10 +35,14 @@ export default function Info() {
   }
 
   const handleReloadStatus = () => {
+    if (!nric) {
+      console.log(`nric is null`);
+      return;
+    }
     dispatch(
       checkStatus({
         publicKey: publicKey as string,
-        nric: nric as string,
+        nric,
       })
     );
   };
@@ -55,7 +59,7 @@ export default function Info() {
     <Box sx={styles.container}>
       <Box sx={{ marginTop: 3 }}>
         <Status
-          nric={nric || 'NA'}
+          nric={nric || 0}
           hasResidentId={hasResidentId}
           hasMinterRole={hasMinterRole}
           handleReloadStatus={handleReloadStatus}

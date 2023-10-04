@@ -4,11 +4,15 @@ import checkStatus from './checkStatus';
 const initialize = createAsyncThunk(
   'initialize_resident_account',
   async (_, thunkAPI: any) => {
-    const nric = localStorage.getItem('thuleen.mfs.resident.nric');
+    const snric = localStorage.getItem('thuleen.mfs.resident.nric');
     const publicKey = localStorage.getItem('thuleen.mfs.resident.publicKey');
     const seedPhrase = localStorage.getItem('thuleen.mfs.resident.seedPhrase');
 
-    if (publicKey && nric) thunkAPI.dispatch(checkStatus({ nric, publicKey }));
+    let nric = 0;
+    if (publicKey && snric) {
+      nric = parseInt(snric, 10);
+      thunkAPI.dispatch(checkStatus({ nric, publicKey }));
+    }
 
     return {
       nric,

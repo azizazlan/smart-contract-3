@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 type SignupResidentFields = {
-  nric: string;
+  nric: number;
 };
 
 const signupResident = createAsyncThunk(
@@ -13,7 +13,7 @@ const signupResident = createAsyncThunk(
     const publicKey = wallet.address;
     const seedPhrase = wallet.mnemonic.phrase;
 
-    localStorage.setItem('thuleen.mfs.resident.nric', nric);
+    localStorage.setItem('thuleen.mfs.resident.nric', nric.toString());
     localStorage.setItem('thuleen.mfs.resident.publicKey', publicKey);
     localStorage.setItem('thuleen.mfs.resident.seedPhrase', seedPhrase);
 

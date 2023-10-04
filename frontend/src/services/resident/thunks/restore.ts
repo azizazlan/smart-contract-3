@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 
 type RestoreFields = {
-  nric: string;
+  nric: number;
   seedPhrase: string;
 };
 
@@ -15,7 +15,7 @@ const restore = createAsyncThunk(
     const wallet = ethers.Wallet.fromMnemonic(seedPhrase);
     const publicKey = wallet.address;
 
-    localStorage.setItem('thuleen.mfs.resident.nric', nric);
+    localStorage.setItem('thuleen.mfs.resident.nric', nric.toString());
     localStorage.setItem('thuleen.mfs.resident.publicKey', publicKey);
     localStorage.setItem('thuleen.mfs.resident.seedPhrase', seedPhrase);
 

@@ -14,7 +14,7 @@ const MINTER_ROLE: string = ethers.utils.keccak256(
 );
 
 type CheckStatusFields = {
-  nric: string;
+  nric: number;
   publicKey: string;
 };
 

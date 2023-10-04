@@ -9,11 +9,13 @@ const initialize = createAsyncThunk(
       console.log('Delay completed after 3 seconds');
     }, 1000);
 
-    const nric = localStorage.getItem('thuleen.mfs.official.nric');
+    const snric = localStorage.getItem('thuleen.mfs.official.nric');
     const publicKey = localStorage.getItem('thuleen.mfs.official.publicKey');
     const seedPhrase = localStorage.getItem('thuleen.mfs.official.seedPhrase');
 
-    if (publicKey && nric) {
+    let nric = 0;
+    if (publicKey && snric) {
+      nric = parseInt(snric, 10);
       thunkAPI.dispatch(checkStatus({ nric, publicKey }));
       thunkAPI.dispatch(ethBal({ publicKey }));
     }

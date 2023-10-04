@@ -45,7 +45,7 @@ export default function SignupForm() {
 
   const onSubmit: SubmitHandler<SignupFields> = (data) => {
     const { nric } = data;
-    dispatch(signupOfficial({ nric }));
+    dispatch(signupOfficial({ nric: parseInt(nric) }));
   };
 
   return (

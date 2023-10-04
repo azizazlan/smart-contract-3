@@ -9,11 +9,12 @@ const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type AssignRoleFields = {
   tokenId: number;
-  allowances: number;
+  allowances: number; // For example 100 tokens of Bag70kg of rice
   officerPublicKey: string;
   privateKey: string;
 };
 
+// approve allowance per one token id. For example approve allowance 100 tokens of bag 70kg of rice
 const approveAllowance = createAsyncThunk(
   'admin_approve_allowance',
   async (props: AssignRoleFields) => {

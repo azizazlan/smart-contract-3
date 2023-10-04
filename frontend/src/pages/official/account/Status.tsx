@@ -7,7 +7,7 @@ export default function Status({
   hasMinterRole,
   handleReloadStatus,
 }: {
-  nric: string;
+  nric: number;
   hasResidentId: boolean;
   hasMinterRole: boolean;
   handleReloadStatus: () => void;

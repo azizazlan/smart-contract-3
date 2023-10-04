@@ -42,7 +42,7 @@ export default function RestoreForm() {
 
   const onSubmit: SubmitHandler<RestoreFields> = (data) => {
     const { nric, seedPhrase } = data;
-    dispatch(restore({ nric, seedPhrase }));
+    dispatch(restore({ nric: parseInt(nric, 10), seedPhrase }));
   };
 
   return (

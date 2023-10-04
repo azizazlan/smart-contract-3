@@ -1,40 +1,46 @@
 import { ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import contractABI from '../../../assets/artifacts/contracts/MelakaResident.sol/MelakaResident.json';
+import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
+import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
-const MELAKA_RESIDENT_CONTRACT_ADDR = import.meta.env
-  .VITE_APP_ADDR_MLK_RESIDENT;
+
+const RESIDENTID_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
+const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type CheckStatusFields = {
-  nric: string;
+  nric: number;
   publicKey: string;
 };
 
 const checkStatus = createAsyncThunk(
-  'resident_check_residency_whitelisting',
+  'resident_check_status',
   async (props: CheckStatusFields) => {
     const { nric, publicKey } = props;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
-    const contract = new ethers.Contract(
-      MELAKA_RESIDENT_CONTRACT_ADDR,
-      contractABI.abi,
+    const melakaResidentId = new ethers.Contract(
+      RESIDENTID_CONTRACT_ADDR,
+      melakaResidentIdJSON.abi,
       provider
     );
-    const isResident: boolean = await contract.verifyResident(
-      publicKey,
-      ethers.utils.formatBytes32String(nric)
+    const addressNric = await melakaResidentId.nationalIdToAddress(nric);
+    const hasResidentId = addressNric === publicKey;
+
+    const melakaSubsidy = new ethers.Contract(
+      SUBSIDY_CONTRACT_ADDR,
+      melakaSubsidyJSON.abi,
+      provider
     );
 
-    const isWhitelisted = await contract.isResidentWhitelisted(publicKey);
+    const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
 
     const message = `Successfully checked residency and whitelisting status`;
 
     return {
-      isResident,
+      hasResidentId,
       isWhitelisted,
       message,
     };

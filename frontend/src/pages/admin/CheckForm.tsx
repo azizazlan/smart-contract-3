@@ -59,7 +59,7 @@ export default function CheckForm() {
       console.log('One of the param is null');
       return;
     }
-    dispatch(checkStatus({ nric, publicKey }));
+    dispatch(checkStatus({ nric: parseInt(nric, 10), publicKey }));
   };
 
   return (

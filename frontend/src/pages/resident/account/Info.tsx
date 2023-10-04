@@ -16,7 +16,7 @@ import QrDialog from '../../../layouts/resident/QrDialog';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
-  const { publicKey, seedPhrase, isResident, isWhitelisted, nric, qrcode } =
+  const { publicKey, seedPhrase, hasResidentId, isWhitelisted, nric, qrcode } =
     useResidentSelector((state: ResidentState) => state.resident);
 
   const [openQrCode, setOpenQrCode] = React.useState(false);
@@ -69,8 +69,8 @@ export default function Info() {
     <Box sx={{ ...styles.container, marginTop: 3 }}>
       <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
       <Status
-        nric={nric || 'Error'}
-        isResident={isResident}
+        nric={nric}
+        hasResidentId={hasResidentId}
         handleReloadResidentStat={handleReloadResidentStat}
         isWhitelisted={isWhitelisted}
         handleReloadWhitelistStat={handleReloadWhitelistStat}
