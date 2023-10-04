@@ -8,70 +8,43 @@ import rice from '../../../assets/bag-rice.png';
 import wheat from '../../../assets/bag-wheatflour.png';
 import { Box, Divider, Typography } from '@mui/material';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
+import { useResidentSelector } from '../../../services/hook';
+import { ResidentState } from '../../../services/store';
 
 export default function TxHistory() {
+  const { transactions } = useResidentSelector(
+    (state: ResidentState) => state.resident
+  );
   return (
     <List
       sx={{ width: '100%', backgroundColor: 'background.paper' }}
       subheader={
         <Typography
           color="primary"
-          sx={{ fontFamily: 'Oswald', backgroundColor: '#f5f6fa', padding: 1 }}
+          sx={{
+            fontFamily: 'Oswald',
+            backgroundColor: '#f5f6fa',
+            padding: 1,
+            paddingLeft: 2,
+          }}
         >
           Transactions history
         </Typography>
       }
     >
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <img src={rice} style={{ width: '32px' }} />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary="Rice (10 tokens)"
-          secondary={`${format(
-            new Date(),
-            'hh:mm:ss dd-MM-yyyy'
-          )} from ${truncateEthAddr(
-            '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199'
-          )}`}
-        />
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <img src={wheat} style={{ width: '32px' }} />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary="Wheat Flour (2 tokens)"
-          secondary={`${format(
-            new Date(),
-            'hh:mm:ss dd-MM-yyyy'
-          )} from ${truncateEthAddr(
-            '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199'
-          )}`}
-        />
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <img src={rice} style={{ width: '32px' }} />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary="Rice (1 token)"
-          secondary={`${format(
-            new Date(),
-            'hh:mm:ss dd-MM-yyyy'
-          )} from ${truncateEthAddr(
-            '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199'
-          )}`}
-        />
-      </ListItem>
+      {transactions.map((tx, index) => (
+        <Box key={index}>
+          <ListItem key={index}>
+            <ListItemAvatar>
+              <Avatar sx={{ backgroundColor: '#dfe6e9' }}>
+                <img src={rice} style={{ width: '32px' }} />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={tx.primary} secondary={tx.secondary} />
+          </ListItem>
+          <Divider />
+        </Box>
+      ))}
     </List>
   );
 }

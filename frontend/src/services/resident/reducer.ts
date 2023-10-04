@@ -8,6 +8,11 @@ import checkStatus from './thunks/checkStatus';
 import restore from './thunks/restore';
 import watchTfrEvents from './thunks/watchTfrEvents.ts';
 
+export interface TransactionsSubsidy {
+  primary: string;
+  secondary: string;
+}
+
 interface ResidentState {
   submissionState: SubmissionStates;
   submissionMsg: string | null;
@@ -18,6 +23,7 @@ interface ResidentState {
   seedPhrase: string | null;
   hasResidentId: boolean;
   isWhitelisted: boolean;
+  transactions: TransactionsSubsidy[];
 }
 
 const initialState: ResidentState = {
@@ -30,6 +36,16 @@ const initialState: ResidentState = {
   seedPhrase: null,
   hasResidentId: false,
   isWhitelisted: false,
+  transactions: [
+    {
+      primary: 'Test rice',
+      secondary: '06:37:38 05-10-2023 from 0x8626…1199',
+    },
+    {
+      primary: 'Test rice 2',
+      secondary: '06:38:38 05-10-2023 from 0x8626…1199',
+    },
+  ],
 };
 
 export const residentSlice = createSlice({
