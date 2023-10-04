@@ -188,15 +188,13 @@ export default function TransferFTForm(props: TransferFTFormProps) {
               />
             )}
           />
-          <Box sx={{ minHeight: 46 }}>
-            {errors.recipientPublicKey ? (
-              <FormHelperText error>
-                {errors.recipientPublicKey.message}
-              </FormHelperText>
-            ) : (
-              <FormHelperText>Recipient address public key.</FormHelperText>
-            )}
-          </Box>
+          {errors.recipientPublicKey ? (
+            <FormHelperText error>
+              {errors.recipientPublicKey.message}
+            </FormHelperText>
+          ) : (
+            <FormHelperText>Recipient address public key.</FormHelperText>
+          )}
         </FormControl>
       </form>
       <Box sx={isMobile ? styles.mobileFormButtons : styles.formButtons}>

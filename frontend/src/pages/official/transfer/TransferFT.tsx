@@ -12,6 +12,9 @@ import {
 import QrReader from '../../../commons/QrReader';
 import { OfficialState } from '../../../services/store';
 import ErrResult from './ErrResult';
+import { Box } from '@mui/material';
+import BackdropLoader from '../../../commons/BackdropLoader';
+import styles from './styles';
 
 // Transfer FT page
 export default function TransferFT() {
@@ -79,5 +82,10 @@ export default function TransferFT() {
     return <ErrResult message={submissionMsg} />;
   }
 
-  return <TransferFTForm toggleCamera={toggleCamera} />;
+  return (
+    <Box sx={{ ...styles.container, margin: 0 }}>
+      <BackdropLoader submissionState={submissionState} />
+      <TransferFTForm toggleCamera={toggleCamera} />;
+    </Box>
+  );
 }

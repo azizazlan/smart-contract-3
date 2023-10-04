@@ -121,9 +121,7 @@ export default function VerificationForm(props: VerificationFormProps) {
           {errors.publicKey ? (
             <FormHelperText error>{errors.publicKey.message}</FormHelperText>
           ) : (
-            <FormHelperText>
-              Example: 0xd4C94252d9a182FBEd2b0576F07778470F2h2835
-            </FormHelperText>
+            <FormHelperText>Example: 0xd4C942...F2h2835</FormHelperText>
           )}
         </FormControl>
       </form>

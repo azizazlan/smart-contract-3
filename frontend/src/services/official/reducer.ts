@@ -208,6 +208,10 @@ export const officialSlice = createSlice({
       state.submissionMsg = action.payload as string;
       state.submissionState = 'FAILED';
     });
+    builder.addCase(transferTokens.fulfilled, (state, { payload }) => {
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
   },
 });
 
