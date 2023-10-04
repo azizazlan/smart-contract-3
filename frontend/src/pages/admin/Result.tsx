@@ -13,13 +13,12 @@ type ResultProps = {
   title?: string;
   message: string;
   error: boolean;
-  handleClickApprove?: () => void;
 };
 
 export default function Result(props: ResultProps) {
   const dispatch = useAdminDispatch();
 
-  const { title, error, message, handleClickApprove } = props;
+  const { title, error, message } = props;
 
   const handleClose = () => {
     dispatch(resetSubmission());
@@ -39,12 +38,9 @@ export default function Result(props: ResultProps) {
         )}
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flexGrow: 1 }} />
-          <Button onClick={handleClose}>close</Button>
-          {handleClickApprove ? (
-            <Button variant="contained" onClick={handleClickApprove}>
-              approve
-            </Button>
-          ) : null}
+          <Button variant="outlined" onClick={handleClose}>
+            close
+          </Button>
         </CardActions>
       </Card>
     </Box>
