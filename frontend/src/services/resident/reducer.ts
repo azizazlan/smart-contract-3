@@ -6,7 +6,6 @@ import initialize from './thunks/initialize';
 import clearLocalSto from './thunks/clearLocalSto';
 import checkStatus from './thunks/checkStatus';
 import restore from './thunks/restore';
-import watchTfrEvents from './thunks/watchEvents.ts';
 
 export interface TransactionsSubsidy {
   tokenId: number;
@@ -121,9 +120,6 @@ export const residentSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
-    });
-    builder.addCase(watchTfrEvents.rejected, (state, action) => {
-      console.log(action);
     });
   },
 });

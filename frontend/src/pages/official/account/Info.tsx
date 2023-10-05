@@ -7,10 +7,8 @@ import {
   useOfficialDispatch,
   useOfficialSelector,
 } from '../../../services/hook';
-import checkStatus from '../../../services/official/thunks/checkStatus';
 import Balance from './Balance';
 import Status from './Status';
-import ethBal from '../../../services/official/thunks/ethBal';
 import initialize from '../../../services/official/thunks/initialize';
 
 // Official info page
@@ -20,7 +18,6 @@ export default function Info() {
     publicKey,
     seedPhrase,
     nric,
-    etherBal,
     hasResidentId,
     hasMinterRole,
     tokenAllowances,
@@ -59,7 +56,6 @@ export default function Info() {
     <Box sx={{ ...styles.container, marginTop: 3 }}>
       <Status
         publicKey={publicKey || 'NA'}
-        etherBal={etherBal}
         nric={nric || 0}
         hasResidentId={hasResidentId}
         hasMinterRole={hasMinterRole}

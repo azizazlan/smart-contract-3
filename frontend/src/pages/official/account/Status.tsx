@@ -1,5 +1,4 @@
-import { Box, Typography, IconButton } from '@mui/material';
-import ReplayIcon from '@mui/icons-material/Replay';
+import { Box, Typography } from '@mui/material';
 import truncateEthAddr from '../../../utils/truncateEthAddr';
 import minterImg from '../../../assets/minter.png';
 import nonMinterImg from '../../../assets/non-minter.png';
@@ -7,13 +6,11 @@ import nonMinterImg from '../../../assets/non-minter.png';
 export default function Status({
   publicKey,
   nric,
-  etherBal,
   hasResidentId,
   hasMinterRole,
 }: {
   publicKey: string;
   nric: number;
-  etherBal: string;
   hasResidentId: boolean;
   hasMinterRole: boolean;
 }) {
