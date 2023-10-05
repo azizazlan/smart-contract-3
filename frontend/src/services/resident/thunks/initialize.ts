@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import checkStatus from './checkStatus';
-import watchTransferEvent from './watchTransferEvent';
+import watchEvents from './watchEvents';
 
 const initialize = createAsyncThunk(
   'initialize_resident',
@@ -13,7 +13,7 @@ const initialize = createAsyncThunk(
     if (publicKey && snric) {
       nric = parseInt(snric, 10);
       thunkAPI.dispatch(checkStatus({ nric, publicKey }));
-      thunkAPI.dispatch(watchTransferEvent({ nric, publicKey }));
+      thunkAPI.dispatch(watchEvents({ nric, publicKey }));
     }
 
     return {

@@ -16,8 +16,8 @@ type WatchTransferEventProps = {
   publicKey: string;
 };
 
-const watchTransferEvent = createAsyncThunk(
-  'resident_watch_transfer_event',
+const watchEvents = createAsyncThunk(
+  'resident_watch_events',
   async (props: WatchTransferEventProps, thunkAPI: any) => {
     const { nric, publicKey } = props;
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
@@ -89,4 +89,4 @@ const watchTransferEvent = createAsyncThunk(
     };
   }
 );
-export default watchTransferEvent;
+export default watchEvents;
