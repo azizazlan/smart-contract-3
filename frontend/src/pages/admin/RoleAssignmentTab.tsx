@@ -20,7 +20,10 @@ export default function RoleAssignmentTab() {
 
   return (
     <Box sx={{ marginTop: 0 }}>
-      <BackdropLoader submissionState={submissionState} />
+      <BackdropLoader
+        submissionState={submissionState}
+        message="...minting on blockchain take a little bit of time..."
+      />
       <Typography
         variant="body2"
         color="primary"

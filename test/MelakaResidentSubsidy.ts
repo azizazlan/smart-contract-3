@@ -56,6 +56,17 @@ describe("MelakaSubsidy", function () {
         .connect(officer1)
         .mint(officer2.address, BAG_070KG_RICE, oneToken, metadataBytes);
 
+      // Check event
+      const filter = melakaSubsidy.filters.TransferSingle(
+        null, //operator,
+        null, // from,
+        null, // to,
+        null, // id
+        null // value
+      );
+      const updatedEvents = await melakaSubsidy.queryFilter(filter);
+      console.log(updatedEvents);
+
       const nric = 123456789012;
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);
       // Ensure the user has an identity

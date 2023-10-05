@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import ethBal from './ethBal';
 import checkStatus from './checkStatus';
+import watchTransferEvent from './watchTransferEvent';
 
 const initialize = createAsyncThunk(
   'initialize_official',
@@ -18,6 +19,8 @@ const initialize = createAsyncThunk(
       nric = parseInt(snric, 10);
       thunkAPI.dispatch(checkStatus({ nric, publicKey }));
       thunkAPI.dispatch(ethBal({ publicKey }));
+
+      thunkAPI.dispatch(watchTransferEvent({ nric, publicKey }));
     }
 
     return {

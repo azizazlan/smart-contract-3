@@ -51,12 +51,19 @@ export default function Balance() {
       </Box>
       <Box sx={{ marginTop: 5 }}>
         <Carousel showThumbs={false}>
-          <div>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <img src={rice} style={{ marginTop: 1, width: '75px' }} />
+            <Typography variant="body2">Transaction summary todo</Typography>
             <Link to="txhistory">
               <p className="legend">Bag 70kg of Rice</p>
             </Link>
-          </div>
+          </Box>
           <div>
             <img src={flour} style={{ marginTop: 1, width: '75px' }} />
             <Link to="txhistory">

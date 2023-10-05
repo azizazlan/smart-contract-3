@@ -100,8 +100,9 @@ export const adminSlice = createSlice({
     });
     builder.addCase(awardResidentId.rejected, (state, action) => {
       state.submissionState = 'FAILED';
+      console.log(action);
       let msg = action.error?.message || 'An error occurred';
-      msg = msg.substring(0, msg.length / 3);
+      // msg = msg.substring(0, msg.length / 3);
       state.submissionMsg = msg;
     });
     builder.addCase(awardResidentId.fulfilled, (state, { payload }) => {
