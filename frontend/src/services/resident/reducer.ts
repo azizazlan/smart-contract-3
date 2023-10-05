@@ -6,7 +6,7 @@ import initialize from './thunks/initialize';
 import clearLocalSto from './thunks/clearLocalSto';
 import checkStatus from './thunks/checkStatus';
 import restore from './thunks/restore';
-import watchTfrEvents from './thunks/watchTfrEvents.ts';
+import watchTfrEvents from './thunks/watchTransferEvent.ts';
 
 export interface TransactionsSubsidy {
   primary: string;

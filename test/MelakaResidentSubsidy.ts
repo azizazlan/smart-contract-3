@@ -65,15 +65,40 @@ describe("MelakaSubsidy", function () {
         null // value
       );
       const updatedEvents = await melakaSubsidy.queryFilter(filter);
+      console.log("\r\n");
+      console.log(`TransferSingle event - by mint to approve allowance`);
       console.log(updatedEvents);
 
       const nric = 123456789012;
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);
+
+      // Check Transfer event when call mintIdentity
+      // Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
+      const filter2 = melakaId.filters.Transfer(
+        null, // from,
+        null, // to,
+        null // tokenId
+      );
+      const updatedEvents2 = await melakaId.queryFilter(filter2);
+      console.log("\r\n");
+      console.log(`Transfer event - by mintIdentity`);
+      console.log(updatedEvents2);
+
       // Ensure the user has an identity
       const hasIdentity = await melakaId.nationalIdToAddress(nric);
       console.log(hasIdentity);
       expect(hasIdentity).to.equal(resident1.address);
       await melakaSubsidy.connect(officer2).setWhitelisted(nric, true);
+
+      const filter3 = melakaSubsidy.filters.WhitelistingEvent(
+        null, // id,
+        null, // bool status,
+        null // timestamp
+      );
+      const updatedEvents3 = await melakaSubsidy.queryFilter(filter3);
+      console.log("\r\n");
+      console.log(`WhitelistingEvent event - by setWhitelisted`);
+      console.log(updatedEvents3);
 
       await melakaSubsidy.transferTokens(
         officer2.address,

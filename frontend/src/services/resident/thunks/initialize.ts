@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import checkStatus from './checkStatus';
+import watchTransferEvent from './watchTransferEvent';
 
 const initialize = createAsyncThunk(
-  'initialize_resident_account',
+  'initialize_resident',
   async (_, thunkAPI: any) => {
     const snric = localStorage.getItem('thuleen.mfs.resident.nric');
     const publicKey = localStorage.getItem('thuleen.mfs.resident.publicKey');
@@ -12,6 +13,7 @@ const initialize = createAsyncThunk(
     if (publicKey && snric) {
       nric = parseInt(snric, 10);
       thunkAPI.dispatch(checkStatus({ nric, publicKey }));
+      thunkAPI.dispatch(watchTransferEvent({ nric, publicKey }));
     }
 
     return {

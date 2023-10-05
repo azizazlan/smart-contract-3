@@ -36,11 +36,11 @@ contract MelakaResidentId is
             "National ID already used"
         );
 
-        uint256 tokenId = totalSupply() + 1;
-        _mint(resident, tokenId);
-
         // Associate the national ID with the resident's address
         nationalIdToAddress[nationalId] = resident;
+
+        uint256 tokenId = totalSupply() + 1;
+        _mint(resident, tokenId);
     }
 
     function safeMint(

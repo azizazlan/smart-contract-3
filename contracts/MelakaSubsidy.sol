@@ -26,11 +26,12 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
         uint256 timestamp
     );
 
+    event WhitelistingEvent(uint256 indexed id, bool status, uint256 timestamp);
+
     constructor() ERC1155("") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(URI_SETTER_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
-
         // _mint(msg.sender, BAG_070KG_RICE, 10 ** 27, "");
         // _mint(msg.sender, BAG_001KG_WHEATFLOUR, 10 ** 27, "");
     }
@@ -91,6 +92,7 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
         bool status
     ) public onlyRole(MINTER_ROLE) {
         whitelistedNationalIds[id] = status;
+        emit WhitelistingEvent(id, status, block.timestamp);
     }
 
     // The following functions are overrides required by Solidity.
