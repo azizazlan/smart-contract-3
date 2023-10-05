@@ -7,8 +7,14 @@ import rice from '../../../assets/bag-rice.png';
 import flour from '../../../assets/bag-wheatflour.png';
 import blank from '../../../assets/blank.png';
 import { Link } from 'react-router-dom';
+import { TokenBalance } from '../../../utils/subsidyUtils';
 
-export default function Balance() {
+type BalanceProps = {
+  tokenBalances: TokenBalance[];
+};
+
+export default function Balance(props: BalanceProps) {
+  const { tokenBalances } = props;
   const [isCopied, setIsCopied] = React.useState(false);
 
   return (
@@ -59,13 +65,26 @@ export default function Balance() {
             }}
           >
             <img src={rice} style={{ marginTop: 1, width: '75px' }} />
-            <Typography variant="body2">Transaction summary todo</Typography>
+            <Typography
+              color="primary"
+              sx={{ fontSize: '16pt', marginTop: 2, fontFamily: 'Oswald' }}
+            >
+              {tokenBalances[0].balance}{' '}
+              {tokenBalances[0].balance === 1 ? 'token' : 'tokens'}
+            </Typography>
             <Link to="txhistory">
               <p className="legend">Bag 70kg of Rice</p>
             </Link>
           </Box>
           <div>
             <img src={flour} style={{ marginTop: 1, width: '75px' }} />
+            <Typography
+              color="primary"
+              sx={{ fontSize: '16pt', marginTop: 2, fontFamily: 'Oswald' }}
+            >
+              {tokenBalances[1].balance}{' '}
+              {tokenBalances[1].balance === 1 ? 'token' : 'tokens'}
+            </Typography>
             <Link to="txhistory">
               <p className="legend">Bag 1kg of Wheat Flour 2</p>
             </Link>

@@ -12,17 +12,27 @@ import Status from './Status';
 // import checkStatus from '../../../services/resident/thunks/checkStatus';
 import initialize from '../../../services/resident/thunks/initialize';
 import QrDialog from '../../../layouts/resident/QrDialog';
+import { getBalances } from '../../../utils/subsidyUtils';
 
 export default function Info() {
   const dispatch = useResidentDispatch();
-  const { publicKey, seedPhrase, hasResidentId, isWhitelisted, nric, qrcode } =
-    useResidentSelector((state: ResidentState) => state.resident);
+  const {
+    publicKey,
+    seedPhrase,
+    hasResidentId,
+    isWhitelisted,
+    nric,
+    qrcode,
+    transactions,
+  } = useResidentSelector((state: ResidentState) => state.resident);
 
   const [openQrCode, setOpenQrCode] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(initialize());
   }, []);
+
+  const tokenBalances = getBalances(transactions);
 
   const toggleQrCode = () => {
     setOpenQrCode((o) => !o);
@@ -51,7 +61,7 @@ export default function Info() {
         isWhitelisted={isWhitelisted}
         handleClickAvatar={toggleQrCode}
       />
-      <Balance />
+      <Balance tokenBalances={tokenBalances} />
     </Box>
   );
 }

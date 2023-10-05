@@ -9,6 +9,8 @@ import restore from './thunks/restore';
 import watchTfrEvents from './thunks/watchEvents.ts';
 
 export interface TransactionsSubsidy {
+  tokenId: number;
+  receivedTokens: number;
   primary: string;
   secondary: string;
 }
@@ -38,11 +40,21 @@ const initialState: ResidentState = {
   isWhitelisted: false,
   transactions: [
     {
-      primary: 'Test rice',
+      tokenId: 0,
+      receivedTokens: 1,
+      primary: '1 token Bag 70kg of rice',
       secondary: '06:37:38 05-10-2023 from 0x8626…1199',
     },
     {
-      primary: 'Test rice 2',
+      tokenId: 0,
+      receivedTokens: 1,
+      primary: '1 token Bag 70kg of rice',
+      secondary: '06:38:38 05-10-2023 from 0x8626…1199',
+    },
+    {
+      tokenId: 1,
+      receivedTokens: 1,
+      primary: '1 token Bag 01kg of wheat flour',
       secondary: '06:38:38 05-10-2023 from 0x8626…1199',
     },
   ],

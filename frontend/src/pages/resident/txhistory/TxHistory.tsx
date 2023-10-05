@@ -2,12 +2,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import { format } from 'date-fns';
 import Avatar from '@mui/material/Avatar';
 import rice from '../../../assets/bag-rice.png';
 import wheat from '../../../assets/bag-wheatflour.png';
 import { Box, Divider, Typography } from '@mui/material';
-import truncateEthAddr from '../../../utils/truncateEthAddr';
 import { useResidentSelector } from '../../../services/hook';
 import { ResidentState } from '../../../services/store';
 
@@ -37,7 +35,10 @@ export default function TxHistory() {
           <ListItem key={index}>
             <ListItemAvatar>
               <Avatar sx={{ backgroundColor: '#dfe6e9' }}>
-                <img src={rice} style={{ width: '32px' }} />
+                <img
+                  src={tx.tokenId === 0 ? rice : wheat}
+                  style={{ width: '32px' }}
+                />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={tx.primary} secondary={tx.secondary} />
