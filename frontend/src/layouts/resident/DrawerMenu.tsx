@@ -4,7 +4,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import WalletIcon from '@mui/icons-material/Wallet';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
 import QrCodeIcon from '@mui/icons-material/QrCode';
@@ -34,10 +34,22 @@ export default function DrawerMenu({
       onKeyDown={toggleDrawer}
     >
       <List>
-        <ListItem key="Account" disablePadding>
+        <ListItem key="Home" disablePadding>
           <ListItemButton component={Link} to="/signedresident">
+            <ListItemIcon />
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  Home
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="Wallet" disablePadding>
+          <ListItemButton component={Link} to="/signedresident/account">
             <ListItemIcon>
-              <AccountCircleIcon sx={{ color: 'grey' }} />
+              <WalletIcon sx={{ color: 'grey' }} />
             </ListItemIcon>
             <ListItemText
               primary={
@@ -48,7 +60,6 @@ export default function DrawerMenu({
             />
           </ListItemButton>
         </ListItem>
-
         <ListItem key="QrCodeDlg" disablePadding>
           <ListItemButton onClick={toggleQrCode}>
             <ListItemIcon>

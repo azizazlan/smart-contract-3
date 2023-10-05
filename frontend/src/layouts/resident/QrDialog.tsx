@@ -106,7 +106,9 @@ export default function QrDialog({
         )}
       </Box>
       <DialogActions sx={{ paddingBottom: 3, paddingRight: 3 }}>
-        <Button onClick={handleClose}>close</Button>
+        <Button variant="outlined" onClick={handleClose}>
+          close
+        </Button>
       </DialogActions>
     </Dialog>
   );

@@ -13,7 +13,7 @@ type BalanceProps = {
   tokenBalances: TokenBalance[];
 };
 
-export default function Balance(props: BalanceProps) {
+export default function TokenBalances(props: BalanceProps) {
   const { tokenBalances } = props;
   const [isCopied, setIsCopied] = React.useState(false);
 

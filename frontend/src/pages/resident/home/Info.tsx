@@ -7,7 +7,7 @@ import {
 } from '../../../services/hook';
 import { ResidentState } from '../../../services/store';
 import { Navigate } from 'react-router-dom';
-import Balance from './Balance';
+import TokenBalances from './TokenBalances';
 import Status from './Status';
 // import checkStatus from '../../../services/resident/thunks/checkStatus';
 import initialize from '../../../services/resident/thunks/initialize';
@@ -61,7 +61,7 @@ export default function Info() {
         isWhitelisted={isWhitelisted}
         handleClickAvatar={toggleQrCode}
       />
-      <Balance tokenBalances={tokenBalances} />
+      <TokenBalances tokenBalances={tokenBalances} />
     </Box>
   );
 }
