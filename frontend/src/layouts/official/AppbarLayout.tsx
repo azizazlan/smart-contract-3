@@ -62,7 +62,7 @@ function Appbar() {
             component="div"
             sx={{ fontFamily: 'Oswald', flexGrow: 1 }}
           >
-            MES Official
+            MES State Officer
           </Typography>
         </Toolbar>
       </AppBar>

@@ -38,15 +38,6 @@ export default function Info() {
     setOpenQrCode((o) => !o);
   };
 
-  // const handleReloadBal = () => {};
-
-  // const handleReloadResidentStat = () => {
-  //   if (!nric || !publicKey) {
-  //     return;
-  //   }
-  //   dispatch(checkStatus({ nric, publicKey }));
-  // };
-
   if (!publicKey && !seedPhrase) {
     return <Navigate to="/" />;
   }

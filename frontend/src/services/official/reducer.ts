@@ -17,6 +17,7 @@ interface OfficialState {
   submissionState: SubmissionStates;
   submissionMsg: string | null;
   networkId: number;
+  qrcode: string | null;
   nric: number;
   publicKey: string | null;
   seedPhrase: string | null;
@@ -37,6 +38,7 @@ const initialState: OfficialState = {
   submissionMsg: null,
   networkId: -1,
   nric: 0,
+  qrcode: null,
   publicKey: null,
   seedPhrase: null,
   etherBal: '0.0',
@@ -98,6 +100,7 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.submissionState = 'OK';
     });
     builder.addCase(checkStatus.pending, (state, {}) => {
@@ -172,6 +175,7 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });

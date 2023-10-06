@@ -8,11 +8,13 @@ export default function Status({
   nric,
   hasResidentId,
   hasMinterRole,
+  handleClickAvatar,
 }: {
   publicKey: string;
   nric: number;
   hasResidentId: boolean;
   hasMinterRole: boolean;
+  handleClickAvatar: () => void;
 }) {
   return (
     <Box
@@ -23,9 +25,19 @@ export default function Status({
       }}
     >
       {hasResidentId && hasMinterRole ? (
-        <img src={minterImg} alt="minter" style={{ width: '57px' }} />
+        <img
+          onClick={handleClickAvatar}
+          src={minterImg}
+          alt="minter"
+          style={{ width: '85px' }}
+        />
       ) : (
-        <img src={nonMinterImg} alt="minter" style={{ width: '85px' }} />
+        <img
+          onClick={handleClickAvatar}
+          src={nonMinterImg}
+          alt="minter"
+          style={{ width: '85px' }}
+        />
       )}
       <Typography
         style={{

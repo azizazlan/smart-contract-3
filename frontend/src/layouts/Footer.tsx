@@ -8,9 +8,7 @@ import web3Info from '../services/app/thunks/web3Info';
 
 export default function Footer() {
   const dispatch = useAppDispatch();
-  const { networkId, submissionState } = useAppSelector(
-    (state: AppState) => state.app
-  );
+  const { submissionState } = useAppSelector((state: AppState) => state.app);
 
   React.useEffect(() => {
     dispatch(web3Info());
@@ -44,8 +42,6 @@ export default function Footer() {
       }}
     >
       <Typography variant="caption" sx={{ color: 'silver' }}>
-        Network id {networkId}
-        <br />
         Built with love for{' '}
         <Link
           to="/official"

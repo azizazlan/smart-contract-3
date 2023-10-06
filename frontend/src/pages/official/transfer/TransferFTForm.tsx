@@ -172,12 +172,11 @@ export default function TransferFTForm(props: TransferFTFormProps) {
             <FormHelperText error>{errors.tokenId?.message}</FormHelperText>
           ) : (
             <FormHelperText>
-              Each token is equivalent to 70kg bag of rice or 1kg bag of wheat
-              flour
+              Each token is equivalent to a bag of subsidy item
             </FormHelperText>
           )}
         </FormControl>
-        <FormControl fullWidth margin="normal" variant="outlined">
+        <FormControl fullWidth margin="dense" variant="outlined">
           <Controller
             name="recipientNric"
             control={control}
@@ -186,7 +185,7 @@ export default function TransferFTForm(props: TransferFTFormProps) {
                 type="number"
                 placeholder="845678910112"
                 InputLabelProps={{ shrink: true }}
-                label="NRIC"
+                label="Resident NRIC"
                 id="recipientNric"
                 {...field}
               />

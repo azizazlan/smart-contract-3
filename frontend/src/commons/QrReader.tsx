@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
-import { QrScanner } from '@yudiel/react-qr-scanner';
 import { isMobile } from 'react-device-detect';
+import { QrScanner } from '@yudiel/react-qr-scanner';
 
 type QrReaderProps = {
   handleOnDecode: (resut: any) => void;
@@ -19,8 +19,8 @@ export default function QrReader(props: QrReaderProps) {
       }}
     >
       <QrScanner
-        onDecode={(result) => handleOnDecode(result)}
-        onError={(error) => console.log(error?.message)}
+        onDecode={(result: any) => handleOnDecode(result)}
+        onError={(error: any) => console.log(error?.message)}
       />
       {!isMobile ? (
         <Button
