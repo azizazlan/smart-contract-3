@@ -56,6 +56,12 @@ const initialState: ResidentState = {
       primary: '1 token Bag 01kg of wheat flour',
       secondary: '06:38:38 05-10-2023 from 0x8626…1199',
     },
+    {
+      tokenId: 2,
+      receivedTokens: 1,
+      primary: '1 token Bag 01kg of cooking oil',
+      secondary: '06:38:38 05-10-2023 from 0x8626…1199',
+    },
   ],
 };
 

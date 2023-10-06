@@ -5,9 +5,10 @@ import { default as AdminLanding } from './pages/admin/Landing';
 import { default as AdminAccount } from './pages/admin/AccountForm';
 import { default as OfficialLayout } from './layouts/official/Default';
 import { default as OfficialAppbarLayout } from './layouts/official/AppbarLayout';
-import { default as OfficialSignup } from './pages/official/account/Signup';
-import { default as OfficialRestore } from './pages/official/account/Restore';
-import { default as OfficialAccountInfo } from './pages/official/account/Info';
+import { default as OfficialSignup } from './pages/official/home/Signup';
+import { default as OfficialRestore } from './pages/official/home/Restore';
+import { default as OfficialHome } from './pages/official/home/Info';
+import { default as OfficialAccount } from './pages/official/account/Account';
 import { default as OfficialVerification } from './pages/official/verification/Verification';
 import { default as OfficialResidency } from './pages/official/residency/Residency';
 import { default as OfficialWhitelisting } from './pages/official/whitelisting/Whitelisting';
@@ -43,11 +44,11 @@ function App() {
         <Route index element={<OfficialLanding />} />
         <Route path="signup" element={<OfficialSignup />} />
         <Route path="restore" element={<OfficialRestore />} />
-        <Route path="account" element={<OfficialAccountInfo />} />
       </Route>
       <Route path="/signedofficial" element={<OfficialAppbarLayout />}>
-        <Route index element={<OfficialAccountInfo />} />
+        <Route index element={<OfficialHome />} />
         <Route path="residency" element={<OfficialResidency />} />
+        <Route path="account" element={<OfficialAccount />} />
         <Route path="whitelisting" element={<OfficialWhitelisting />} />
         <Route path="verification" element={<OfficialVerification />} />
         <Route path="transfer" element={<OfficialTransferFT />} />

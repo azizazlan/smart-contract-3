@@ -25,6 +25,7 @@ import { OfficialState } from '../../../services/store';
 import initialize from '../../../services/official/thunks/initialize';
 import bag_rice from '../../../assets/bag-rice.png';
 import bag_wheatflour from '../../../assets/bag-wheatflour.png';
+import bag_cookingoil from '../../../assets/bag-cooking-oil.png';
 import transferTokens from '../../../services/official/thunks/transferTokens';
 
 const schema = Yup.object().shape({
@@ -82,9 +83,6 @@ export default function TransferFTForm(props: TransferFTFormProps) {
 
   const onSubmit: SubmitHandler<TransferFTFields> = (data) => {
     const { tokenId, recipientNric, recipientPublicKey } = data;
-    // console.log('Submit transfer FT to resident!');
-    // console.log(recipientPublicKey);
-    // console.log(recipientNric);
     if (!seedPhrase) {
       console.log(`seedPhrase is null!`);
       return;
@@ -135,6 +133,13 @@ export default function TransferFTForm(props: TransferFTFormProps) {
                     style={{ width: '16px', marginRight: 7 }}
                   />
                   1kg bag of wheat flour ≡ 1 token
+                </MenuItem>
+                <MenuItem value={2}>
+                  <img
+                    src={bag_cookingoil}
+                    style={{ width: '16px', marginRight: 7 }}
+                  />
+                  1kg bag of cooking oil ≡ 1 token
                 </MenuItem>
               </Select>
             )}

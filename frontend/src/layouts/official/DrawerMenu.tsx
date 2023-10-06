@@ -4,7 +4,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import WalletIcon from '@mui/icons-material/Wallet';
 import LinkIcon from '@mui/icons-material/Link';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
@@ -33,10 +33,22 @@ export default function DrawerMenu({
       onKeyDown={toggleDrawer}
     >
       <List>
-        <ListItem key="Account" disablePadding>
+        <ListItem key="Home" disablePadding>
           <ListItemButton component={Link} to="/signedofficial">
+            <ListItemIcon />
+            <ListItemText
+              primary={
+                <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+                  Home
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="Account" disablePadding>
+          <ListItemButton component={Link} to="/signedofficial/account">
             <ListItemIcon>
-              <AccountCircleIcon sx={{ color: 'grey' }} />
+              <WalletIcon />
             </ListItemIcon>
             <ListItemText
               primary={

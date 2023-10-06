@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
-import { TOKEN_SHORTNAMES } from '../../../services/subsidyType';
+import { TOKEN_NAMES } from '../../../services/subsidyType';
 import TokenIcon from '../../../commons/TokenIcon';
 
 export default function Balance({
@@ -49,13 +49,14 @@ export default function Balance({
               color="primary"
               style={{
                 fontFamily: 'Oswald',
-                fontSize: '16pt',
-                marginLeft: 7,
+                fontSize: '14pt',
+                marginLeft: 15,
+                minWidth: '275px',
               }}
               key={index}
               variant="body1"
             >
-              {allowance} {TOKEN_SHORTNAMES[index]} tokens
+              {allowance} {TOKEN_NAMES[index]} tokens
             </Typography>
           </Box>
         ))}

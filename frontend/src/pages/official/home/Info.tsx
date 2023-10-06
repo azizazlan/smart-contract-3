@@ -31,27 +31,6 @@ export default function Info() {
     return <Navigate to="/official" />;
   }
 
-  // const handleReloadStatus = () => {
-  //   if (!nric) {
-  //     console.log(`nric is null`);
-  //     return;
-  //   }
-  //   dispatch(
-  //     checkStatus({
-  //       publicKey: publicKey as string,
-  //       nric,
-  //     })
-  //   );
-  // };
-
-  // const handleReloadBal = () => {
-  //   dispatch(
-  //     ethBal({
-  //       publicKey: publicKey as string,
-  //     })
-  //   );
-  // };
-
   return (
     <Box sx={{ ...styles.container, marginTop: 3 }}>
       <Status

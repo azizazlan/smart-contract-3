@@ -11,6 +11,9 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
 
     uint256 public constant BAG_070KG_RICE = 0;
     uint256 public constant BAG_001KG_WHEATFLOUR = 1;
+    uint256 public constant BAG_001KG_OIL = 2;
+    uint256 public constant BAG_001KG_DIESEL = 3;
+    uint256 public constant BAG_010KG_FERTILIZER = 4;
 
     mapping(uint256 => bool) public whitelistedNationalIds;
 
