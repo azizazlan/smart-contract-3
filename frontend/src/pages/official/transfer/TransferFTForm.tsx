@@ -26,7 +26,17 @@ import initialize from '../../../services/official/thunks/initialize';
 import bag_rice from '../../../assets/bag-rice.png';
 import bag_wheatflour from '../../../assets/bag-wheatflour.png';
 import bag_cookingoil from '../../../assets/bag-cooking-oil.png';
+import bag_diesel from '../../../assets/bag-diesel.png';
+import bag_fertilizer from '../../../assets/bag-fertilizer.png';
 import transferTokens from '../../../services/official/thunks/transferTokens';
+import {
+  BAG_001KG_COOKINGOIL,
+  BAG_001KG_DIESEL,
+  BAG_001KG_WHEATFLOUR,
+  BAG_010KG_FERTILIZER,
+  BAG_070KG_RICE,
+  TOKEN_NAMES,
+} from '../../../services/subsidyType';
 
 const schema = Yup.object().shape({
   tokenId: Yup.number()
@@ -125,21 +135,35 @@ export default function TransferFTForm(props: TransferFTFormProps) {
                     src={bag_rice}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  70kg bag of rice ≡ 1 token
+                  {TOKEN_NAMES[BAG_070KG_RICE]} ≅ 1 token
                 </MenuItem>
                 <MenuItem value={1}>
                   <img
                     src={bag_wheatflour}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  1kg bag of wheat flour ≡ 1 token
+                  {TOKEN_NAMES[BAG_001KG_WHEATFLOUR]} ≅ 1 token
                 </MenuItem>
                 <MenuItem value={2}>
                   <img
                     src={bag_cookingoil}
                     style={{ width: '16px', marginRight: 7 }}
                   />
-                  1kg bag of cooking oil ≡ 1 token
+                  {TOKEN_NAMES[BAG_001KG_COOKINGOIL]} ≅ 1 token
+                </MenuItem>
+                <MenuItem value={3}>
+                  <img
+                    src={bag_diesel}
+                    style={{ width: '16px', marginRight: 7 }}
+                  />
+                  {TOKEN_NAMES[BAG_001KG_DIESEL]} ≅ 1 token
+                </MenuItem>
+                <MenuItem value={4}>
+                  <img
+                    src={bag_fertilizer}
+                    style={{ width: '16px', marginRight: 7 }}
+                  />
+                  {TOKEN_NAMES[BAG_010KG_FERTILIZER]} ≅ 1 token
                 </MenuItem>
               </Select>
             )}
