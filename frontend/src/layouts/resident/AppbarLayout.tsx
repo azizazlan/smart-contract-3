@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Footer from '../Footer';
 import DrawerMenu from './DrawerMenu';
 import QrDialog from './QrDialog';
-import ClearCacheDlg from '../../dialogs/ClearCacheDlg';
+import ClearCacheDlg from '../../commons/ClearCacheDlg';
 import { useResidentDispatch, useResidentSelector } from '../../services/hook';
 import clearLocalSto from '../../services/resident/thunks/clearLocalSto';
 import { ResidentState } from '../../services/store';

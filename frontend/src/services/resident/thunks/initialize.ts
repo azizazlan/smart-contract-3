@@ -3,7 +3,7 @@ import checkStatus from './checkStatus';
 import watchEvents from './watchEvents';
 
 const initialize = createAsyncThunk(
-  'initialize_resident',
+  'resident_initialize',
   async (_, thunkAPI: any) => {
     const snric = localStorage.getItem('thuleen.mfs.resident.nric');
     const publicKey = localStorage.getItem('thuleen.mfs.resident.publicKey');

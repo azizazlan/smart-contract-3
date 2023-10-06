@@ -7,7 +7,7 @@ type MetamaskInfoProps = {
 };
 
 const metamaskInfo = createAsyncThunk(
-  'metamaskInfo',
+  'admin_metamask_info',
   async (props: MetamaskInfoProps) => {
     const { privateKey } = props;
     const provider = await detectEthereumProvider({ silent: true });

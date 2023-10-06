@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Footer from '../Footer';
 import DrawerMenu from './DrawerMenu';
-import ClearCacheDlg from '../../dialogs/ClearCacheDlg';
+import ClearCacheDlg from '../../commons/ClearCacheDlg';
 import { useOfficialDispatch, useResidentDispatch } from '../../services/hook';
 import { default as clearResidentLocalSto } from '../../services/resident/thunks/clearLocalSto';
 import { default as clearOfficialLocalSto } from '../../services/official/thunks/clearLocalSto';

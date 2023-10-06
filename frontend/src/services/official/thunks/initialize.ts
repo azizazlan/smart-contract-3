@@ -4,7 +4,7 @@ import checkStatus from './checkStatus';
 import watchEvents from './watchEvents';
 
 const initialize = createAsyncThunk(
-  'initialize_official',
+  'official_initialize',
   async (_, thunkAPI: any) => {
     setTimeout(() => {
       console.log('Delay completed after 3 seconds');
