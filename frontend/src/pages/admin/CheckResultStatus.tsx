@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useAdminDispatch } from '../../services/hook';
 import { resetSubmission } from '../../services/admin/reducer';
+import { TOKEN_NAMES } from '../../services/subsidyType';
 
 type ResultStatusProps = {
   message: string;
@@ -21,7 +22,6 @@ type ResultStatusProps = {
 export default function CheckResultStatus(props: ResultStatusProps) {
   const dispatch = useAdminDispatch();
 
-  const tokenNames = ['Bag 70kg of rice', 'Bag 1kg of wheat flour'];
   const handleClose = () => {
     dispatch(resetSubmission());
   };
@@ -74,7 +74,7 @@ export default function CheckResultStatus(props: ResultStatusProps) {
           </Typography>
           {props.allowances.map((allowance, index) => (
             <Typography key={index} variant="body1">
-              {tokenNames[index]}: {allowance} tokens
+              {TOKEN_NAMES[index]}: {allowance} tokens
             </Typography>
           ))}
         </CardContent>

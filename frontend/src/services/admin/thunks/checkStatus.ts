@@ -54,18 +54,29 @@ const checkStatus = createAsyncThunk(
     const addressNric = await melakaResidentId.nationalIdToAddress(nric);
     const hasResidentId = addressNric === publicKey;
 
-    const allowanceRiceTokens: BigNumber = await melakaSubsidy.balanceOf(
+    const allowRiceTokens: BigNumber = await melakaSubsidy.balanceOf(
       publicKey,
       0
     );
-    const allowanceWheatFlourTokens: BigNumber = await melakaSubsidy.balanceOf(
+    const allowWheatFlourTokens: BigNumber = await melakaSubsidy.balanceOf(
       publicKey,
       1
     );
-
+    const allowCookingOil: BigNumber = await melakaSubsidy.balanceOf(
+      publicKey,
+      2
+    );
+    const allowDiesel: BigNumber = await melakaSubsidy.balanceOf(publicKey, 3);
+    const allowFertilizer: BigNumber = await melakaSubsidy.balanceOf(
+      publicKey,
+      4
+    );
     const allowances = [
-      allowanceRiceTokens.toNumber(),
-      allowanceWheatFlourTokens.toNumber(),
+      allowRiceTokens.toNumber(),
+      allowWheatFlourTokens.toNumber(),
+      allowCookingOil.toNumber(),
+      allowDiesel.toNumber(),
+      allowFertilizer.toNumber(),
     ];
 
     const message = 'Successfully check status';
