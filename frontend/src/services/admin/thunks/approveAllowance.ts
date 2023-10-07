@@ -34,7 +34,7 @@ const approveAllowance = createAsyncThunk(
     await new Promise((resolve) => setTimeout(resolve, 15000));
 
     const tokens = BigNumber.from(allowances);
-    const metadataBytes = ethers.utils.toUtf8Bytes('metadata');
+    const metadataBytes = ethers.utils.toUtf8Bytes('SET_QUOTA');
     await melakaSubsidy
       .connect(metaMaskWallet)
       .approve(officerPublicKey, tokens);
@@ -43,7 +43,7 @@ const approveAllowance = createAsyncThunk(
 
     await melakaSubsidy
       .connect(metaMaskWallet)
-      .mint(officerPublicKey, tokenId, tokens, metadataBytes);
+      .setTokensQuota(officerPublicKey, tokenId, tokens, metadataBytes);
 
     let tokenName = 'Bag 70kg of rice';
     if (tokenId === 1) tokenName = 'Bag 1kg of Whear flour';

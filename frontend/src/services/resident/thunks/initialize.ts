@@ -8,6 +8,10 @@ const initialize = createAsyncThunk(
     const snric = localStorage.getItem('thuleen.mfs.resident.nric');
     const publicKey = localStorage.getItem('thuleen.mfs.resident.publicKey');
     const seedPhrase = localStorage.getItem('thuleen.mfs.resident.seedPhrase');
+    const sBlockNumber = localStorage.getItem(
+      'thuleen.mfs.resident.blockNumber'
+    );
+    const blockNumber = parseInt(sBlockNumber || `0`, 10);
 
     let nric = 0;
     if (publicKey && snric) {
@@ -20,6 +24,7 @@ const initialize = createAsyncThunk(
       nric,
       publicKey,
       seedPhrase,
+      blockNumber,
     };
   }
 );

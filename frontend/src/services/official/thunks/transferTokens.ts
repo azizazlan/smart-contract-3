@@ -58,12 +58,15 @@ const transferTokens = createAsyncThunk(
     const oneToken = BigNumber.from('1');
     await melakaSubsidy
       .connect(officialWallet)
-      .transferTokens(
+      .transferSubsidyTokens(
         officialWallet.address,
         residentPublicKey,
         tokenId,
         oneToken
       );
+
+    const bal = await melakaSubsidy.balanceOf(residentPublicKey, tokenId);
+    console.log(`Bal=${bal.toNumber()}`);
 
     const message = `Successfully transfer tokens to ${truncateEthAddr(
       residentPublicKey

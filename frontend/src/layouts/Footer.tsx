@@ -52,6 +52,10 @@ export default function Footer() {
         <Link to="/" style={{ textDecoration: 'none', color: 'silver' }}>
           folks{' '}
         </Link>
+        and{' '}
+        <Link to="/" style={{ textDecoration: 'none', color: 'silver' }}>
+          merchants{' '}
+        </Link>
         by{' '}
         <Link
           to="/admin"

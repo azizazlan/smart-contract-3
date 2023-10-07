@@ -7,6 +7,7 @@ import clearLocalSto from './thunks/clearLocalSto';
 import checkStatus from './thunks/checkStatus';
 import restore from './thunks/restore';
 import claim from './thunks/claim';
+import updateTokens from './thunks/updateTokens';
 
 export interface TransactionsSubsidy {
   flow: 1 | 0; // 1 = incoming and 0 = outgoing
@@ -27,6 +28,7 @@ interface ResidentState {
   hasResidentId: boolean;
   isWhitelisted: boolean;
   transactions: TransactionsSubsidy[];
+  blockNumber: number;
 }
 
 const initialState: ResidentState = {
@@ -39,43 +41,45 @@ const initialState: ResidentState = {
   seedPhrase: null,
   hasResidentId: false,
   isWhitelisted: false,
-  transactions: [
-    {
-      flow: 1,
-      tokenId: 0,
-      amount: 1,
-      primary: '1 token Bag 70kg of rice',
-      secondary: '06:37:38 05-10-2023',
-    },
-    {
-      flow: 1,
-      tokenId: 0,
-      amount: 1,
-      primary: '1 token Bag 70kg of rice',
-      secondary: '06:38:38 05-10-2023',
-    },
-    {
-      flow: 0,
-      tokenId: 0,
-      amount: 1,
-      primary: '1 token Bag 70kg of rice',
-      secondary: '06:38:38 05-10-2023',
-    },
-    {
-      flow: 1,
-      tokenId: 1,
-      amount: 1,
-      primary: '1 token Bag 01kg of wheat flour',
-      secondary: '06:38:38 05-10-2023',
-    },
-    {
-      flow: 1,
-      tokenId: 2,
-      amount: 1,
-      primary: '1 token Bag 01kg of cooking oil',
-      secondary: '06:38:38 05-10-2023',
-    },
-  ],
+  transactions: [],
+  blockNumber: 0,
+  // transactions: [
+  //   {
+  //     flow: 1,
+  //     tokenId: 0,
+  //     amount: 1,
+  //     primary: '1 token Bag 70kg of rice',
+  //     secondary: '06:37:38 05-10-2023',
+  //   },
+  //   {
+  //     flow: 1,
+  //     tokenId: 0,
+  //     amount: 1,
+  //     primary: '1 token Bag 70kg of rice',
+  //     secondary: '06:38:38 05-10-2023',
+  //   },
+  //   {
+  //     flow: 0,
+  //     tokenId: 0,
+  //     amount: 1,
+  //     primary: '1 token Bag 70kg of rice',
+  //     secondary: '06:38:38 05-10-2023',
+  //   },
+  //   {
+  //     flow: 1,
+  //     tokenId: 1,
+  //     amount: 1,
+  //     primary: '1 token Bag 01kg of wheat flour',
+  //     secondary: '06:38:38 05-10-2023',
+  //   },
+  //   {
+  //     flow: 1,
+  //     tokenId: 2,
+  //     amount: 1,
+  //     primary: '1 token Bag 01kg of cooking oil',
+  //     secondary: '06:38:38 05-10-2023',
+  //   },
+  // ],
 };
 
 export const residentSlice = createSlice({
@@ -93,6 +97,7 @@ export const residentSlice = createSlice({
       state.publicKey = payload.publicKey;
       state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.seedPhrase = payload.seedPhrase;
+      state.blockNumber = payload.blockNumber;
       state.submissionState = 'OK';
     });
     builder.addCase(clearLocalSto.pending, (state, {}) => {
@@ -143,6 +148,23 @@ export const residentSlice = createSlice({
     builder.addCase(claim.pending, (state, {}) => {
       state.submissionMsg = null;
       state.submissionState = 'PENDING';
+    });
+
+    builder.addCase(updateTokens.fulfilled, (state, { payload }) => {
+      console.log(`payload.blockNumber=${payload.blockNumber}`);
+      if (state.blockNumber !== payload.blockNumber) {
+        // Create a new transaction object
+        const newTransaction: TransactionsSubsidy = {
+          flow: payload.flow, // 1 for incoming
+          tokenId: payload.tokenId,
+          amount: payload.amount,
+          primary: payload.primary,
+          secondary: payload.secondary,
+        };
+        state.transactions.push(newTransaction);
+        state.blockNumber = payload.blockNumber;
+      }
+      state.submissionState = 'OK';
     });
   },
 });
