@@ -9,6 +9,7 @@ import applyPrivateKey from './thunks/applyPrivateKey';
 import revokeRole from './thunks/revokeRole';
 import checkStatus from './thunks/checkStatus';
 import approveAllowance from './thunks/approveAllowance';
+import initialize from './thunks/initialize';
 
 interface AdminState {
   submissionState: SubmissionStates;
@@ -55,6 +56,28 @@ export const adminSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(initialize.pending, (state, {}) => {
+      state.submissionState = 'PENDING';
+      state.submissionMsg = null;
+    });
+    builder.addCase(initialize.rejected, (state, action) => {
+      state.submissionState = 'FAILED';
+      state.submissionMsg = action.error.message || 'Error initilized';
+    });
+    builder.addCase(initialize.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        state.privateKey = null;
+        state.publicKey = null;
+        state.submissionMsg = 'Error initialized';
+        state.submissionState = 'FAILED';
+        return;
+      }
+      state.hasMinterRole = payload.hasMinterRole;
+      state.privateKey = payload.privateKey;
+      state.publicKey = payload.publicKey;
+      state.submissionMsg = 'Initialized';
+      state.submissionState = 'OK';
+    });
     builder.addCase(metamaskInfo.pending, (state, {}) => {
       state.submissionState = 'PENDING';
       state.submissionMsg = null;

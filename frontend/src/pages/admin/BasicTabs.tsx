@@ -12,6 +12,7 @@ import contractInfo from '../../services/admin/thunks/contractInfo';
 import { resetSubmission } from '../../services/admin/reducer';
 import CheckTab from './CheckTab';
 import AllowanceTab from './AllowanceTab';
+import initialize from '../../services/admin/thunks/initialize';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,6 +53,7 @@ export default function BasicTabs() {
   React.useEffect(() => {
     if (!privateKey) {
       console.log('private key is null');
+      dispatch(initialize());
       return;
     }
     dispatch(metamaskInfo({ privateKey }));

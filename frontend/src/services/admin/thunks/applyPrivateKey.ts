@@ -3,6 +3,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Wallet } from 'ethers';
 
 import MelakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
+
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 const MELAKA_RESIDENTID_CONTRACT_ADDR = import.meta.env
   .VITE_APP_ADDR_MLK_RESIDENTID;
@@ -27,6 +28,9 @@ const applyPrivateKey = createAsyncThunk(
     const metaMaskWallet = new Wallet(privateKey, web3Provider);
 
     const publicKey = metaMaskWallet.address;
+
+    localStorage.setItem('thuleen.mfs.admin.publicKey', publicKey);
+    localStorage.setItem('thuleen.mfs.admin.privateKey', privateKey);
 
     const provider2 = new ethers.providers.JsonRpcProvider(RPC_URL);
 

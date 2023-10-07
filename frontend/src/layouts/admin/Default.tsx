@@ -17,7 +17,7 @@ export default function Layout() {
           marginTop: 3,
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'flex-start',
+          alignItems: 'center',
           width: '100%',
         }}
       >

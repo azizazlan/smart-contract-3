@@ -4,8 +4,14 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 
-contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
+contract MelakaSubsidy is
+    ERC1155,
+    AccessControl,
+    ERC1155Supply,
+    ERC1155Burnable
+{
     bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -45,7 +51,8 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
         allowances[spender] = amount;
     }
 
-    function transferTokens(
+    // Transfer tokens to resident
+    function transferSubsidyTokens(
         address from,
         address to,
         uint256 id,
@@ -67,13 +74,27 @@ contract MelakaSubsidy is ERC1155, AccessControl, ERC1155Supply {
         _setURI(newuri);
     }
 
-    function mint(
-        address account,
+    // set quota for an officer. Must call approve(officer_A, amount)
+    function setTokensQuota(
+        address account, // officer_A
         uint256 id,
-        uint256 amount,
+        uint256 amount, // amount of tokens
         bytes memory data
     ) public onlyRole(MINTER_ROLE) {
         _mint(account, id, amount, data);
+    }
+
+    // Resident claim tokens
+    function claimTokens(
+        uint256 residentNric,
+        address resident,
+        uint256 id,
+        uint256 amount
+    ) external onlyRole(MINTER_ROLE) {
+        require(whitelistedNationalIds[residentNric], "NRIC not whitelisted");
+        require(balanceOf(resident, id) >= amount, "Insufficient token");
+
+        burn(msg.sender, id, amount);
     }
 
     function mintBatch(

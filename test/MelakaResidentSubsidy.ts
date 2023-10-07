@@ -54,7 +54,12 @@ describe("MelakaSubsidy", function () {
       await melakaSubsidy.connect(officer1).approve(officer2.address, oneToken);
       await melakaSubsidy
         .connect(officer1)
-        .mint(officer2.address, BAG_070KG_RICE, oneToken, metadataBytes);
+        .setTokensQuota(
+          officer2.address,
+          BAG_070KG_RICE,
+          oneToken,
+          metadataBytes
+        );
 
       // Check event
       const filter = melakaSubsidy.filters.TransferSingle(
@@ -65,9 +70,9 @@ describe("MelakaSubsidy", function () {
         null // value
       );
       const updatedEvents = await melakaSubsidy.queryFilter(filter);
-      console.log("\r\n");
-      console.log(`TransferSingle event - by mint to approve allowance`);
-      console.log(updatedEvents);
+      // console.log("\r\n");
+      // console.log(`TransferSingle event - by mint to approve allowance`);
+      // console.log(updatedEvents);
 
       const nric = 123456789012;
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);
@@ -80,13 +85,13 @@ describe("MelakaSubsidy", function () {
         null // tokenId
       );
       const updatedEvents2 = await melakaId.queryFilter(filter2);
-      console.log("\r\n");
-      console.log(`Transfer event - by mintIdentity`);
-      console.log(updatedEvents2);
+      // console.log("\r\n");
+      // console.log(`Transfer event - by mintIdentity`);
+      // console.log(updatedEvents2);
 
       // Ensure the user has an identity
       const hasIdentity = await melakaId.nationalIdToAddress(nric);
-      console.log(hasIdentity);
+      // console.log(hasIdentity);
       expect(hasIdentity).to.equal(resident1.address);
       await melakaSubsidy.connect(officer2).setWhitelisted(nric, true);
 
@@ -96,11 +101,11 @@ describe("MelakaSubsidy", function () {
         null // timestamp
       );
       const updatedEvents3 = await melakaSubsidy.queryFilter(filter3);
-      console.log("\r\n");
-      console.log(`WhitelistingEvent event - by setWhitelisted`);
-      console.log(updatedEvents3);
+      // console.log("\r\n");
+      // console.log(`WhitelistingEvent event - by setWhitelisted`);
+      // console.log(updatedEvents3);
 
-      await melakaSubsidy.transferTokens(
+      await melakaSubsidy.transferSubsidyTokens(
         officer2.address,
         resident1.address,
         0,
@@ -128,13 +133,18 @@ describe("MelakaSubsidy", function () {
       await melakaSubsidy.connect(officer1).approve(officer2.address, oneToken);
       await melakaSubsidy
         .connect(officer1)
-        .mint(officer2.address, BAG_070KG_RICE, oneToken, metadataBytes);
+        .setTokensQuota(
+          officer2.address,
+          BAG_070KG_RICE,
+          oneToken,
+          metadataBytes
+        );
 
       const nric = 123456789012;
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);
       // Ensure the user has an identity
       const hasIdentity = await melakaId.nationalIdToAddress(nric);
-      console.log(hasIdentity);
+      // console.log(hasIdentity);
       expect(hasIdentity).to.equal(resident1.address);
       await melakaSubsidy.connect(officer2).setWhitelisted(nric, true);
 
@@ -146,7 +156,7 @@ describe("MelakaSubsidy", function () {
         null // timestamp
       );
 
-      await melakaSubsidy.transferTokens(
+      await melakaSubsidy.transferSubsidyTokens(
         officer2.address,
         resident1.address,
         0,
@@ -156,7 +166,7 @@ describe("MelakaSubsidy", function () {
       const updatedEvents = await melakaSubsidy.queryFilter(filter);
       const unixTimestamp = updatedEvents[0].args.timestamp;
       const date = new Date(unixTimestamp.toNumber());
-      console.log(format(date, "hh:mm:ss  dd-MM-yyyy"));
+      // console.log(format(date, "hh:mm:ss  dd-MM-yyyy"));
     });
 
     it("Should fail to transfer to resident when officer2 exceeded allowance", async function () {
@@ -174,11 +184,16 @@ describe("MelakaSubsidy", function () {
       await melakaSubsidy.connect(officer1).approve(officer2.address, oneToken);
       await melakaSubsidy
         .connect(officer1)
-        .mint(officer2.address, BAG_070KG_RICE, oneToken, metadataBytes);
+        .setTokensQuota(
+          officer2.address,
+          BAG_070KG_RICE,
+          oneToken,
+          metadataBytes
+        );
 
       // Get the metadata back
       const uri = await melakaSubsidy.uri(BAG_070KG_RICE);
-      console.log(uri);
+      // console.log(uri);
 
       const nric = 123456789012;
       await melakaId.connect(officer2).mintIdentity(resident1.address, nric);
@@ -189,13 +204,143 @@ describe("MelakaSubsidy", function () {
 
       const twoTokens = BigNumber.from("2");
       await expect(
-        melakaSubsidy.transferTokens(
+        melakaSubsidy.transferSubsidyTokens(
           officer2.address,
           resident1.address,
           0,
           twoTokens
         )
       ).to.be.revertedWith("Allowance exceeded");
+    });
+  });
+  describe("Token claim", function () {
+    it("Fail to claim when resident nric not correct", async function () {
+      const { melakaId, melakaSubsidy, officer1, officer2, resident1 } =
+        await loadFixture(deployContracts);
+      // grant role
+      await melakaId.connect(officer1).grantRole(MINTER_ROLE, officer2.address);
+      await melakaSubsidy
+        .connect(officer1)
+        .grantRole(MINTER_ROLE, officer2.address);
+      // approve and mint one token
+      const oneToken = BigNumber.from("1");
+      const metadataBytes = ethers.utils.toUtf8Bytes("MetadataRiceBatch2023");
+      await melakaSubsidy.connect(officer1).approve(officer2.address, oneToken);
+      await melakaSubsidy
+        .connect(officer1)
+        .setTokensQuota(
+          officer2.address,
+          BAG_070KG_RICE,
+          oneToken,
+          metadataBytes
+        );
+      const residentNric = 123456789012;
+      await melakaId
+        .connect(officer2)
+        .mintIdentity(resident1.address, residentNric);
+      await melakaSubsidy.connect(officer2).setWhitelisted(residentNric, true);
+      await melakaSubsidy.transferSubsidyTokens(
+        officer2.address,
+        resident1.address,
+        BAG_070KG_RICE,
+        oneToken
+      );
+      const residentTokenBal = await melakaSubsidy.balanceOf(
+        resident1.address,
+        BAG_070KG_RICE
+      );
+      expect(residentTokenBal).equals(1);
+      const residentIncorrectNric = 123456789013;
+      await expect(
+        melakaSubsidy
+          .connect(officer2)
+          .claimTokens(
+            residentIncorrectNric,
+            resident1.address,
+            BAG_070KG_RICE,
+            oneToken
+          )
+      ).to.be.revertedWith("NRIC not whitelisted");
+    });
+    it("Fail to claim when no token balance", async function () {
+      const { melakaId, melakaSubsidy, officer1, officer2, resident1 } =
+        await loadFixture(deployContracts);
+      // grant role
+      await melakaId.connect(officer1).grantRole(MINTER_ROLE, officer2.address);
+      await melakaSubsidy
+        .connect(officer1)
+        .grantRole(MINTER_ROLE, officer2.address);
+      // approve and mint one token
+      const oneToken = BigNumber.from("1");
+      const metadataBytes = ethers.utils.toUtf8Bytes("MetadataRiceBatch2023");
+      await melakaSubsidy.connect(officer1).approve(officer2.address, oneToken);
+      await melakaSubsidy
+        .connect(officer1)
+        .setTokensQuota(
+          officer2.address,
+          BAG_070KG_RICE,
+          oneToken,
+          metadataBytes
+        );
+      const residentNric = 123456789012;
+      await melakaId
+        .connect(officer2)
+        .mintIdentity(resident1.address, residentNric);
+      await melakaSubsidy.connect(officer2).setWhitelisted(residentNric, true);
+
+      await expect(
+        melakaSubsidy
+          .connect(officer2)
+          .claimTokens(
+            residentNric,
+            resident1.address,
+            BAG_070KG_RICE,
+            oneToken
+          )
+      ).to.be.revertedWith("Insufficient token");
+    });
+
+    it("Fail to claim when officer2 not minter", async function () {
+      const { melakaId, melakaSubsidy, officer1, officer2, resident1 } =
+        await loadFixture(deployContracts);
+      // grant role
+      await melakaId.connect(officer1).grantRole(MINTER_ROLE, officer2.address);
+      await melakaSubsidy
+        .connect(officer1)
+        .grantRole(MINTER_ROLE, officer2.address);
+      // approve and mint one token
+      const oneToken = BigNumber.from("1");
+      const metadataBytes = ethers.utils.toUtf8Bytes("MetadataRiceBatch2023");
+      await melakaSubsidy.connect(officer1).approve(officer2.address, oneToken);
+      await melakaSubsidy
+        .connect(officer1)
+        .setTokensQuota(
+          officer2.address,
+          BAG_070KG_RICE,
+          oneToken,
+          metadataBytes
+        );
+      const residentNric = 123456789012;
+      await melakaId
+        .connect(officer2)
+        .mintIdentity(resident1.address, residentNric);
+      await melakaSubsidy.connect(officer2).setWhitelisted(residentNric, true);
+
+      // Revoke minter role!!!
+      await melakaSubsidy
+        .connect(officer1)
+        .revokeRole(MINTER_ROLE, officer2.address);
+
+      await expect(
+        melakaSubsidy
+          .connect(officer2)
+          .claimTokens(
+            residentNric,
+            resident1.address,
+            BAG_070KG_RICE,
+            oneToken
+          )
+      ).to.be.reverted;
     });
   });
 });
