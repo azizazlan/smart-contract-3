@@ -10,11 +10,17 @@ export function getBalances(transactions: TransactionsSubsidy[]) {
   let balFlourTokens = 0;
 
   transactions.forEach((tx) => {
-    if (tx.tokenId === 0) {
-      balRiceTokens += tx.receivedTokens;
+    if (tx.tokenId === 0 && tx.flow === 1) {
+      balRiceTokens += tx.amount;
     }
-    if (tx.tokenId === 1) {
-      balFlourTokens += tx.receivedTokens;
+    if (tx.tokenId === 0 && tx.flow === 0) {
+      balRiceTokens -= tx.amount;
+    }
+    if (tx.tokenId === 1 && tx.flow === 1) {
+      balFlourTokens += tx.amount;
+    }
+    if (tx.tokenId === 1 && tx.flow === 0) {
+      balFlourTokens -= tx.amount;
     }
   });
 

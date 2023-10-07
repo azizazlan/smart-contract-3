@@ -37,6 +37,14 @@ contract MelakaSubsidy is
 
     event WhitelistingEvent(uint256 indexed id, bool status, uint256 timestamp);
 
+    event ClaimTokensEvent(
+        address indexed from,
+        address indexed to,
+        uint256 indexed id,
+        uint256 amount,
+        uint256 timestamp
+    );
+
     constructor() ERC1155("") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(URI_SETTER_ROLE, msg.sender);
@@ -87,14 +95,22 @@ contract MelakaSubsidy is
     // Resident claim tokens
     function claimTokens(
         uint256 residentNric,
-        address resident,
+        address merchant,
         uint256 id,
         uint256 amount
-    ) external onlyRole(MINTER_ROLE) {
+    ) external {
         require(whitelistedNationalIds[residentNric], "NRIC not whitelisted");
-        require(balanceOf(resident, id) >= amount, "Insufficient token");
+        require(balanceOf(msg.sender, id) >= amount, "Insufficient token");
+        // Perform the transfer
+        _safeTransferFrom(msg.sender, merchant, id, amount, "Claimed");
 
-        burn(msg.sender, id, amount);
+        emit ClaimTokensEvent(
+            msg.sender,
+            merchant,
+            id,
+            amount,
+            block.timestamp
+        );
     }
 
     function mintBatch(

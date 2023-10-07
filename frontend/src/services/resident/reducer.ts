@@ -6,10 +6,12 @@ import initialize from './thunks/initialize';
 import clearLocalSto from './thunks/clearLocalSto';
 import checkStatus from './thunks/checkStatus';
 import restore from './thunks/restore';
+import claim from './thunks/claim';
 
 export interface TransactionsSubsidy {
+  flow: 1 | 0; // 1 = incoming and 0 = outgoing
   tokenId: number;
-  receivedTokens: number;
+  amount: number;
   primary: string;
   secondary: string;
 }
@@ -39,28 +41,39 @@ const initialState: ResidentState = {
   isWhitelisted: false,
   transactions: [
     {
+      flow: 1,
       tokenId: 0,
-      receivedTokens: 1,
+      amount: 1,
       primary: '1 token Bag 70kg of rice',
-      secondary: '06:37:38 05-10-2023 from 0x8626…1199',
+      secondary: '06:37:38 05-10-2023',
     },
     {
+      flow: 1,
       tokenId: 0,
-      receivedTokens: 1,
+      amount: 1,
       primary: '1 token Bag 70kg of rice',
-      secondary: '06:38:38 05-10-2023 from 0x8626…1199',
+      secondary: '06:38:38 05-10-2023',
     },
     {
+      flow: 0,
+      tokenId: 0,
+      amount: 1,
+      primary: '1 token Bag 70kg of rice',
+      secondary: '06:38:38 05-10-2023',
+    },
+    {
+      flow: 1,
       tokenId: 1,
-      receivedTokens: 1,
+      amount: 1,
       primary: '1 token Bag 01kg of wheat flour',
-      secondary: '06:38:38 05-10-2023 from 0x8626…1199',
+      secondary: '06:38:38 05-10-2023',
     },
     {
+      flow: 1,
       tokenId: 2,
-      receivedTokens: 1,
+      amount: 1,
       primary: '1 token Bag 01kg of cooking oil',
-      secondary: '06:38:38 05-10-2023 from 0x8626…1199',
+      secondary: '06:38:38 05-10-2023',
     },
   ],
 };
@@ -126,6 +139,10 @@ export const residentSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
+    });
+    builder.addCase(claim.pending, (state, {}) => {
+      state.submissionMsg = null;
+      state.submissionState = 'PENDING';
     });
   },
 });

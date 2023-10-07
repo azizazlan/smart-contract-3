@@ -3,6 +3,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import rice from '../../../assets/bag-rice.png';
 import wheat from '../../../assets/bag-wheatflour.png';
 import { Box, Divider, Typography } from '@mui/material';
@@ -32,17 +34,24 @@ export default function TxHistory() {
     >
       {transactions.map((tx, index) => (
         <Box key={index}>
-          <ListItem key={index}>
-            <ListItemAvatar>
-              <Avatar sx={{ backgroundColor: '#dfe6e9' }}>
-                <img
-                  src={tx.tokenId === 0 ? rice : wheat}
-                  style={{ width: '32px' }}
-                />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={tx.primary} secondary={tx.secondary} />
-          </ListItem>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <ListItem key={index}>
+              <ListItemAvatar>
+                <Avatar sx={{ backgroundColor: '#dfe6e9' }}>
+                  <img
+                    src={tx.tokenId === 0 ? rice : wheat}
+                    style={{ width: '32px' }}
+                  />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={tx.primary} secondary={tx.secondary} />
+            </ListItem>
+            {tx.flow === 0 ? (
+              <ArrowDropUpIcon fontSize="large" color="error" />
+            ) : (
+              <ArrowDropDownIcon fontSize="large" color="success" />
+            )}
+          </Box>
           <Divider />
         </Box>
       ))}

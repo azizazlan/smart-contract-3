@@ -17,7 +17,7 @@ describe("MelakaSubsidy", function () {
   const BAG_001KG_WHEATFLOUR = 1;
 
   async function deployContracts() {
-    const [resident1, resident2, officer1, officer2] =
+    const [resident1, resident2, officer1, officer2, merchant] =
       await ethers.getSigners();
 
     const MelakaResidentId = await ethers.getContractFactory(
@@ -35,6 +35,7 @@ describe("MelakaSubsidy", function () {
       resident2,
       officer1,
       officer2,
+      merchant,
     };
   }
 
@@ -215,8 +216,14 @@ describe("MelakaSubsidy", function () {
   });
   describe("Token claim", function () {
     it("Fail to claim when resident nric not correct", async function () {
-      const { melakaId, melakaSubsidy, officer1, officer2, resident1 } =
-        await loadFixture(deployContracts);
+      const {
+        melakaId,
+        melakaSubsidy,
+        officer1,
+        officer2,
+        resident1,
+        merchant,
+      } = await loadFixture(deployContracts);
       // grant role
       await melakaId.connect(officer1).grantRole(MINTER_ROLE, officer2.address);
       await melakaSubsidy
@@ -253,18 +260,24 @@ describe("MelakaSubsidy", function () {
       const residentIncorrectNric = 123456789013;
       await expect(
         melakaSubsidy
-          .connect(officer2)
+          .connect(resident1)
           .claimTokens(
             residentIncorrectNric,
-            resident1.address,
+            merchant.address,
             BAG_070KG_RICE,
             oneToken
           )
       ).to.be.revertedWith("NRIC not whitelisted");
     });
     it("Fail to claim when no token balance", async function () {
-      const { melakaId, melakaSubsidy, officer1, officer2, resident1 } =
-        await loadFixture(deployContracts);
+      const {
+        melakaId,
+        melakaSubsidy,
+        officer1,
+        officer2,
+        resident1,
+        merchant,
+      } = await loadFixture(deployContracts);
       // grant role
       await melakaId.connect(officer1).grantRole(MINTER_ROLE, officer2.address);
       await melakaSubsidy
@@ -290,19 +303,20 @@ describe("MelakaSubsidy", function () {
 
       await expect(
         melakaSubsidy
-          .connect(officer2)
-          .claimTokens(
-            residentNric,
-            resident1.address,
-            BAG_070KG_RICE,
-            oneToken
-          )
+          .connect(resident1)
+          .claimTokens(residentNric, merchant.address, BAG_070KG_RICE, oneToken)
       ).to.be.revertedWith("Insufficient token");
     });
 
-    it("Fail to claim when officer2 not minter", async function () {
-      const { melakaId, melakaSubsidy, officer1, officer2, resident1 } =
-        await loadFixture(deployContracts);
+    it("Should able to claim and result resident token balance to zero", async function () {
+      const {
+        melakaId,
+        melakaSubsidy,
+        officer1,
+        officer2,
+        resident1,
+        merchant,
+      } = await loadFixture(deployContracts);
       // grant role
       await melakaId.connect(officer1).grantRole(MINTER_ROLE, officer2.address);
       await melakaSubsidy
@@ -326,21 +340,50 @@ describe("MelakaSubsidy", function () {
         .mintIdentity(resident1.address, residentNric);
       await melakaSubsidy.connect(officer2).setWhitelisted(residentNric, true);
 
-      // Revoke minter role!!!
-      await melakaSubsidy
-        .connect(officer1)
-        .revokeRole(MINTER_ROLE, officer2.address);
+      await melakaSubsidy.transferSubsidyTokens(
+        officer2.address,
+        resident1.address,
+        BAG_070KG_RICE,
+        oneToken
+      );
+      const tokenBalBeforeClaim = await melakaSubsidy.balanceOf(
+        resident1.address,
+        BAG_070KG_RICE
+      );
+      expect(tokenBalBeforeClaim).equals(1);
 
-      await expect(
-        melakaSubsidy
-          .connect(officer2)
-          .claimTokens(
-            residentNric,
-            resident1.address,
-            BAG_070KG_RICE,
-            oneToken
-          )
-      ).to.be.reverted;
+      await melakaSubsidy
+        .connect(resident1)
+        .claimTokens(residentNric, merchant.address, BAG_070KG_RICE, oneToken);
+
+      const filter = melakaSubsidy.filters.ClaimTokensEvent(
+        null, // from
+        null, // to
+        null, // tokenId
+        null, // amount
+        null // timestamp
+      );
+      const updatedEvents = await melakaSubsidy.queryFilter(filter);
+      for (const event of updatedEvents) {
+        const eventToAddress = event.args.to; // Get the "to" address from the event
+        expect(eventToAddress).equals(merchant.address);
+        const tokenId = event.args.id;
+        expect(tokenId).equals(BAG_070KG_RICE);
+        const amount = event.args.amount; // Get the "to" address from the event
+        expect(amount).equals(1);
+      }
+
+      const tokenBalPostClaim = await melakaSubsidy.balanceOf(
+        resident1.address,
+        BAG_070KG_RICE
+      );
+      expect(tokenBalPostClaim).equals(0);
+
+      const merchantTokenBal = await melakaSubsidy.balanceOf(
+        merchant.address,
+        BAG_070KG_RICE
+      );
+      expect(merchantTokenBal).equals(1);
     });
   });
 });

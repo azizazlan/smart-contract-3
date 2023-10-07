@@ -40,6 +40,7 @@ const ResidentHomeInfo = lazy(() => import('./pages/resident/home/Info'));
 const ResidentSignup = lazy(() => import('./pages/resident/home/Signup'));
 const ResidentRestore = lazy(() => import('./pages/resident/home/Restore'));
 const ResidentAccount = lazy(() => import('./pages/resident/account/Account'));
+const ResidentClaim = lazy(() => import('./pages/resident/claim/Claim'));
 
 const About = lazy(() => import('./pages/about/About'));
 const Verify = lazy(() => import('./pages/verify/Verify'));
@@ -60,6 +61,7 @@ function App() {
           <Route path="account" element={<ResidentAccount />} />
           <Route path="about" element={<About />} />
           <Route path="verify" element={<Verify />} />
+          <Route path="claim" element={<ResidentClaim />} />
         </Route>
         <Route path="/official" element={<OfficialLayout />}>
           <Route index element={<OfficialLanding />} />
