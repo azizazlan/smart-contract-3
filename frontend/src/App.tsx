@@ -61,7 +61,7 @@ function App() {
           <Route path="account" element={<ResidentAccount />} />
           <Route path="about" element={<About />} />
           <Route path="verify" element={<Verify />} />
-          <Route path="claim" element={<ResidentClaim />} />
+          <Route path="claim/:tokenId" element={<ResidentClaim />} />
         </Route>
         <Route path="/official" element={<OfficialLayout />}>
           <Route index element={<OfficialLanding />} />

@@ -8,7 +8,6 @@ import WalletIcon from '@mui/icons-material/Wallet';
 import InfoIcon from '@mui/icons-material/Info';
 import MemoryIcon from '@mui/icons-material/Memory';
 import QrCodeIcon from '@mui/icons-material/QrCode';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { Typography } from '@mui/material';
@@ -56,20 +55,6 @@ export default function DrawerMenu({
               primary={
                 <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
                   Account
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="Claim" disablePadding>
-          <ListItemButton component={Link} to="/signedresident/claim">
-            <ListItemIcon>
-              <CompareArrowsIcon sx={{ color: 'red' }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography color="error" sx={{ fontFamily: 'Oswald' }}>
-                  Claim
                 </Typography>
               }
             />

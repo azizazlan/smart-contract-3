@@ -13,12 +13,12 @@ import {
 } from '../services/subsidyType';
 
 type TokenIconProps = {
-  index: number;
+  tokenId: number;
 };
 
 export default function TokenIcon(props: TokenIconProps) {
-  const { index } = props;
-  if (index === BAG_001KG_WHEATFLOUR) {
+  const { tokenId } = props;
+  if (tokenId === BAG_001KG_WHEATFLOUR) {
     return (
       <img
         src={bagWheatFlour}
@@ -27,7 +27,7 @@ export default function TokenIcon(props: TokenIconProps) {
       />
     );
   }
-  if (index === BAG_001KG_COOKINGOIL) {
+  if (tokenId === BAG_001KG_COOKINGOIL) {
     return (
       <img
         src={bagCookingOil}
@@ -36,7 +36,7 @@ export default function TokenIcon(props: TokenIconProps) {
       />
     );
   }
-  if (index === BAG_001KG_DIESEL) {
+  if (tokenId === BAG_001KG_DIESEL) {
     return (
       <img
         src={bagDiesel}
@@ -45,7 +45,7 @@ export default function TokenIcon(props: TokenIconProps) {
       />
     );
   }
-  if (index === BAG_010KG_FERTILIZER) {
+  if (tokenId === BAG_010KG_FERTILIZER) {
     return (
       <img
         src={bagFertilizer}

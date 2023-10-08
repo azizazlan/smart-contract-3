@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,15 +9,48 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { format } from 'date-fns';
 import rice from '../../../assets/bag-rice.png';
 import wheat from '../../../assets/bag-wheatflour.png';
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Divider, ListItemButton, Typography } from '@mui/material';
 import { useResidentSelector } from '../../../services/hook';
 import { ResidentState } from '../../../services/store';
 import { TOKEN_NAMES } from '../../../services/subsidyType';
 
+type SecondaryListComponentProps = {
+  text: string;
+  flow: number;
+};
+
+function SecondaryListComponent(props: SecondaryListComponentProps) {
+  const { text, flow } = props;
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+    >
+      <Typography sx={{ flexGrow: 1 }} variant="body2">
+        {text}
+      </Typography>
+      {flow === 0 ? (
+        <ArrowDropUpIcon fontSize="large" color="error" />
+      ) : (
+        <ArrowDropDownIcon fontSize="large" color="success" />
+      )}
+    </Box>
+  );
+}
+
 export default function TxHistory() {
+  const navigate = useNavigate();
   const { transactions } = useResidentSelector(
     (state: ResidentState) => state.resident
   );
+
+  const handleClickList = ({ tokenId }: { tokenId: string }) => {
+    navigate(`/signedresident/claim/${tokenId}`);
+  };
+
   return (
     <List
       sx={{ width: '100%', backgroundColor: 'background.paper' }}
@@ -36,8 +70,10 @@ export default function TxHistory() {
     >
       {transactions.map((tx, index) => (
         <Box key={index}>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <ListItem key={index}>
+          <ListItem key={index} disablePadding>
+            <ListItemButton
+              onClick={() => handleClickList({ tokenId: `${tx.tokenId}` })}
+            >
               <ListItemAvatar>
                 <Avatar sx={{ backgroundColor: '#dfe6e9' }}>
                   <img
@@ -48,15 +84,15 @@ export default function TxHistory() {
               </ListItemAvatar>
               <ListItemText
                 primary={TOKEN_NAMES[tx.tokenId]}
-                secondary={format(tx.timestamp, 'E MMM dd/MM/yyyy hh:mm:ss a')}
+                secondary={
+                  <SecondaryListComponent
+                    flow={tx.flow}
+                    text={format(tx.timestamp, 'E MMM dd/MM/yyyy hh:mm:ss a')}
+                  />
+                }
               />
-            </ListItem>
-            {tx.flow === 0 ? (
-              <ArrowDropUpIcon fontSize="large" color="error" />
-            ) : (
-              <ArrowDropDownIcon fontSize="large" color="success" />
-            )}
-          </Box>
+            </ListItemButton>
+          </ListItem>
           <Divider />
         </Box>
       ))}
