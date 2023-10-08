@@ -49,6 +49,10 @@ export const residentSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
+    resetClaimSubmission: (state) => {
+      state.submissionMsg = null;
+      state.submissionState = 'IDLE';
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(initialize.pending, (state, {}) => {
@@ -112,6 +116,14 @@ export const residentSlice = createSlice({
       state.submissionMsg = null;
       state.submissionState = 'PENDING';
     });
+    builder.addCase(claim.rejected, (state, action) => {
+      state.submissionMsg = action.error.message || 'Error claim rejected!';
+      state.submissionState = 'FAILED';
+    });
+    builder.addCase(claim.fulfilled, (state, { payload }) => {
+      state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
 
     builder.addCase(updateTokens.fulfilled, (state, { payload }) => {
       console.log(`payload.blockNumber=${payload.blockNumber}`);
@@ -134,7 +146,6 @@ export const residentSlice = createSlice({
           'thuleen.mfs.resident.transactions',
           JSON.stringify(state.transactions)
         );
-
         state.blockNumber = payload.blockNumber;
       }
       state.submissionState = 'OK';
@@ -142,5 +153,5 @@ export const residentSlice = createSlice({
   },
 });
 
-export const { reset } = residentSlice.actions;
+export const { reset, resetClaimSubmission } = residentSlice.actions;
 export default residentSlice.reducer;

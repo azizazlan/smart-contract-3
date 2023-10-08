@@ -1,44 +1,64 @@
-import { ethers } from 'ethers';
+import { BigNumber, Wallet, ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 
-const RESIDENTID_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_RESIDENTID;
 const SUBSIDY_CONTRACT_ADDR = import.meta.env.VITE_APP_ADDR_MLK_SUBSIDY;
 
 type ClaimFields = {
-  nric: number;
-  publicKey: string;
+  merchantPublicKey: string;
+  residentNric: number;
+  tokenId: number;
+  seedPhrase: string;
 };
 
-const claim = createAsyncThunk('resident_claim', async (props: ClaimFields) => {
-  const { nric, publicKey } = props;
+const claim = createAsyncThunk(
+  'resident_claim',
+  async (props: ClaimFields, { rejectWithValue }) => {
+    const { merchantPublicKey, residentNric, tokenId, seedPhrase } = props;
+    console.log(`Merchant public key=${merchantPublicKey}`);
 
-  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    // await new Promise((resolve) => setTimeout(resolve, 15000));
 
-  const melakaResidentId = new ethers.Contract(
-    RESIDENTID_CONTRACT_ADDR,
-    melakaResidentIdJSON.abi,
-    provider
-  );
-  const addressNric = await melakaResidentId.nationalIdToAddress(nric);
-  const hasResidentId = addressNric === publicKey;
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const residentWallet = Wallet.fromMnemonic(seedPhrase).connect(provider);
 
-  const melakaSubsidy = new ethers.Contract(
-    SUBSIDY_CONTRACT_ADDR,
-    melakaSubsidyJSON.abi,
-    provider
-  );
+    const melakaSubsidy = new ethers.Contract(
+      SUBSIDY_CONTRACT_ADDR,
+      melakaSubsidyJSON.abi,
+      provider
+    );
 
-  const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
+    const tokenBal = await melakaSubsidy.balanceOf(
+      residentWallet.address,
+      tokenId
+    );
+    console.log(`Resident token balance=${tokenBal}`);
 
-  const message = `Successfully claimed`;
+    if (tokenBal < 1) {
+      return rejectWithValue('Claim failed insufficient token');
+    }
 
-  return {
-    message,
-  };
-});
+    const oneToken = BigNumber.from('1');
+    await melakaSubsidy
+      .connect(residentWallet)
+      .claimTokens(residentNric, merchantPublicKey, tokenId, oneToken);
+
+    await new Promise((resolve) => setTimeout(resolve, 15000));
+
+    const tokenPostBal = await melakaSubsidy.balanceOf(
+      residentWallet.address,
+      tokenId
+    );
+    console.log(`Resident tokenPostBal=${tokenPostBal}`);
+
+    const message = `Successfully claimed`;
+
+    return {
+      message,
+    };
+  }
+);
 export default claim;

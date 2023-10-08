@@ -22,22 +22,20 @@ type SecondaryListComponentProps = {
 function SecondaryListComponent(props: SecondaryListComponentProps) {
   const { text, flow } = props;
   return (
-    <Box
-      sx={{
+    <span
+      style={{
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
       }}
     >
-      <Typography sx={{ flexGrow: 1 }} variant="body2">
-        {text}
-      </Typography>
+      <span style={{ flexGrow: 1 }}>{text}</span>
       {flow === 0 ? (
         <ArrowDropUpIcon fontSize="large" color="error" />
       ) : (
         <ArrowDropDownIcon fontSize="large" color="success" />
       )}
-    </Box>
+    </span>
   );
 }
 
@@ -69,7 +67,7 @@ export default function TxHistory() {
       }
     >
       {transactions.map((tx, index) => (
-        <Box key={index}>
+        <Box component="span" key={index}>
           <ListItem key={index} disablePadding>
             <ListItemButton
               onClick={() => handleClickList({ tokenId: `${tx.tokenId}` })}
@@ -83,7 +81,27 @@ export default function TxHistory() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={TOKEN_NAMES[tx.tokenId]}
+                primary={
+                  <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                    <Typography
+                      sx={{ flexGrow: 1, fontSize: '12pt' }}
+                      color="primary"
+                    >
+                      {TOKEN_NAMES[tx.tokenId]}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'Oswald',
+                        marginLeft: 1,
+                        fontSize: '9pt',
+                        fontWeight: 'bold',
+                      }}
+                      color={tx.flow === 1 ? 'primary' : 'error'}
+                    >
+                      {tx.flow === 1 ? 'RECEIVED' : 'CLAIMED'}
+                    </Typography>
+                  </Box>
+                }
                 secondary={
                   <SecondaryListComponent
                     flow={tx.flow}

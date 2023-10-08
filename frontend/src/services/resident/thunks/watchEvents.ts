@@ -67,6 +67,36 @@ const watchEvents = createAsyncThunk(
       }
     );
 
+    // listen event when subsidy item is claimed
+    const eventFilterClaim = melakaSubsidy.filters.ClaimTokensEvent();
+    melakaSubsidy.on(
+      eventFilterClaim,
+      (from, to, tokenId, amount, timestamp, event) => {
+        const eventData = {
+          from,
+          to,
+          tokenId,
+          amount,
+          timestamp,
+          event,
+        };
+        console.log(`from: ${from} publicKey: ${publicKey}`);
+        if (from === publicKey) {
+          let unixTimestamp = eventData.timestamp;
+          unixTimestamp = unixTimestamp.toNumber();
+          thunkAPI.dispatch(
+            updateTokens({
+              blockNumber: event.blockNumber,
+              flow: 0,
+              tokenId: tokenId.toNumber(),
+              amount: eventData.amount.toNumber(),
+              timestamp: unixTimestamp,
+            })
+          );
+        }
+      }
+    );
+
     // listen event when subsidy item is received
     const eventFilterWhitelisted = melakaSubsidy.filters.WhitelistingEvent();
     melakaSubsidy.on(eventFilterWhitelisted, (id, status, timestamp, event) => {
