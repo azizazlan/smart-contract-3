@@ -1,12 +1,9 @@
 import { ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { format } from 'date-fns';
-
 import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
 import checkStatus from './checkStatus';
 import updateTokens from './updateTokens';
-import { TOKEN_NAMES } from '../../subsidyType';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 
@@ -53,19 +50,17 @@ const watchEvents = createAsyncThunk(
         };
 
         if (to === publicKey) {
-          console.log(`updateToken PLUS!!!`);
           let unixTimestamp = eventData.timestamp;
           unixTimestamp = unixTimestamp.toNumber();
-          const dateSent = new Date(unixTimestamp);
-          const formattedDate = format(dateSent, 'hh:mm:ss  dd-MM-yyyy');
+          // const dateSent = new Date(unixTimestamp);
+          // const formattedDate = format(dateSent, 'hh:mm:ss  dd-MM-yyyy');
           thunkAPI.dispatch(
             updateTokens({
               blockNumber: event.blockNumber,
               flow: 1,
               tokenId: tokenId.toNumber(),
               amount: eventData.value.toNumber(),
-              primary: `${TOKEN_NAMES[tokenId.toNumber()]}`,
-              secondary: `${formattedDate}`,
+              timestamp: unixTimestamp,
             })
           );
         }

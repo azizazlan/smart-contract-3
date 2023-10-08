@@ -13,6 +13,9 @@ const initialize = createAsyncThunk(
     );
     const blockNumber = parseInt(sBlockNumber || `0`, 10);
 
+    const stx = localStorage.getItem('thuleen.mfs.resident.transactions');
+    const lastTransactions = JSON.parse(stx || `[]`);
+
     let nric = 0;
     if (publicKey && snric) {
       nric = parseInt(snric, 10);
@@ -25,6 +28,7 @@ const initialize = createAsyncThunk(
       publicKey,
       seedPhrase,
       blockNumber,
+      lastTransactions,
     };
   }
 );

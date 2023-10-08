@@ -5,24 +5,26 @@ type UpdateTokensFields = {
   flow: 0 | 1;
   tokenId: number;
   amount: number;
-  primary: string;
-  secondary: string;
+  timestamp: number;
 };
 
 const updateTokens = createAsyncThunk(
   'resident_update_tokens',
   async (props: UpdateTokensFields) => {
-    const { blockNumber, flow, tokenId, amount, primary, secondary } = props;
+    const { blockNumber, flow, tokenId, amount, timestamp } = props;
 
-    //TODO : Save transactions in localStorage thuleen.mfs.resident.transactions
+    // last blockNumber
+    localStorage.setItem(
+      'thuleen.mfs.resident.blockNumber',
+      blockNumber.toString()
+    );
 
     return {
       blockNumber,
       flow,
       tokenId,
       amount,
-      primary,
-      secondary,
+      timestamp,
     };
   }
 );

@@ -13,8 +13,7 @@ export interface TransactionsSubsidy {
   flow: 1 | 0; // 1 = incoming and 0 = outgoing
   tokenId: number;
   amount: number;
-  primary: string;
-  secondary: string;
+  timestamp: number;
 }
 
 interface ResidentState {
@@ -43,43 +42,6 @@ const initialState: ResidentState = {
   isWhitelisted: false,
   transactions: [],
   blockNumber: 0,
-  // transactions: [
-  //   {
-  //     flow: 1,
-  //     tokenId: 0,
-  //     amount: 1,
-  //     primary: '1 token Bag 70kg of rice',
-  //     secondary: '06:37:38 05-10-2023',
-  //   },
-  //   {
-  //     flow: 1,
-  //     tokenId: 0,
-  //     amount: 1,
-  //     primary: '1 token Bag 70kg of rice',
-  //     secondary: '06:38:38 05-10-2023',
-  //   },
-  //   {
-  //     flow: 0,
-  //     tokenId: 0,
-  //     amount: 1,
-  //     primary: '1 token Bag 70kg of rice',
-  //     secondary: '06:38:38 05-10-2023',
-  //   },
-  //   {
-  //     flow: 1,
-  //     tokenId: 1,
-  //     amount: 1,
-  //     primary: '1 token Bag 01kg of wheat flour',
-  //     secondary: '06:38:38 05-10-2023',
-  //   },
-  //   {
-  //     flow: 1,
-  //     tokenId: 2,
-  //     amount: 1,
-  //     primary: '1 token Bag 01kg of cooking oil',
-  //     secondary: '06:38:38 05-10-2023',
-  //   },
-  // ],
 };
 
 export const residentSlice = createSlice({
@@ -98,6 +60,7 @@ export const residentSlice = createSlice({
       state.qrcode = `${payload.nric}_${payload.publicKey}`;
       state.seedPhrase = payload.seedPhrase;
       state.blockNumber = payload.blockNumber;
+      state.transactions = payload.lastTransactions;
       state.submissionState = 'OK';
     });
     builder.addCase(clearLocalSto.pending, (state, {}) => {
@@ -158,10 +121,20 @@ export const residentSlice = createSlice({
           flow: payload.flow, // 1 for incoming
           tokenId: payload.tokenId,
           amount: payload.amount,
-          primary: payload.primary,
-          secondary: payload.secondary,
+          timestamp: payload.timestamp,
         };
         state.transactions.push(newTransaction);
+
+        // last blockNumber
+        localStorage.setItem(
+          'thuleen.mfs.resident.blockNumber',
+          payload.blockNumber.toString()
+        );
+        localStorage.setItem(
+          'thuleen.mfs.resident.transactions',
+          JSON.stringify(state.transactions)
+        );
+
         state.blockNumber = payload.blockNumber;
       }
       state.submissionState = 'OK';

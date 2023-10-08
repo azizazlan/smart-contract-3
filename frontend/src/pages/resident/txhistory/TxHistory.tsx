@@ -5,11 +5,13 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { format } from 'date-fns';
 import rice from '../../../assets/bag-rice.png';
 import wheat from '../../../assets/bag-wheatflour.png';
 import { Box, Divider, Typography } from '@mui/material';
 import { useResidentSelector } from '../../../services/hook';
 import { ResidentState } from '../../../services/store';
+import { TOKEN_NAMES } from '../../../services/subsidyType';
 
 export default function TxHistory() {
   const { transactions } = useResidentSelector(
@@ -44,7 +46,10 @@ export default function TxHistory() {
                   />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={tx.primary} secondary={tx.secondary} />
+              <ListItemText
+                primary={TOKEN_NAMES[tx.tokenId]}
+                secondary={format(tx.timestamp, 'E MMM dd/MM/yyyy hh:mm:ss a')}
+              />
             </ListItem>
             {tx.flow === 0 ? (
               <ArrowDropUpIcon fontSize="large" color="error" />
