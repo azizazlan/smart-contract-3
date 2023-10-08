@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
-import { BAG_070KG_RICE } from '../../subsidyType';
+// import { BAG_070KG_RICE } from '../../subsidyType';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 
@@ -38,8 +38,8 @@ const checkStatus = createAsyncThunk(
 
     const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
 
-    const riceTokens = await melakaSubsidy.balanceOf(publicKey, BAG_070KG_RICE);
-    console.log(`riceTokens=${riceTokens}`);
+    // const riceTokens = await melakaSubsidy.balanceOf(publicKey, BAG_070KG_RICE);
+    // console.log(`riceTokens=${riceTokens}`);
 
     const message = `Successfully checked residency and whitelisting status`;
 

@@ -28,6 +28,7 @@ interface ResidentState {
   isWhitelisted: boolean;
   transactions: TransactionsSubsidy[];
   blockNumber: number;
+  balanceEther: string;
 }
 
 const initialState: ResidentState = {
@@ -42,6 +43,7 @@ const initialState: ResidentState = {
   isWhitelisted: false,
   transactions: [],
   blockNumber: 0,
+  balanceEther: '0.0',
 };
 
 export const residentSlice = createSlice({
@@ -65,6 +67,7 @@ export const residentSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.blockNumber = payload.blockNumber;
       state.transactions = payload.lastTransactions;
+      state.balanceEther = payload.balanceEther;
       state.submissionState = 'OK';
     });
     builder.addCase(clearLocalSto.pending, (state, {}) => {
@@ -126,7 +129,7 @@ export const residentSlice = createSlice({
     });
 
     builder.addCase(updateTokens.fulfilled, (state, { payload }) => {
-      console.log(`payload.blockNumber=${payload.blockNumber}`);
+      // console.log(`payload.blockNumber=${payload.blockNumber}`);
       if (state.blockNumber !== payload.blockNumber) {
         // Create a new transaction object
         const newTransaction: TransactionsSubsidy = {

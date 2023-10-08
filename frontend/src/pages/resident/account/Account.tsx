@@ -14,7 +14,7 @@ import Seedphrase from './Seedphrase';
 export default function Account() {
   const [copied, setCopied] = React.useState(false);
   const [copiedSeedphrase, setCopiedSeedphrase] = React.useState(false);
-  const { publicKey, seedPhrase } = useResidentSelector(
+  const { publicKey, seedPhrase, balanceEther } = useResidentSelector(
     (state: ResidentState) => state.resident
   );
 
@@ -79,6 +79,7 @@ export default function Account() {
           </IconButton>
         </CopyToClipboard>
       </Box>
+      <Typography variant="caption">Ξ {balanceEther}</Typography>
       <Seedphrase seedPhrase={seedPhrase} handleCopy={handleCopySeedphrase} />
     </Box>
   );
