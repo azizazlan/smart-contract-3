@@ -103,7 +103,7 @@ export default function ClaimForm() {
         >
           scan
         </Button>
-        <Box sx={{ flexGrow: 1, height: 12, width: 12 }} />
+        <Box sx={{ flexGrow: 1, minHeight: 12, width: 12 }} />
         <Button
           fullWidth={isMobile ? true : false}
           variant="outlined"

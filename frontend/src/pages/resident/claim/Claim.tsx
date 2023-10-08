@@ -42,14 +42,26 @@ export default function Claim() {
             marginBottom: 1,
           }}
         >
-          <FormHeader title="Claim" />
-          <TokenIcon tokenId={parseInt(tokenId, 10)} />
-          <Typography
-            sx={{ fontFamily: 'Oswald', fontSize: '14pt' }}
-            color="primary"
-          >
-            1 token of {TOKEN_NAMES[parseInt(tokenId, 10)]}
-          </Typography>
+          <FormHeader title="Claim one token" />
+          <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
+            <TokenIcon tokenId={parseInt(tokenId, 10)} />
+            <Typography
+              sx={{ fontFamily: 'Oswald', fontSize: '14pt', marginLeft: 1 }}
+              color="primary"
+            >
+              {TOKEN_NAMES[parseInt(tokenId, 10)]}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: 1 }}>
+            <Typography
+              sx={{ fontFamily: 'Oswald', color: 'silver', marginRight: 1 }}
+            >
+              Balance
+            </Typography>
+            <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
+              1 token
+            </Typography>
+          </Box>
         </Box>
       ) : (
         'Error'

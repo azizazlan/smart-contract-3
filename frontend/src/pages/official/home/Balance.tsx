@@ -44,7 +44,7 @@ export default function Balance({
               marginBottom: 1,
             }}
           >
-            <TokenIcon index={index} />
+            <TokenIcon tokenId={index} />
             <Typography
               color="primary"
               style={{

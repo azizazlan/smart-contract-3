@@ -88,7 +88,7 @@ export default function Result() {
                 alignItems: 'center',
               }}
             >
-              <TokenIcon index={index} />
+              <TokenIcon tokenId={index} />
               <Typography key={index} variant="body1" sx={{ marginLeft: 1 }}>
                 {TOKEN_NAMES[index]}: {balance} tokens
               </Typography>

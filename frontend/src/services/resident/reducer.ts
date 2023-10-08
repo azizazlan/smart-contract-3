@@ -29,6 +29,7 @@ interface ResidentState {
   transactions: TransactionsSubsidy[];
   blockNumber: number;
   balanceEther: string;
+  tokensBalances: number[];
 }
 
 const initialState: ResidentState = {
@@ -44,6 +45,7 @@ const initialState: ResidentState = {
   transactions: [],
   blockNumber: 0,
   balanceEther: '0.0',
+  tokensBalances: [0, 0, 0, 0, 0],
 };
 
 export const residentSlice = createSlice({

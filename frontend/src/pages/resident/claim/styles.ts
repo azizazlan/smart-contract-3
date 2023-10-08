@@ -18,10 +18,9 @@ const styles: { [key: string]: React.CSSProperties } = {
   mobileFormButtons: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'right',
     width: '100%',
     marginTop: '7px',
+    height: window.innerHeight - 375,
   },
 };
 export default styles;
