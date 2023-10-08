@@ -3,6 +3,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import melakaResidentIdJSON from '../../../assets/artifacts/contracts/MelakaResidentId.sol/MelakaResidentId.json';
 import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
+import {
+  BAG_001KG_COOKINGOIL,
+  BAG_001KG_DIESEL,
+  BAG_001KG_WHEATFLOUR,
+  BAG_010KG_FERTILIZER,
+  BAG_070KG_RICE,
+} from '../../subsidyType';
 // import { BAG_070KG_RICE } from '../../subsidyType';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
@@ -38,14 +45,32 @@ const checkStatus = createAsyncThunk(
 
     const isWhitelisted = await melakaSubsidy.whitelistedNationalIds(nric);
 
-    // const riceTokens = await melakaSubsidy.balanceOf(publicKey, BAG_070KG_RICE);
-    // console.log(`riceTokens=${riceTokens}`);
+    const rice = await melakaSubsidy.balanceOf(publicKey, BAG_070KG_RICE);
+    const wheatFlour = await melakaSubsidy.balanceOf(
+      publicKey,
+      BAG_001KG_WHEATFLOUR
+    );
+    const cookingOil = await melakaSubsidy.balanceOf(
+      publicKey,
+      BAG_001KG_COOKINGOIL
+    );
+    const diesel = await melakaSubsidy.balanceOf(publicKey, BAG_001KG_DIESEL);
+    const fertilizer = await melakaSubsidy.balanceOf(
+      publicKey,
+      BAG_010KG_FERTILIZER
+    );
+
+    const balances = [rice, wheatFlour, cookingOil, diesel, fertilizer];
+    const tokensBalances: number[] = balances.map((balance) =>
+      balance.toNumber()
+    );
 
     const message = `Successfully checked residency and whitelisting status`;
 
     return {
       hasResidentId,
       isWhitelisted,
+      tokensBalances,
       message,
     };
   }

@@ -19,9 +19,8 @@ import { resetClaimSubmission } from '../../../services/resident/reducer';
 export default function Claim() {
   const { tokenId } = useParams();
   const dispatch = useResidentDispatch();
-  const { submissionState, submissionMsg } = useResidentSelector(
-    (state: ResidentState) => state.resident
-  );
+  const { submissionState, submissionMsg, tokensBalances } =
+    useResidentSelector((state: ResidentState) => state.resident);
 
   React.useEffect(() => {
     dispatch(resetClaimSubmission());
@@ -59,7 +58,8 @@ export default function Claim() {
               Balance
             </Typography>
             <Typography color="primary" sx={{ fontFamily: 'Oswald' }}>
-              1 token
+              {tokensBalances[parseInt(tokenId, 10)]}{' '}
+              {tokensBalances[parseInt(tokenId, 10)] === 1 ? 'token' : 'tokens'}
             </Typography>
           </Box>
         </Box>

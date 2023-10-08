@@ -100,6 +100,7 @@ export const residentSlice = createSlice({
       state.hasResidentId = payload.hasResidentId;
       state.isWhitelisted = payload.isWhitelisted;
       state.submissionMsg = payload.message;
+      state.tokensBalances = payload.tokensBalances;
       state.submissionState = 'OK';
     });
     builder.addCase(restore.pending, (state, {}) => {
