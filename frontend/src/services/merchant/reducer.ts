@@ -47,6 +47,7 @@ export const merchantSlice = createSlice({
       state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
       state.lastBlockNumber = payload.lastBlockNumber;
+      state.transactions = payload.lastTransactions;
       state.submissionState = 'OK';
     });
     builder.addCase(signup.pending, (state, {}) => {

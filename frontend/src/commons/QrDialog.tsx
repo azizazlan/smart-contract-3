@@ -10,8 +10,8 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import Box from '@mui/material/Box';
 import { QRCodeCanvas } from 'qrcode.react';
-import truncateEthAddr from '../../utils/truncateEthAddr';
 import { DialogActions } from '@mui/material';
+import truncateEthAddr from '../utils/truncateEthAddr';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -23,10 +23,12 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function QrDialog({
+  appBackgroundColor,
   qrcode,
   open,
   handleClose,
 }: {
+  appBackgroundColor: string;
   qrcode: string | null;
   open: boolean;
   handleClose: () => void;
@@ -47,7 +49,9 @@ export default function QrDialog({
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <AppBar sx={{ position: 'relative' }}>
+      <AppBar
+        sx={{ position: 'relative', backgroundColor: `${appBackgroundColor}` }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -85,7 +89,7 @@ export default function QrDialog({
               justifyContent: 'center',
             }}
           >
-            <QRCodeCanvas size={256} fgColor="#273c75" value={qrcode} />
+            <QRCodeCanvas size={256} fgColor="black" value={qrcode} />
             <Typography
               color="primary"
               sx={{ marginTop: 3, fontFamily: 'Oswald', fontSize: '14pt' }}

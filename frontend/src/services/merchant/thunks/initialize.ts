@@ -17,6 +17,8 @@ const initialize = createAsyncThunk(
           'Merchant public key does not exist. Click to signup' as string,
       });
     }
+    const stxs = localStorage.getItem('thuleen.mfs.merchant.transactions');
+    const lastTransactions = JSON.parse(stxs || `[]`);
 
     thunkAPI.dispatch(watchEvents({ publicKey }));
 
@@ -26,6 +28,7 @@ const initialize = createAsyncThunk(
       publicKey,
       seedPhrase,
       lastBlockNumber,
+      lastTransactions,
       message,
     };
   }

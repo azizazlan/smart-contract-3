@@ -91,6 +91,7 @@ export const officialSlice = createSlice({
       state.nric = payload.nric;
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
+      state.qrcode = payload.qrcode;
       state.submissionState = 'OK';
     });
     builder.addCase(signup.pending, (state, {}) => {

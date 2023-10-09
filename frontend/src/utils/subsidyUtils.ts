@@ -1,4 +1,4 @@
-import { TransactionsSubsidy } from '../services/resident/reducer';
+import { TransactionsSubsidy } from '../services/transactionType';
 
 export type TokenBalance = {
   tokenId: number;

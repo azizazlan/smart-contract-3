@@ -12,7 +12,7 @@ const Status = lazy(() => import('./Status'));
 // import Balance from './Balance';
 // import Status from './Status';
 import initialize from '../../../services/official/thunks/initialize';
-import QrDialog from '../../../layouts/official/QrDialog';
+import QrDialog from '../../../commons/QrDialog';
 
 // Official info page
 export default function Info() {
@@ -43,7 +43,12 @@ export default function Info() {
 
   return (
     <Box sx={{ ...styles.container, marginTop: 3 }}>
-      <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
+      <QrDialog
+        appBackgroundColor="black"
+        qrcode={qrcode}
+        open={openQrCode}
+        handleClose={toggleQrCode}
+      />
       <Status
         publicKey={publicKey || 'NA'}
         nric={nric || 0}

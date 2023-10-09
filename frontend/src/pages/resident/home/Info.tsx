@@ -11,7 +11,7 @@ import TokenBalances from './TokenBalances';
 import Status from './Status';
 // import checkStatus from '../../../services/resident/thunks/checkStatus';
 import initialize from '../../../services/resident/thunks/initialize';
-import QrDialog from '../../../layouts/resident/QrDialog';
+import QrDialog from '../../../commons/QrDialog';
 import { getBalances } from '../../../utils/subsidyUtils';
 
 export default function Info() {
@@ -44,7 +44,12 @@ export default function Info() {
 
   return (
     <Box sx={{ ...styles.container, marginTop: 3 }}>
-      <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
+      <QrDialog
+        appBackgroundColor="#273c75"
+        qrcode={qrcode}
+        open={openQrCode}
+        handleClose={toggleQrCode}
+      />
       <Status
         publicKey={publicKey || ''}
         nric={nric}

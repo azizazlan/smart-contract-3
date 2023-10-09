@@ -15,8 +15,10 @@ const initialize = createAsyncThunk(
     const seedPhrase = localStorage.getItem('thuleen.mfs.official.seedPhrase');
 
     let nric = 0;
+    let qrcode = '';
     if (publicKey && snric) {
       nric = parseInt(snric, 10);
+      qrcode = `${snric}_${publicKey}`;
       thunkAPI.dispatch(checkStatus({ nric, publicKey }));
       thunkAPI.dispatch(ethBal({ publicKey }));
       thunkAPI.dispatch(watchEvents({ nric, publicKey }));
@@ -24,6 +26,7 @@ const initialize = createAsyncThunk(
 
     return {
       nric,
+      qrcode,
       publicKey,
       seedPhrase,
     };
