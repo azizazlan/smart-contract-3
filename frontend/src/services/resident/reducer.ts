@@ -8,13 +8,7 @@ import checkStatus from './thunks/checkStatus';
 import restore from './thunks/restore';
 import claim from './thunks/claim';
 import updateTokens from './thunks/updateTokens';
-
-export interface TransactionsSubsidy {
-  flow: 1 | 0; // 1 = incoming and 0 = outgoing
-  tokenId: number;
-  amount: number;
-  timestamp: number;
-}
+import { TransactionsSubsidy } from '../transactionType';
 
 interface ResidentState {
   submissionState: SubmissionStates;

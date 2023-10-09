@@ -3,12 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SubmissionStates } from '../submissionState';
 import initialize from './thunks/initialize';
 import signup from './thunks/signup';
+import { MerchantTransaction } from '../transactionType';
 
 interface MerchantState {
   submissionState: SubmissionStates;
   submissionMsg: string | null;
   publicKey: string | null | undefined;
   seedPhrase: string | null | undefined;
+  transactions: MerchantTransaction[];
+  lastBlockNumber: number;
 }
 
 const initialState: MerchantState = {
@@ -16,6 +19,8 @@ const initialState: MerchantState = {
   submissionMsg: null,
   publicKey: null,
   seedPhrase: null,
+  transactions: [],
+  lastBlockNumber: 0,
 };
 
 export const merchantSlice = createSlice({
@@ -40,6 +45,7 @@ export const merchantSlice = createSlice({
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
+      state.lastBlockNumber = payload.lastBlockNumber;
       state.submissionState = 'OK';
     });
     builder.addCase(signup.pending, (state, {}) => {

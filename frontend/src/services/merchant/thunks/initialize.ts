@@ -5,6 +5,10 @@ const initialize = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const publicKey = localStorage.getItem('thuleen.mfs.merchant.publicKey');
     const seedPhrase = localStorage.getItem('thuleen.mfs.merchant.seedPhrase');
+    const slastBlockNumber = localStorage.getItem(
+      'thuleen.mfs.merchant.lastBlockNumber'
+    );
+    const lastBlockNumber = parseInt(slastBlockNumber || `0`, 10);
 
     if (!publicKey || !seedPhrase) {
       return rejectWithValue({
@@ -18,6 +22,7 @@ const initialize = createAsyncThunk(
     return {
       publicKey,
       seedPhrase,
+      lastBlockNumber,
       message,
     };
   }
