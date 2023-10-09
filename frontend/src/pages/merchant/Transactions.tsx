@@ -187,7 +187,7 @@ export default function Transactions() {
   return (
     <Paper
       elevation={0}
-      style={{ height: winSize.height - 250, width: winSize.width - 5 }}
+      style={{ height: winSize.height - 260, width: winSize.width - 5 }}
     >
       <TableVirtuoso
         data={rows}
