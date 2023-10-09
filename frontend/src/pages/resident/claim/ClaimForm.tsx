@@ -13,6 +13,7 @@ import {
 } from '../../../services/hook';
 import claim from '../../../services/resident/thunks/claim';
 import { ResidentState } from '../../../services/store';
+import { setError } from '../../../services/resident/reducer';
 
 const schema = Yup.object().shape({
   merchantPublicKey: Yup.string()
@@ -53,6 +54,11 @@ export default function ClaimForm(props: ClaimFormProps) {
   const onSubmit: SubmitHandler<ClaimFields> = (data) => {
     const { merchantPublicKey } = data;
     if (!seedPhrase || !tokenId) {
+      dispatch(
+        setError({
+          message: 'Ethereum account not recognized. Go to HOME and try again',
+        })
+      );
       return;
     }
     dispatch(

@@ -56,6 +56,10 @@ export const residentSlice = createSlice({
     setMerchantPublicKey: (state, { payload }) => {
       state.merchantPublicKey = payload.publicKey;
     },
+    setError: (state, { payload }) => {
+      state.submissionState = 'FAILED';
+      state.submissionMsg = payload.message;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(initialize.pending, (state, {}) => {
@@ -161,6 +165,6 @@ export const residentSlice = createSlice({
   },
 });
 
-export const { reset, resetClaimSubmission, setMerchantPublicKey } =
+export const { reset, resetClaimSubmission, setMerchantPublicKey, setError } =
   residentSlice.actions;
 export default residentSlice.reducer;
