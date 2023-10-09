@@ -14,10 +14,17 @@ import {
 import { ResidentState } from '../../../services/store';
 import BackdropLoader from '../../../commons/BackdropLoader';
 import Result from './Result';
-import { resetClaimSubmission } from '../../../services/resident/reducer';
+import {
+  resetClaimSubmission,
+  setMerchantPublicKey,
+} from '../../../services/resident/reducer';
 import ErrResult from './ErrResult';
+import ScanError from '../../../commons/ScanError';
+import QrReader from '../../../commons/QrReader';
 
 export default function Claim() {
+  const [camera, setCamera] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const { tokenId } = useParams();
   const dispatch = useResidentDispatch();
   const { submissionState, submissionMsg, tokensBalances } =
@@ -27,12 +34,61 @@ export default function Claim() {
     dispatch(resetClaimSubmission());
   }, []);
 
+  const handleOnDecode = (result: string) => {
+    console.log(result);
+    if (!result.includes('_')) {
+      setCamera((o) => !o);
+      setError((o) => !o);
+    }
+    const codes = result.split('_');
+    // const nric = codes[0];
+    const publicKey = codes[1];
+    dispatch(setMerchantPublicKey({ publicKey }));
+    handleCancelScan();
+  };
+
+  const handleCloseCamera = () => {
+    setCamera(false);
+  };
+
+  const handleCancelScan = () => {
+    setError((o) => !o);
+  };
+
+  const handleScanAgain = () => {
+    setError((o) => !o);
+    setCamera((o) => !o);
+  };
+
+  const toggleCamera = () => {
+    setCamera(true);
+    setError(false);
+  };
+
   if (submissionState === 'FAILED' && submissionMsg) {
     return <ErrResult message={submissionMsg} />;
   }
 
   if (submissionState === 'OK' && submissionMsg) {
     return <Result message={submissionMsg} />;
+  }
+
+  if (!camera && error) {
+    return (
+      <ScanError
+        handleCancel={handleCancelScan}
+        handleScanAgain={handleScanAgain}
+      />
+    );
+  }
+
+  if (camera && !error) {
+    return (
+      <QrReader
+        handleOnDecode={handleOnDecode}
+        handleClose={handleCloseCamera}
+      />
+    );
   }
 
   return (
@@ -74,7 +130,7 @@ export default function Claim() {
       ) : (
         'Error'
       )}
-      <ClaimForm />
+      <ClaimForm toggleCamera={toggleCamera} />
     </Box>
   );
 }

@@ -27,10 +27,15 @@ type ClaimFields = {
   merchantPublicKey: string;
 };
 
-export default function ClaimForm() {
+type ClaimFormProps = {
+  toggleCamera: () => void;
+};
+
+export default function ClaimForm(props: ClaimFormProps) {
+  const { toggleCamera } = props;
   const { tokenId } = useParams();
   const dispatch = useResidentDispatch();
-  const { seedPhrase, nric } = useResidentSelector(
+  const { seedPhrase, nric, merchantPublicKey } = useResidentSelector(
     (state: ResidentState) => state.resident
   );
   const {
@@ -41,7 +46,7 @@ export default function ClaimForm() {
   } = useForm<ClaimFields>({
     resolver: yupResolver(schema),
     defaultValues: {
-      merchantPublicKey: '',
+      merchantPublicKey: merchantPublicKey || '',
     },
   });
 
@@ -61,7 +66,7 @@ export default function ClaimForm() {
   };
 
   const handleReset = () => {
-    reset();
+    reset({ merchantPublicKey: '' });
   };
 
   return (
@@ -99,7 +104,7 @@ export default function ClaimForm() {
           endIcon={<CameraIcon />}
           fullWidth={isMobile ? true : false}
           variant="outlined"
-          //   onClick={toggleCamera}
+          onClick={toggleCamera}
         >
           scan
         </Button>

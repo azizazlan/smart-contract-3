@@ -24,6 +24,7 @@ interface ResidentState {
   blockNumber: number;
   balanceEther: string;
   tokensBalances: number[];
+  merchantPublicKey: string | null;
 }
 
 const initialState: ResidentState = {
@@ -40,6 +41,7 @@ const initialState: ResidentState = {
   blockNumber: 0,
   balanceEther: '0.0',
   tokensBalances: [0, 0, 0, 0, 0],
+  merchantPublicKey: null,
 };
 
 export const residentSlice = createSlice({
@@ -50,6 +52,9 @@ export const residentSlice = createSlice({
     resetClaimSubmission: (state) => {
       state.submissionMsg = null;
       state.submissionState = 'IDLE';
+    },
+    setMerchantPublicKey: (state, { payload }) => {
+      state.merchantPublicKey = payload.publicKey;
     },
   },
   extraReducers: (builder) => {
@@ -154,5 +159,6 @@ export const residentSlice = createSlice({
   },
 });
 
-export const { reset, resetClaimSubmission } = residentSlice.actions;
+export const { reset, resetClaimSubmission, setMerchantPublicKey } =
+  residentSlice.actions;
 export default residentSlice.reducer;
