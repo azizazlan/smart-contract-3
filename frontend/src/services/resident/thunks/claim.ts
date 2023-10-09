@@ -2,6 +2,13 @@ import { BigNumber, Wallet, ethers } from 'ethers';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import melakaSubsidyJSON from '../../../assets/artifacts/contracts/MelakaSubsidy.sol/MelakaSubsidy.json';
+import {
+  BAG_070KG_RICE,
+  BAG_001KG_WHEATFLOUR,
+  BAG_001KG_COOKINGOIL,
+  BAG_001KG_DIESEL,
+  BAG_010KG_FERTILIZER,
+} from '../../subsidyType';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
 
@@ -16,7 +23,7 @@ type ClaimFields = {
 
 const claim = createAsyncThunk(
   'resident_claim',
-  async (props: ClaimFields, { rejectWithValue }) => {
+  async (props: ClaimFields, thunkAPI: any) => {
     const { merchantPublicKey, residentNric, tokenId, seedPhrase } = props;
     console.log(`Merchant public key=${merchantPublicKey}`);
 
@@ -38,7 +45,7 @@ const claim = createAsyncThunk(
     console.log(`Resident token balance=${tokenBal}`);
 
     if (tokenBal < 1) {
-      return rejectWithValue('Claim failed insufficient token');
+      return thunkAPI.rejectWithValue('Claim failed insufficient token');
     }
 
     const oneToken = BigNumber.from('1');
@@ -46,17 +53,36 @@ const claim = createAsyncThunk(
       .connect(residentWallet)
       .claimTokens(residentNric, merchantPublicKey, tokenId, oneToken);
 
-    await new Promise((resolve) => setTimeout(resolve, 15000));
-
-    const tokenPostBal = await melakaSubsidy.balanceOf(
+    const rice = await melakaSubsidy.balanceOf(
       residentWallet.address,
-      tokenId
+      BAG_070KG_RICE
     );
-    console.log(`Resident tokenPostBal=${tokenPostBal}`);
+    const wheatFlour = await melakaSubsidy.balanceOf(
+      residentWallet.address,
+      BAG_001KG_WHEATFLOUR
+    );
+    const cookingOil = await melakaSubsidy.balanceOf(
+      residentWallet.address,
+      BAG_001KG_COOKINGOIL
+    );
+    const diesel = await melakaSubsidy.balanceOf(
+      residentWallet.address,
+      BAG_001KG_DIESEL
+    );
+    const fertilizer = await melakaSubsidy.balanceOf(
+      residentWallet.address,
+      BAG_010KG_FERTILIZER
+    );
+
+    const balances = [rice, wheatFlour, cookingOil, diesel, fertilizer];
+    const tokensBalances: number[] = balances.map((balance) =>
+      balance.toNumber()
+    );
 
     const message = `Successfully claimed`;
 
     return {
+      tokensBalances,
       message,
     };
   }

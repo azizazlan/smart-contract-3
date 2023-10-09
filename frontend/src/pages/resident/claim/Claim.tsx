@@ -15,6 +15,7 @@ import { ResidentState } from '../../../services/store';
 import BackdropLoader from '../../../commons/BackdropLoader';
 import Result from './Result';
 import { resetClaimSubmission } from '../../../services/resident/reducer';
+import ErrResult from './ErrResult';
 
 export default function Claim() {
   const { tokenId } = useParams();
@@ -26,8 +27,12 @@ export default function Claim() {
     dispatch(resetClaimSubmission());
   }, []);
 
+  if (submissionState === 'FAILED' && submissionMsg) {
+    return <ErrResult message={submissionMsg} />;
+  }
+
   if (submissionState === 'OK' && submissionMsg) {
-    return <Result />;
+    return <Result message={submissionMsg} />;
   }
 
   return (

@@ -4,6 +4,7 @@ import { SubmissionStates } from '../submissionState';
 import initialize from './thunks/initialize';
 import signup from './thunks/signup';
 import { MerchantTransaction } from '../transactionType';
+import updateClaims from './thunks/updateClaims';
 
 interface MerchantState {
   submissionState: SubmissionStates;
@@ -58,6 +59,32 @@ export const merchantSlice = createSlice({
       state.publicKey = payload.publicKey;
       state.seedPhrase = payload.seedPhrase;
       state.submissionMsg = payload.message;
+      state.submissionState = 'OK';
+    });
+    builder.addCase(updateClaims.fulfilled, (state, { payload }) => {
+      // console.log(`payload.blockNumber=${payload.blockNumber}`);
+      if (state.lastBlockNumber !== payload.blockNumber) {
+        // Create a new transaction object
+        const newTransaction: MerchantTransaction = {
+          id: payload.blockNumber,
+          claimantPublicKey: payload.claimantPublicKey,
+          tokenId: payload.tokenId,
+          value: payload.amount,
+          timestamp: payload.timestamp,
+        };
+        state.transactions.push(newTransaction);
+
+        // last blockNumber
+        localStorage.setItem(
+          'thuleen.mfs.merchant.lastBlockNumber',
+          payload.blockNumber.toString()
+        );
+        localStorage.setItem(
+          'thuleen.mfs.merchant.transactions',
+          JSON.stringify(state.transactions)
+        );
+        state.lastBlockNumber = payload.blockNumber;
+      }
       state.submissionState = 'OK';
     });
   },

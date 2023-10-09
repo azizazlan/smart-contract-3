@@ -24,16 +24,6 @@ interface ColumnData {
   width: number;
 }
 
-function createData(
-  id: number,
-  claimantPublicKey: string,
-  tokenId: number,
-  value: number,
-  timestamp: number
-): MerchantTransaction {
-  return { id, claimantPublicKey, tokenId, value, timestamp };
-}
-
 const columns: ColumnData[] = [
   {
     width: 120,

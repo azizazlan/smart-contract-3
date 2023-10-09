@@ -65,7 +65,7 @@ const checkStatus = createAsyncThunk(
       balance.toNumber()
     );
 
-    const message = `Successfully checked residency and whitelisting status`;
+    const message = `Successfully checked status`;
 
     return {
       hasResidentId,

@@ -121,6 +121,7 @@ export const residentSlice = createSlice({
       state.submissionState = 'FAILED';
     });
     builder.addCase(claim.fulfilled, (state, { payload }) => {
+      state.tokensBalances = payload.tokensBalances;
       state.submissionMsg = payload.message;
       state.submissionState = 'OK';
     });
