@@ -6,6 +6,8 @@ import {
   ResidentState,
   AdminDispatch,
   AdminState,
+  MerchantDispatch,
+  MerchantState,
   AppState,
   AppDispatch,
 } from './store';
@@ -16,6 +18,10 @@ export const useResidentSelector: TypedUseSelectorHook<ResidentState> =
 
 export const useOfficialDispatch = () => useDispatch<OfficialDispatch>();
 export const useOfficialSelector: TypedUseSelectorHook<OfficialState> =
+  useSelector;
+
+export const useMerchantDispatch = () => useDispatch<MerchantDispatch>();
+export const useMerchantSelector: TypedUseSelectorHook<MerchantState> =
   useSelector;
 
 export const useAdminDispatch = () => useDispatch<AdminDispatch>();

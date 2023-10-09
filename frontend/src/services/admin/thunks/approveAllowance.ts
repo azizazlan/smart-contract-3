@@ -31,6 +31,7 @@ const approveAllowance = createAsyncThunk(
       melakaSubsidyJSON.abi,
       web3Provider
     );
+
     await new Promise((resolve) => setTimeout(resolve, 15000));
 
     const tokens = BigNumber.from(allowances);

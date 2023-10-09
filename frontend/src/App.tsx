@@ -42,6 +42,9 @@ const ResidentRestore = lazy(() => import('./pages/resident/home/Restore'));
 const ResidentAccount = lazy(() => import('./pages/resident/account/Account'));
 const ResidentClaim = lazy(() => import('./pages/resident/claim/Claim'));
 
+const MerchantLayout = lazy(() => import('./layouts/merchant/Default'));
+const MerchantHome = lazy(() => import('./pages/merchant/Home'));
+
 const About = lazy(() => import('./pages/about/About'));
 const Verify = lazy(() => import('./pages/verify/Verify'));
 import NotFound from './pages/404/NotFound';
@@ -80,6 +83,9 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminLanding />} />
           <Route path="account" element={<AdminAccount />} />
+        </Route>
+        <Route path="/merchant" element={<MerchantLayout />}>
+          <Route index element={<MerchantHome />} />
         </Route>
         <Route path="/verify" element={<Layout />}>
           <Route index element={<Verify />} />
