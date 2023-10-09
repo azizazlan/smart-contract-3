@@ -7,7 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import { format } from 'date-fns';
 import useWindowSize from '../../utils/useWindowSize';
+import { TOKEN_NAMES } from '../../services/subsidyType';
+import truncateEthAddr from '../../utils/truncateEthAddr';
+import { Typography } from '@mui/material';
+import TokenIcon from '../../commons/TokenIcon';
 
 interface Data {
   tokenId: number;
@@ -46,25 +51,25 @@ function createData(
 
 const columns: ColumnData[] = [
   {
-    width: 200,
+    width: 120,
     label: 'Claimant public key',
     dataKey: 'claimantPublicKey',
   },
   {
-    width: 120,
-    label: 'Token id',
+    width: 170,
+    label: 'Token',
     dataKey: 'tokenId',
-    numeric: true,
+    numeric: false,
   },
   {
-    width: 120,
+    width: 30,
     label: 'Value',
     dataKey: 'value',
     numeric: true,
   },
   {
-    width: 150,
-    label: 'Timestamp',
+    width: 120,
+    label: 'Date and time',
     dataKey: 'timestamp',
     numeric: true,
   },
@@ -120,14 +125,59 @@ function fixedHeaderContent() {
 function rowContent(_index: number, row: Data) {
   return (
     <React.Fragment>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          align={column.numeric || false ? 'right' : 'left'}
-        >
-          {row[column.dataKey]}
-        </TableCell>
-      ))}
+      {columns.map((column: ColumnData, index) => {
+        if (index === 0) {
+          return (
+            <TableCell
+              key={column.dataKey}
+              align={column.numeric || false ? 'right' : 'left'}
+            >
+              {truncateEthAddr(row[column.dataKey].toString())}
+            </TableCell>
+          );
+        }
+        if (index === 1) {
+          return (
+            <TableCell
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              key={column.dataKey}
+              align={column.numeric || false ? 'right' : 'left'}
+            >
+              <TokenIcon
+                tokenId={parseInt(row[column.dataKey].toString(), 10)}
+              />
+              <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                {TOKEN_NAMES[parseInt(row[column.dataKey].toString(), 10)]}
+              </Typography>
+            </TableCell>
+          );
+        }
+        if (index === 3) {
+          return (
+            <TableCell
+              key={column.dataKey}
+              align={column.numeric || false ? 'right' : 'left'}
+            >
+              {format(
+                parseInt(row[column.dataKey].toString(), 10),
+                'dd-MM-yyyy hh:mm:ss a'
+              )}
+            </TableCell>
+          );
+        }
+        return (
+          <TableCell
+            key={column.dataKey}
+            align={column.numeric || false ? 'right' : 'left'}
+          >
+            {row[column.dataKey]}
+          </TableCell>
+        );
+      })}
     </React.Fragment>
   );
 }
