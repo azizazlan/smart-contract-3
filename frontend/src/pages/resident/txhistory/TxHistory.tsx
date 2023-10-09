@@ -6,13 +6,22 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CloseIcon from '@mui/icons-material/Close';
 import { format } from 'date-fns';
 import rice from '../../../assets/bag-rice.png';
 import wheat from '../../../assets/bag-wheatflour.png';
-import { Box, Divider, ListItemButton, Typography } from '@mui/material';
+import {
+  Box,
+  Divider,
+  IconButton,
+  ListItemButton,
+  ListSubheader,
+  Typography,
+} from '@mui/material';
 import { useResidentSelector } from '../../../services/hook';
 import { ResidentState } from '../../../services/store';
 import { TOKEN_NAMES } from '../../../services/subsidyType';
+import useWindowSize from '../../../utils/useWindowSize';
 
 type SecondaryListComponentProps = {
   text: string;
@@ -40,10 +49,15 @@ function SecondaryListComponent(props: SecondaryListComponentProps) {
 }
 
 export default function TxHistory() {
+  const windowSize = useWindowSize();
   const navigate = useNavigate();
   const { transactions } = useResidentSelector(
     (state: ResidentState) => state.resident
   );
+
+  const handleClose = () => {
+    navigate(`/signedresident`);
+  };
 
   const handleClickList = ({ tokenId }: { tokenId: string }) => {
     navigate(`/signedresident/claim/${tokenId}`);
@@ -51,19 +65,39 @@ export default function TxHistory() {
 
   return (
     <List
-      sx={{ width: '100%', backgroundColor: 'background.paper' }}
+      sx={{
+        width: '100%',
+        backgroundColor: 'background.paper',
+        maxHeight: windowSize.height - 130,
+        overflow: 'auto',
+      }}
       subheader={
-        <Typography
-          color="primary"
+        <ListSubheader
+          disableGutters
           sx={{
-            fontFamily: 'Oswald',
+            display: 'flex',
+            flexDirection: 'row',
             backgroundColor: '#f5f6fa',
-            padding: 1,
-            paddingLeft: 2,
           }}
         >
-          Transactions history
-        </Typography>
+          <Typography
+            color="primary"
+            sx={{
+              fontFamily: 'Oswald',
+              padding: 1,
+              paddingLeft: 2,
+              flexGrow: 1,
+            }}
+          >
+            Transactions history
+          </Typography>
+          <IconButton onClick={handleClose} sx={{ paddingRight: 3 }}>
+            <CloseIcon
+              fontSize="small"
+              sx={{ backgroundColor: 'transparent' }}
+            />
+          </IconButton>
+        </ListSubheader>
       }
     >
       {transactions.map((tx, index) => (

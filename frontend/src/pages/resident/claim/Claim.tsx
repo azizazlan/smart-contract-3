@@ -41,7 +41,10 @@ export default function Claim() {
             marginBottom: 1,
           }}
         >
-          <FormHeader title="Claim one token" />
+          <FormHeader
+            title="Claim one token"
+            cancelUrl="/signedresident/txhistory"
+          />
           <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: 2 }}>
             <TokenIcon tokenId={parseInt(tokenId, 10)} />
             <Typography

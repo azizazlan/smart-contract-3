@@ -42,7 +42,7 @@ function Appbar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <QrDialog qrcode={qrcode} open={openQrCode} handleClose={toggleQrCode} />
       <ClearCacheDlg
         open={openClearCache}
