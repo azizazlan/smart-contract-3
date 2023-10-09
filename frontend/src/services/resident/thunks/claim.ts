@@ -8,6 +8,7 @@ import {
   BAG_001KG_COOKINGOIL,
   BAG_001KG_DIESEL,
   BAG_010KG_FERTILIZER,
+  TOKEN_NAMES,
 } from '../../subsidyType';
 
 const RPC_URL = import.meta.env.VITE_APP_RPC_URL;
@@ -45,7 +46,9 @@ const claim = createAsyncThunk(
     console.log(`Resident token balance=${tokenBal}`);
 
     if (tokenBal < 1) {
-      return thunkAPI.rejectWithValue('Claim failed insufficient token');
+      return thunkAPI.rejectWithValue(
+        `Claim failed due to insufficient ${TOKEN_NAMES[tokenId]} token`
+      );
     }
 
     const oneToken = BigNumber.from('1');

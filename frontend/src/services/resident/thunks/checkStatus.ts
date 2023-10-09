@@ -64,6 +64,7 @@ const checkStatus = createAsyncThunk(
     const tokensBalances: number[] = balances.map((balance) =>
       balance.toNumber()
     );
+    // console.log(tokensBalances);
 
     const message = `Successfully checked status`;
 

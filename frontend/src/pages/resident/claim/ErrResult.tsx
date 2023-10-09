@@ -41,7 +41,7 @@ export default function ErrResult(props: { message: string }) {
                 fontSize: '12pt',
               }}
             >
-              Failed to transfer token
+              Failed to claim
             </Typography>
           }
           sx={{ color: '#273c75' }}
@@ -53,7 +53,7 @@ export default function ErrResult(props: { message: string }) {
         </CardContent>
         <CardActions sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flexGrow: 1 }} />
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" color="error" onClick={handleClose}>
             close
           </Button>
         </CardActions>

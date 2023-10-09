@@ -122,7 +122,9 @@ export const residentSlice = createSlice({
       state.submissionState = 'PENDING';
     });
     builder.addCase(claim.rejected, (state, action) => {
-      state.submissionMsg = action.error.message || 'Error claim rejected!';
+      state.submissionMsg = action.payload
+        ? String(action.payload)
+        : 'Error claim rejected!';
       state.submissionState = 'FAILED';
     });
     builder.addCase(claim.fulfilled, (state, { payload }) => {
